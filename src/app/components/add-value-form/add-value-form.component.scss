@@ -1,0 +1,17 @@
+.add-form-list {
+  .line {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    mat-form-field {
+      flex: 1;
+      margin-right: 8px;
+    }
+
+    &.buttons {
+      justify-content: flex-end;
+    }
+  }
+
+  margin-bottom: 16px;
+}

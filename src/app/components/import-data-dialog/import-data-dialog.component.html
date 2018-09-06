@@ -1,0 +1,25 @@
+<h1 mat-dialog-title>import Data</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-select placeholder="Redis Instance" [(ngModel)]="instanceId">
+      <mat-option *ngFor="let instance of data.instances" [value]="instance.id">
+        {{instance.name}}({{instance.ip}}:{{instance.port}}:{{instance.db}})
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+
+  <mat-form-field [style.fontSize]="14">
+    <mat-label>Value</mat-label>
+    <textarea matInput
+              [(ngModel)]="rawContent"
+              cdkTextareaAutosize
+              #autosize="cdkTextareaAutosize"
+              cdkAutosizeMinRows="10"></textarea>
+  </mat-form-field>
+
+</div>
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="null">Cancel</button>
+  <button mat-raised-button color="primary">Add</button>
+</div>

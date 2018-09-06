@@ -1,0 +1,67 @@
+<div class="data-viewer-root">
+  <div class="header">
+    <button mat-raised-button
+            *ngIf="pageData.item.type !== 'string'"
+            (click)="onAddNewRecords()"
+    >Add new Value
+    </button>
+    <button mat-raised-button color="warn"
+            (click)="onDelete()">Delete {{pageData.item.type === 'folder'?
+      'Branch':'Key'}}
+    </button>
+  </div>
+
+  <div class="string-editor" *ngIf="pageData.item.type === 'string'">
+
+    <span class="key"><span class="t">Key</span>: {{pageData.item.key}}</span>
+    <mat-form-field [style.fontSize]="14">
+      <mat-label>Value</mat-label>
+      <textarea matInput
+                cdkTextareaAutosize
+                [(ngModel)]="pageData.item.value"
+                #autosize="cdkTextareaAutosize"
+                cdkAutosizeMinRows="2"></textarea>
+    </mat-form-field>
+
+    <button mat-raised-button
+            color="primary"
+            (click)="onSaveString()"
+    >Save
+    </button>
+  </div>
+
+  <div class="table-content mat-elevation-z8" *ngIf="isNeedShowTable()">
+    <table mat-table [dataSource]="data" class="example-table">
+      <ng-container matColumnDef="index">
+        <th mat-header-cell *matHeaderCellDef>Index</th>
+        <td mat-cell *matCellDef="let row">{{row.index}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="key" *ngIf="pageData.item.type === 'hash'">
+        <th mat-header-cell *matHeaderCellDef>Key</th>
+        <td mat-cell *matCellDef="let row">{{row.key}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="value">
+        <th mat-header-cell *matHeaderCellDef>Value</th>
+        <td mat-cell *matCellDef="let row" class="string-value">{{row.value}}</td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="score" *ngIf="pageData.item.type === 'zset'">
+        <th mat-header-cell *matHeaderCellDef>Score</th>
+        <td mat-cell *matCellDef="let row">{{row.score}}</td>
+      </ng-container>
+
+
+      <tr mat-header-row *matHeaderRowDef="getColumns()"></tr>
+      <tr mat-row *matRowDef="let row; columns: getColumns();"></tr>
+    </table>
+  </div>
+  <mat-paginator
+    *ngIf="isNeedShowTable()"
+    [length]="pageData.item.len"
+    [pageSizeOptions]="[10,20,50,100]"
+    (page)="onPageEvent($event)"
+    [pageSize]="page.pageSize"></mat-paginator>
+</div>

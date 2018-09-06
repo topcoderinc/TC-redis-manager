@@ -1,0 +1,30 @@
+<div *ngFor="let item of itemNode.children"
+     [style.marginLeft.px]="12"
+     [class]="'item-line item-line__sub ' + (item['deleted'] ? 'none':'') ">
+
+  <div [class]=" 'single-line ' + (selectedMap[item.key+item.type] ? 'selected':'') "
+       (click)="onItemClick.emit(item)"
+  >
+      <span [class]="'value-type ' + item.type" *ngIf="item.type !== 'folder'">
+        {{getSignByType(item.type)}}
+      </span>
+
+    <i class="material-icons expand-icon"
+       *ngIf="item.type === 'folder'"
+       (click)="expandedMap[item.key] = !expandedMap[item.key]">
+      {{expandedMap[item.key]?'expand_more':'chevron_right'}}
+    </i>
+
+    <span>{{item.name}}</span>
+    <span class="len" *ngIf="item.len">({{item.len}})</span>
+    <span class="len" *ngIf="item.type === 'folder'">({{item.children.length}})</span>
+  </div>
+
+  <app-tree-node *ngIf="item.children && item.children.length > 0 && item.type === 'folder' && expandedMap[item.key]"
+                 [itemNode]="item" (onItemClick)="onItemClick.emit($event)"
+                 [expandedMap]="expandedMap"
+                 [selectedMap]="selectedMap"
+  >
+  </app-tree-node>
+</div>
+

@@ -1,0 +1,56 @@
+$header-height: 60px;
+
+.redis-content {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
+  .header {
+    z-index: 1;
+    width: 100%;
+    height: $header-height;
+    background-color: #4054b2;
+    color: white;
+  }
+
+  .body {
+    height: calc(100% - 60px);
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    .left-part {
+      position: relative;
+      padding-right: 12px;
+      .tree-list {
+        padding-left: 6px;
+        height: calc(100vh - 60px - 48px);
+        overflow: auto;
+      }
+      .side-header {
+        display: flex;
+        flex-direction: row;
+      }
+      .slider-point {
+        cursor: col-resize;
+        width: 12px;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        .handler {
+          margin-left: 5px;
+          pointer-events: none;
+          width: 2px;
+          background-color: #dcdcdc;
+          height: 100%;
+        }
+      }
+    }
+    .right-part {
+      flex: 1;
+    }
+  }
+  .cli {
+
+  }
+}

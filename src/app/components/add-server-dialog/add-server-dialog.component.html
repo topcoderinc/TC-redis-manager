@@ -1,0 +1,26 @@
+<h1 mat-dialog-title>Add Redis Server</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <input matInput placeholder="Name" [(ngModel)]="data.name">
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput placeholder="Host" [(ngModel)]="data.ip">
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput [min]="1" type="number" placeholder="Port" [(ngModel)]="data.port">
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput placeholder="Password" type="password" [(ngModel)]="data.password">
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput type="number" [min]="0" placeholder="Database Index" [(ngModel)]="data.db">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onClick('cancel')">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onClick('add')">Add</button>
+</div>

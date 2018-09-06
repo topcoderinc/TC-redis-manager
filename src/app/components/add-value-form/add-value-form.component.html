@@ -1,0 +1,46 @@
+<mat-form-field [style.fontSize]="14" *ngIf="type === 'String'">
+  <mat-label>Value</mat-label>
+  <textarea matInput
+            (change)="values=[{value:$event.target.value}];onValueChange()"
+            cdkTextareaAutosize
+            #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="1"></textarea>
+</mat-form-field>
+
+<div *ngIf="type !== 'String'" class="add-form-list">
+  <div class="line" *ngFor="let v of getItemArray(); let i = index">
+    <mat-form-field *ngIf="type === 'List' || type === 'Set' || type === 'Ordered Set'">
+      <input matInput placeholder="Value"
+             (change)="onValueChange()"
+             [(ngModel)]="getItemArray()[i].value">
+    </mat-form-field>
+
+    <mat-form-field *ngIf="type === 'Ordered Set'">
+      <input matInput type="number" placeholder="Score"
+             (change)="onValueChange()"
+             [(ngModel)]="getItemArray()[i].score">
+    </mat-form-field>
+
+    <mat-form-field *ngIf="type === 'Hash Map'">
+      <input matInput placeholder="Key"
+             (change)="onValueChange()"
+             [(ngModel)]="getItemArray()[i].key">
+    </mat-form-field>
+
+    <mat-form-field *ngIf="type === 'Hash Map'">
+      <input matInput placeholder="Value"
+             (change)="onValueChange()"
+             [(ngModel)]="getItemArray()[i].value">
+    </mat-form-field>
+
+    <button mat-icon-button (click)="onRemoveItem(getItemArray(),i)">
+      <i class="material-icons delete-icon">delete</i>
+    </button>
+  </div>
+
+  <div class="line buttons">
+    <button mat-button color="primary" (click)="onAddItem(getItemArray())">
+      <i class="material-icons">add</i>Add new value
+    </button>
+  </div>
+</div>

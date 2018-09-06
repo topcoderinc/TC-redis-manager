@@ -1,0 +1,35 @@
+.instance-root {
+  margin-top: 16px;
+  .item-line {
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    padding: 2px;
+    align-items: center;
+    font-size: 14px;
+    font-weight: bold;
+    overflow: hidden;
+
+    .material-icons {
+      margin-right: 6px;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      &.error {
+        color: red;
+      }
+    }
+
+    &:hover {
+      background-color: #f6f6f6;
+    }
+    &.selected {
+      background-color: #dfdfdf;
+    }
+  }
+  .sub-items {
+    margin-top: 8px;
+  }
+}

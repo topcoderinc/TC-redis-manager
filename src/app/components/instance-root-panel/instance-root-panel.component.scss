@@ -1,0 +1,23 @@
+.redis-panel-root {
+  width: 100%;
+  .header {
+    height: 60px;
+    margin-top: 12px;
+    padding: 16px 12px 2px 12px;
+    button {
+      margin-left: 6px;
+      margin-right: 6px;
+    }
+  }
+
+  .table-content {
+    margin: 6px 16px 16px 16px;
+    position: relative;
+    height: calc(100vh - 60px - 78px - 56px - 36px);
+    overflow: auto;
+    .example-table {
+      position: relative;
+      width: 100%;
+    }
+  }
+}

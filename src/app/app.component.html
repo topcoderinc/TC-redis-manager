@@ -1,0 +1,62 @@
+<div class="redis-content" (mouseup)="dragObject.pressed=false" (mousemove)="mouseMove($event)">
+  <div class="header mat-elevation-z4">
+    <mat-toolbar class="header">
+      <span>{{title}}</span>
+    </mat-toolbar>
+  </div>
+
+  <div class="body">
+    <div class="left-part" [style.width.px]="dragObject.currentWidth">
+      <div class="side-header mat-elevation-z1">
+        <button mat-icon-button matTooltip="Refresh redis instance" (click)="onRefresh()">
+          <i class="material-icons">refresh</i>
+        </button>
+        <button mat-icon-button matTooltip="Add new redis Server" (click)="onAddServer()">
+          <i class="material-icons">add_circle</i>
+        </button>
+        <button mat-icon-button matTooltip="Redis API Document"><i class="material-icons">info</i></button>
+        <div class="flex1"></div>
+        <mat-menu #sideMenu="matMenu">
+          <button mat-menu-item (click)="refreshAndExpand()">Refresh + Expand All Nodes</button>
+          <button mat-menu-item>Import</button>
+          <button mat-menu-item>Export</button>
+        </mat-menu>
+        <button mat-icon-button matTooltip="More" [matMenuTriggerFor]="sideMenu">
+          <i class="material-icons">more_vert</i>
+        </button>
+      </div>
+
+      <div class="tree-list" *ngIf="instances && instances.length > 0">
+        <app-instance-tree *ngFor="let instance of instances"
+                           (updatePage)="updatePage($event)"
+                           [instance]="instance"></app-instance-tree>
+      </div>
+
+      <div class="slider-point"
+           (mousedown)="dragObject.pressed=true"
+           (drag)="$event.preventDefault()">
+        <div class="handler"></div>
+      </div>
+    </div>
+    <div class="right-part">
+      <app-instance-root-panel
+        [pageData]="currentPage"
+        (onDisconnect)="onDisconnect($event)"
+        (onNewValue)="onNewValue($event)"
+        [instance]=""
+        *ngIf="currentPage.type === 'root-instance' && currentInstance.status === 'connected'"
+      ></app-instance-root-panel>
+
+      <app-data-viewer
+        (onDeleteValue)="onDeleteValue()"
+        *ngIf="currentPage.type === 'data-viewer'"
+        [pageData]="currentPage"
+        (onNewValue)="onNewValue($event)">
+      </app-data-viewer>
+    </div>
+  </div>
+
+  <div class="cli">
+
+  </div>
+</div>

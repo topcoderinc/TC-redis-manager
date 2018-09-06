@@ -1,0 +1,26 @@
+<div class="instance-root">
+  <div [class]="'item-line mat-elevation-z1 ' + (instance['selected'] ? 'selected':'')"
+       (click)="onClickRootItem()">
+
+    <div *ngIf="instance.working" class="material-icons">
+      <mat-spinner class="loading-spinner"
+                   [diameter]="20"
+                   [strokeWidth]="2"></mat-spinner>
+    </div>
+
+    <i class="material-icons"
+       *ngIf="!instance.working && instance.status === 'connected'"
+       (click)="onExpand()">
+      {{instance.expanded?'expand_more':'chevron_right'}}
+    </i>
+    <i class="material-icons error" *ngIf="instance.status === 'failed'">close</i>
+    <i class="material-icons" *ngIf="!instance.status">swap_vertical_circle</i>
+    {{instance.serverModel.name}}({{instance.serverModel.ip}}:{{instance.serverModel.port}}:{{instance.serverModel.db}})
+  </div>
+
+  <div *ngIf="instance.expanded" class="sub-items">
+    <app-tree-node [itemNode]="instance" [selectedMap]="selectedMap"
+                   [expandedMap]="expandedMap"
+                   (onItemClick)="onClickItem($event)"></app-tree-node>
+  </div>
+</div>

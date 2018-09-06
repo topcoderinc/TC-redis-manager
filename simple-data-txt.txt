@@ -1,0 +1,54 @@
+set BaicUser:1:name "Job Smith"
+set BaicUser:1:id 1
+lpush user:1:role Admin1 Admin2 Admin3 Admin4 Admin5 Admin6 Admin7 Admin1 Admin2 Admin3 Admin4 Admin5 Admin6 Admin7 Admin1 Admin2 Admin3 Admin4 Admin5 Admin6 Admin7 Admin1 Admin2 Admin3 Admin4 Admin5 Admin6 Admin7 Admin1 Admin2 Admin3 Admin4 Admin5 Admin6 Admin7
+
+
+set BaicUser:2:name "TOpcoder User"
+set BaicUser:2:id 2
+lpush BaicUser:2:role Admin1 Admin2 Admin3 Admin4 Admin5 Admin6 Admin7 Admin1 Admin2 Admin3 Admin4 Admin5 Admin6 Admin7 Admin1 Admin2 Admin3 Admin4 Admin5 Admin6 Admin7 Admin1 Admin2 Admin3 Admin4 Admin5 Admin6 Admin7 Admin1 Admin2 Admin3 Admin4 Admin5 Admin6 Admin7
+
+set BaicUser:3:name "New-User"
+set BaicUser:3:id 3
+lpush BaicUser:3:role Admin1 Admin2 Admin3 Admin4 Admin5 Admin6 Admin7 Admin1 Admin2 Admin3 Admin4 Admin5 Admin6 Admin7 Admin1 Admin2 Admin3 Admin4 Admin5 Admin6 Admin7 Admin1 Admin2 Admin3 Admin4 Admin5 Admin6 Admin7 Admin1 Admin2 Admin3 Admin4 Admin5 Admin6 Admin7
+
+lpush WhitePermissionList "http://127.0.0.1:4200/" "https://redis.io/topics/mass-insert" "http://127.0.0.1:4200/" "https://redis.io/topics/mass-insert" "http://127.0.0.1:4200/" "https://redis.io/topics/mass-insert"  "http://127.0.0.1:4200/" "https://redis.io/topics/mass-insert"  "http://127.0.0.1:4200/" "https://redis.io/topics/mass-insert"  "http://127.0.0.1:4200/" "https://redis.io/topics/mass-insert"  "http://127.0.0.1:4200/" "https://redis.io/topics/mass-insert"  "http://127.0.0.1:4200/" "https://redis.io/topics/mass-insert"  "http://127.0.0.1:4200/" "https://redis.io/topics/mass-insert"  "http://127.0.0.1:4200/" "https://redis.io/topics/mass-insert"  "http://127.0.0.1:4200/" "https://redis.io/topics/mass-insert"  "http://127.0.0.1:4200/" "https://redis.io/topics/mass-insert"  "http://127.0.0.1:4200/" "https://redis.io/topics/mass-insert"  "http://127.0.0.1:4200/" "https://redis.io/topics/mass-insert"  "http://127.0.0.1:4200/" "https://redis.io/topics/mass-insert"  "http://127.0.0.1:4200/" "https://redis.io/topics/mass-insert"  "http://127.0.0.1:4200/" "https://redis.io/topics/mass-insert" 
+
+set global-config:config1 1
+set global-config:config2 2
+set global-config:config3 3
+set global-config:config4 4
+
+sadd global-set-01 value1 value2 value3 value4 value5 value1 value2 value3 value4 value5 value1 value2 value3 value4 value5 value1 value2 value3 value4 value5 value1 value2 value3 value4 value5 value1 value2 value3 value4 value5 value1 value2 value3 value4 value5 value1 value2 value3 value4 value5 value1 value2 value3 value4 value5 value1 value2 value3 value4 value5 value1 value2 value3 value4 value5 value1 value2 value3 value4 value5
+
+zadd global-ordered-list 111 "http://127.0.0.1:8081/" 123 "https://material.io/tools/icons/?search=import&style=baseline1" 111 "http://127.0.0.1:8081/1" 123 "https://material.io/tools/icons/?search=import&style=baseline2" 1 "http://127.0.0.1:8081/2" 123 "https://material.io/tools/icons/?search=import&style=baseline3" 111 "http://127.0.0.1:8081/3" 123 "https://material.io/tools/icons/?search=import&style=baseline4" 111 "http://127.0.0.1:8081/4" 123 "https://material.io/tools/icons/?search=import&style=baseline5" 3 "http://127.0.0.1:8081/5" 123 "https://material.io/tools/icons/?search=import&style=baseline6" 5 "http://127.0.0.1:8081/6" 123 "https://material.io/tools/icons/?search=import&style=baseline7" 111 "http://127.0.0.1:8081/7" 23 "https://material.io/tools/icons/?search=import&style=baseline8" 111 "http://127.0.0.1:8081/8" 123 "https://material.io/tools/icons/?search=import&style=baseline11" 12 "http://127.0.0.1:8081/9" 44 "https://material.io/tools/icons/?search=import&style=baseline12" 111 "http://127.0.0.1:8081/10" 54 "https://material.io/tools/icons/?search=import&style=baseline13" 32 "http://127.0.0.1:8081/11" 123 "https://material.io/tools/icons/?search=import&style=baseline14" 111 "http://127.0.0.1:8081/12" 123 "https://material.io/tools/icons/?search=import&style=baseline15" 21 "http://127.0.0.1:8081/13" 123 "https://material.io/tools/icons/?search=import&style=baseline15" 111 "http://127.0.0.1:8081/14" 123 "https://material.io/tools/icons/?search=import&style=baseline"
+
+hmset global-map map-key-01 map-value-01
+hmset global-map map-key-02 map-value-01
+hmset global-map map-key-03 map-value-01
+hmset global-map map-key-04 map-value-01
+hmset global-map map-key-05 map-value-01
+hmset global-map map-key-06 map-value-01
+hmset global-map map-key-07 map-value-01
+hmset global-map map-key-08 map-value-01
+hmset global-map map-key-09 map-value-01
+hmset global-map map-key-10 map-value-01
+hmset global-map map-key-11 map-value-01
+hmset global-map map-key-12 map-value-01
+hmset global-map map-key-13 map-value-01
+hmset global-map map-key-14 map-value-01
+hmset global-map map-key-15 map-value-01
+hmset global-map map-key-16 map-value-01
+hmset global-map map-key-17 map-value-01
+hmset global-map map-key-23 map-value-01
+hmset global-map map-key-33 map-value-01
+hmset global-map map-key-43 map-value-01
+hmset global-map map-key-53 map-value-01
+hmset global-map map-key-63 map-value-01
+hmset global-map map-key-73 map-value-01
+hmset global-map map-key-83 map-value-01
+hmset global-map map-key-93 map-value-01
+hmset global-map map-key-103 map-value-01
+hmset global-map map-key-203 map-value-01
+
+
+set global-string "Note: The Redis Documentation is also available in raw (computer friendly) format in the redis-doc github repository. The Redis Documentation is released under the Creative Commons Attribution-ShareAlike 4.0 International license."

@@ -1,0 +1,29 @@
+<div class="redis-panel-root">
+  <div class="header">
+    <button mat-raised-button (click)="onAddNewRecords()">Add new Records</button>
+    <button mat-raised-button color="warn" (click)="disconnect()">Disconnect</button>
+  </div>
+  <div class="table-content mat-elevation-z8" *ngIf="pageData.item && pageData.item.length > 0">
+    <table mat-table [dataSource]="getData()" class="example-table">
+      <!-- Number Column -->
+      <ng-container matColumnDef="key">
+        <th mat-header-cell *matHeaderCellDef>Key</th>
+        <td mat-cell *matCellDef="let row">{{row.key}}</td>
+      </ng-container>
+
+      <!-- Title Column -->
+      <ng-container matColumnDef="value">
+        <th mat-header-cell *matHeaderCellDef>Value</th>
+        <td mat-cell *matCellDef="let row">{{row.value}}</td>
+      </ng-container>
+
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+  <mat-paginator [length]="pageData.item.length"
+                 [pageSizeOptions]="[10,20,50,100]"
+                 (page)="onPageEvent($event)"
+                 [pageSize]="page.pageSize"></mat-paginator>
+</div>

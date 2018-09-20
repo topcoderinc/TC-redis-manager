@@ -9,6 +9,11 @@
             (click)="onDelete()">Delete {{pageData.item.type === 'folder'?
       'Branch':'Key'}}
     </button>
+
+    <button mat-raised-button *ngIf="pageData.item.type==='hash'"
+            color="primary"
+            (click)="onEdit()">Edit
+    </button>
   </div>
 
   <div class="string-editor" *ngIf="pageData.item.type === 'string'">
@@ -30,8 +35,20 @@
     </button>
   </div>
 
-  <div class="table-content mat-elevation-z8" *ngIf="isNeedShowTable()">
+  <div class="{{'table-content mat-elevation-z8 ' + ((cli$ | async)?.expanded ? 'cli-expanded':'')}}"
+       *ngIf="isNeedShowTable()">
     <table mat-table [dataSource]="data" class="example-table">
+
+      <ng-container matColumnDef="checkbox">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+          <mat-checkbox
+            (change)="selectedMap[key(element)] = !selectedMap[key(element)]"
+            [checked]="selectedMap[key(element)]"
+            color="primary"></mat-checkbox>
+        </td>
+      </ng-container>
+
       <ng-container matColumnDef="index">
         <th mat-header-cell *matHeaderCellDef>Index</th>
         <td mat-cell *matCellDef="let row">{{row.index}}</td>
@@ -53,6 +70,23 @@
         <td mat-cell *matCellDef="let row">{{row.score}}</td>
       </ng-container>
 
+      <ng-container matColumnDef="actions" *ngIf="pageData.item.type !== 'list'">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let element">
+
+          <button mat-icon-button matTooltip="Edit this item"
+                  *ngIf="pageData.item.type === 'hash'"
+                  (click)="onEditMapElements([element])">
+            <i class="material-icons">edit</i>
+          </button>
+
+          <button mat-icon-button matTooltip="Delete Forever" (click)="removeElement(element)">
+            <i class="material-icons">delete_forever</i>
+          </button>
+
+
+        </td>
+      </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="getColumns()"></tr>
       <tr mat-row *matRowDef="let row; columns: getColumns();"></tr>

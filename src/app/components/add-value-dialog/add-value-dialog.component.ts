@@ -11,6 +11,7 @@ export class ValueMode {
   key: string;
   type: string;
   hideType: boolean;
+  isEditMode = false;
   values = {
     values: [{value: ''}],
     orderedValues: [{value: '', score: '0'}],
@@ -41,6 +42,9 @@ export class AddValueDialogComponent implements OnInit {
   ngOnInit() {
   }
 
+  isEditMode() {
+    return this.data.isEditMode;
+  }
   /**
    * show a error message
    * @param msg the error message text

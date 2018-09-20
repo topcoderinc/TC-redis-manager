@@ -13,7 +13,7 @@
   .table-content {
     margin: 6px 16px 16px 16px;
     position: relative;
-    height: calc(100vh - 60px - 78px - 56px - 36px);
+    height: calc(100vh - 60px - 78px - 56px - 36px - 80px);
     overflow: auto;
     .example-table {
       position: relative;
@@ -21,6 +21,10 @@
     }
     .string-value{
       word-break: break-all;
+    }
+
+    &.cli-expanded {
+      height: calc(100vh - 60px - 78px - 56px - 36px - 420px);
     }
   }
 

@@ -1,11 +1,22 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {AddServerDialogComponent} from './components/add-server-dialog/add-server-dialog.component';
 import {RedisInstance} from './models/redis-instance';
 import uuid from 'uuid';
 import {RedisService} from './services/redis.service';
-import _ from 'lodash';
 import {UtilService} from './services/util.service';
+import {Store} from '@ngrx/store';
+import {
+  ADD_REDIS_SERVER,
+  DESELECT_ALL_REDIS,
+  REDIS_DISCONNECT, REQ_FETCH_TREE,
+  REQ_REDIS_CONNECT,
+  SELECT_REDIS
+} from './ngrx/actions/redis-actions';
+import {Observable} from 'rxjs';
+import {REQ_LOAD_PAGE, REQ_LOAD_ROOT_PAGE} from './ngrx/actions/page-actions';
+import {PageModel} from './models/page-model';
+import {ADD_COMMAND, CLEAR_HISTORY, TOGGLE_CLI} from './ngrx/actions/cli-actions';
 
 /**
  * return a new right page component
@@ -28,10 +39,13 @@ const getNewPage = () => ({
 })
 export class AppComponent implements OnInit {
   title = 'REDIS MANAGER GUI TOOLS';
-  instances = [];
+  instances$: Observable<RedisInstance[]> = null;
+  currentPage$: Observable<PageModel> = null;
+  cli$: Observable<any> = null;
+  currentInstance = null;
+  cliInputValue = '';
 
-  public currentPage = getNewPage();
-  public currentInstance = null;
+  @ViewChild('cliScrollContent') private cliScrollContent: ElementRef;
 
   public dragObject = {
     minWidth: 250,
@@ -45,47 +59,22 @@ export class AppComponent implements OnInit {
   constructor(public dialogService: MatDialog,
               private redisService: RedisService,
               private util: UtilService,
+              private _store: Store<any>
   ) {
-
-    const redisInstance = new RedisInstance();
-    redisInstance.serverModel = {name: 'default-local', ip: 'localhost', port: 6379, db: 0, password: ''};
-    redisInstance.id = uuid();
-    this.instances.push(redisInstance);
-    this.connectInstance(redisInstance);
-  }
-
-  /**
-   * connect a redis instance
-   * @param redisInstance the redis instance data
-   * @param {() => null} scb the success callback
-   */
-  connectInstance(redisInstance, scb = () => null) {
-    redisInstance.status = 'connecting';
-    redisInstance.working = true;
-    this.redisService.connect(redisInstance).subscribe(result => {
-      this.getInstanceById(result.id).status = 'connected';
-      redisInstance.working = false;
-      scb();
-    }, e => {
-      this.getInstanceById(redisInstance.id).status = 'failed';
-      redisInstance.working = false;
-      this.util.showMessage(`redis ${redisInstance.id} connect failed`);
+    this.instances$ = this._store.select('redis');
+    this.currentPage$ = this._store.select('page');
+    this.cli$ = this._store.select('cli');
+    this.instances$.subscribe((instances) => {
+      this._store.dispatch({type: REQ_REDIS_CONNECT, payload: {instance: instances[0]}});
     });
   }
 
-  /**
-   * refresh and expand
-   */
-  refreshAndExpand() {
-
-  }
-
-  /**
-   * get redis instance by id
-   * @param id the instance id
-   */
-  getInstanceById(id) {
-    return this.instances.find(ins => ins.id === id) || {};
+  findInstance(id) {
+    return new Promise(resolve => {
+      this.instances$.subscribe(instances => {
+        resolve(instances.find(ins => ins.id === id) || {});
+      });
+    });
   }
 
   /**
@@ -98,13 +87,9 @@ export class AppComponent implements OnInit {
     });
     ref.afterClosed().subscribe(result => {
       if (result) {
-        const instance = new RedisInstance();
-        instance.id = uuid();
-        instance.serverModel = result;
-        this.instances.push(instance);
-        this.connectInstance(instance, () => {
-          this.util.showMessage('redis connect successful');
-        });
+        const instance = {id: uuid(), serverModel: result};
+        this._store.dispatch({type: ADD_REDIS_SERVER, payload: instance});  // add new server
+        this._store.dispatch({type: REQ_REDIS_CONNECT, payload: {instance}}); // connect
       }
     });
   }
@@ -113,30 +98,21 @@ export class AppComponent implements OnInit {
    * on refresh event
    */
   onRefresh() {
-    if (!this.currentInstance) {
-      this.util.showMessage('you need select Redis instance first');
-      return;
-    }
-
-    const instance = this.currentInstance;
-    instance.working = true;
-    instance.status = 'connecting';
-    this.redisService.connect(instance).subscribe(() => {
-      instance.status = 'connected';
-      if (instance.expanded) {
-        instance.working = true;
-        this.redisService.fetchTree({id: instance.id}).subscribe(ret => {
-          instance.children = ret;
-          instance.working = false;
-        }, () => {
-          instance.working = false;
-        });
-      } else {
-        instance.working = false;
+    this.instances$.subscribe(instances => {
+      const ins = instances.find(i => i.selected === true);
+      if (!ins) {
+        this.util.showMessage('you need select Redis instance first');
+        return;
       }
-    }, e => {
-      instance.status = 'failed';
-      instance.working = false;
+      this._store.dispatch({
+        type: REQ_REDIS_CONNECT, payload: {
+          instance: ins, scb: () => {
+            if (ins.expanded) {
+              this._store.dispatch({type: REQ_FETCH_TREE, payload: {id: ins.id}});
+            }
+          }
+        }
+      });
     });
   }
 
@@ -163,13 +139,8 @@ export class AppComponent implements OnInit {
    * @param id the redis instance id
    */
   onDisconnect(id) {
-    this.currentPage = getNewPage();
-    if (this.getInstanceById(id)) {
-      this.getInstanceById(id).expanded = false;
-      this.getInstanceById(id).status = null;
-      this.getInstanceById(id).selected = false;
-    }
-    this.currentInstance = null;
+    this._store.dispatch({type: REDIS_DISCONNECT, payload: {id}});
+    this._store.dispatch({type: REQ_LOAD_PAGE, payload: getNewPage()});
   }
 
   /**
@@ -193,7 +164,10 @@ export class AppComponent implements OnInit {
    * on delete value (succeed)
    */
   onDeleteValue() {
-    this.currentPage = getNewPage();
+    this._store.dispatch({type: REQ_LOAD_PAGE, payload: getNewPage()});
+  }
+
+  refreshAndExpand() {
   }
 
   /**
@@ -204,49 +178,119 @@ export class AppComponent implements OnInit {
     const {id, type} = page;
     if (page.type === 'root-instance') { // show server information
       this.requireId = uuid();
-      this.instances.forEach(i => i.selected = false);
-      this.currentInstance = this.getInstanceById(id);
-      if (!this.currentInstance) {
-        this.util.showMessage('cannot found redis instance id = ' + id);
-        return;
-      }
-      this.currentInstance.selected = true;
-      const rId = _.clone(this.requireId);
-      this.currentPage = {
-        id, type,
-        loading: true,
-        item: [],
-      };
-      this.connectInstance(this.currentInstance, () => {
-        this.redisService.call(id, [['info']]).subscribe(ret => {
-          const rawInfo = ret[0];
-          const result = [];
-          rawInfo.split('\n').forEach(line => {
-            if (line.indexOf('#') === 0) {
-              return;
+      this._store.dispatch({type: DESELECT_ALL_REDIS});
+      this._store.dispatch({type: SELECT_REDIS, payload: {id}});
+      this.findInstance(id).then(instance => {
+        if (!instance['id']) {
+          this.util.showMessage(`cannot found redis instance where id= ${id}`);
+          return;
+        }
+        this.currentInstance = instance;
+        this._store.dispatch({
+          type: REQ_REDIS_CONNECT, payload: {
+            instance: instance, scb: () => {
+              this._store.dispatch({
+                type: REQ_LOAD_ROOT_PAGE, payload: {
+                  id, type, loading: true, item: [],
+                  requestId: uuid(),
+                }
+              });
             }
-            if (line.trim() === '') {
-              return;
-            }
-            const parts = line.split(':');
-            result.push({
-              key: parts[0].split('_').join(' '),
-              value: parts[1],
-            });
-          });
-          if (rId === this.requireId) { // page didn't update
-            this.currentPage.item = result;
-            this.currentPage.loading = false;
           }
-        }, () => {
-          this.getInstanceById(id).status = 'failed';
-          return this.util.showMessage('redis instance not exist');
         });
       });
     } else if (page.type === 'data-viewer') {
-      this.currentPage = {
-        id, type, loading: true, item: page.item
-      };
+      this._store.dispatch({type: REQ_LOAD_PAGE, payload: {id, type, loading: true, item: page.item}});
+    }
+  }
+
+  /**
+   * get short name of a redis instance
+   * @param instance the redis instance
+   */
+  getShortName(instance) {
+    return `${instance.serverModel.name}(${instance.serverModel.ip}:${instance.serverModel.port}:${instance.serverModel.db})`;
+  }
+
+  /**
+   * toggle cli panel
+   */
+  toggleCli() {
+    this._store.dispatch({type: TOGGLE_CLI});
+  }
+
+  /**
+   * clear cli history
+   */
+  clearHistory() {
+    this._store.dispatch({type: CLEAR_HISTORY});
+  }
+
+
+  /**
+   * on Command added callback
+   * @param err is command added failed
+   */
+  onCommandAdded(err) {
+    this.onRefresh();
+    setTimeout(() => {
+      try {
+        this.cliScrollContent.nativeElement.scrollTop = this.cliScrollContent.nativeElement.scrollHeight;
+      } catch (e) {
+
+      }
+    }, 200);
+  }
+
+  /**
+   * in cli input focus
+   */
+  onCliInputFocus() {
+    this.cli$.subscribe(c => {
+      if (!c.expanded && this.currentInstance) {
+        this.toggleCli();
+      }
+    });
+  }
+
+  /**
+   * on raw content click, put this raw content into input box
+   * @param content the raw input content
+   */
+  onRawContentClick(content) {
+  }
+
+
+  /**
+   * on cli input key down
+   * @param evt the event
+   */
+  onCliInputKeyDown(evt) {
+    if (evt.key === 'Enter') {
+      const v = this.cliInputValue.trim();
+      this.cliInputValue = '';
+      if (v === '') { // empty input
+        return;
+      }
+
+      const command = v.split(' ').filter(c => c.trim() !== ''); // combine into a command
+      const id = uuid();
+      this._store.dispatch({  // dispatch
+        type: ADD_COMMAND, payload: {
+          redisId: this.currentInstance.id,
+          id,
+          command,
+          cb: (err) => this.onCommandAdded(err),
+          item: {
+            status: 'new',
+            id,
+            time: new Date(),
+            rawCommand: v,
+            command,
+            result: ['running, please wait ...'],
+          },
+        }
+      });
     }
   }
 }

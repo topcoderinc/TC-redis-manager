@@ -3,7 +3,8 @@
     <button mat-raised-button (click)="onAddNewRecords()">Add new Records</button>
     <button mat-raised-button color="warn" (click)="disconnect()">Disconnect</button>
   </div>
-  <div class="table-content mat-elevation-z8" *ngIf="pageData.item && pageData.item.length > 0">
+  <div class="{{'table-content mat-elevation-z8 ' + ((cli$ | async)?.expanded ? 'cli-expanded':'')}}"
+       *ngIf="pageData.item && pageData.item.length > 0">
     <table mat-table [dataSource]="getData()" class="example-table">
       <!-- Number Column -->
       <ng-container matColumnDef="key">

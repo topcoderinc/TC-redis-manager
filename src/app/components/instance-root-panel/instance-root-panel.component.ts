@@ -2,6 +2,8 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component';
 import {AddValueDialogComponent, ValueMode} from '../add-value-dialog/add-value-dialog.component';
+import {Store} from '@ngrx/store';
+import {Observable} from 'rxjs';
 
 
 /**
@@ -18,13 +20,15 @@ export class InstanceRootPanelComponent implements OnInit {
   @Output() onDisconnect = new EventEmitter();
   @Output() onNewValue = new EventEmitter();
   displayedColumns: string[] = ['key', 'value'];
+  cli$: Observable<any> = null;
 
   page = {
     pageIndex: 0,
     pageSize: 20,
   };
 
-  constructor(public dialogService: MatDialog) {
+  constructor(public dialogService: MatDialog, private _store: Store<any>) {
+    this.cli$ = this._store.select('cli');
   }
 
   ngOnInit() {

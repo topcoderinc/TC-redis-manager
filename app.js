@@ -1,86 +1,77 @@
-/**
- * Copyright (C) 2017 TopCoder Inc., All Rights Reserved.
- */
-/**
- * The application entry point
- *
- * @author      TCSCODER
- * @version     1.0
- */
-
-
-
-
-const express = require('express');
-const cross = require('cors');
-const bodyParser = require('body-parser');
-const _ = require('lodash');
 const config = require('config');
-const http = require('http');
-const path = require('path');
-const logger = require('./lib/common/logger');
-const errorMiddleware = require('./lib/common/error.middleware');
+const _ = require('lodash');
+
+const HApi = require('hapi');
 const routes = require('./lib/route');
+const logger = require('./lib/common/logger');
 
-const app = express();
-const httpServer = http.Server(app);
+// Create a server with a host and port
+const server = HApi.server({
+  port: config.PORT,
+});
 
 
-app.set('port', config.PORT);
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(cross());
-const apiRouter = express.Router({});
+/**
+ * inject cors headers
+ */
+const injectHeader = (h) => {
+  h.header("Access-Control-Allow-Origin", "*");
+  h.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+  h.header("Access-Control-Allow-Headers", "If-Modified-Since, Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  return h;
+};
 
-// load all routes
-_.each(routes, (verbs, url) => {
-  _.each(verbs, (def, verb) => {
-    let actions = [];
+/**
+ * inject routes
+ */
+_.each(routes, (route, path) => {
+  const newPath = '/backend/' + config.API_VERSION + path;
+  server.route({method: 'options', path: newPath, handler: (req, h) => injectHeader(h.response('ok'))});
+  _.each(route, (handler, method) => {
 
-    const {method} = def;
-    if (!method) {
-      throw new Error(`${verb.toUpperCase()} ${url} method is undefined`);
-    }
-    if (def.middleware && def.middleware.length > 0) {
-      actions = actions.concat(def.middleware);
-    }
-
-    actions.push(async (req, res, next) => {
-      try {
-        await method(req, res, next);
-      } catch (e) {
-        next(e);
+    logger.info(`endpoint added, [${method.toUpperCase()}] ${newPath}`);
+    server.route({
+      method,
+      path: newPath,
+      handler: async (req, h) => {
+        let result = {};
+        let status = 200;
+        try {
+          result = await handler.method(req, h);
+        } catch (e) {
+          result = {code: e.status, message: e.message}
+          status = e.status || 500;
+        }
+        return injectHeader(h.response(result).code(status));
       }
     });
-
-    const middlewares = [];
-    for (let i = 0; i < actions.length - 1; i += 1) {
-      if (actions[i].name.length !== 0) {
-        middlewares.push(actions[i].name);
-      }
-    }
-
-    logger.info(`Endpoint discovered : [${middlewares.join(',')}] ${verb.toLocaleUpperCase()} /${config.API_VERSION}${url}`);
-    apiRouter[verb](`/${config.API_VERSION}${url}`, actions);
   });
 });
-app.use('/backend/', apiRouter);
-app.use(errorMiddleware());
-
-// Serve static assets
-app.use(express.static(path.resolve(__dirname, 'dist')));
-// Always return the main index.html
-app.get('/', (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'dist', 'index.html'));
-});
 
 
-(async () => {
-  if (!module.parent) { // this code will never run in unit test mode
-    httpServer.listen(app.get('port'), () => {
-      logger.info(`Express server listening on port ${app.get('port')}`);
+// Start the server
+async function start() {
+  try {
+    await server.register(require('inert'));
+
+    // add static folder
+    server.route({
+      method: 'GET',
+      path: '/{param*}',
+      handler: {
+        directory: {
+          path: 'dist',
+        }
+      }
     });
-  } else {
-    module.exports = app;
+    await server.start();
   }
-})();
+  catch (err) {
+    logger.error(err);
+    process.exit(1);
+  }
+}
+
+start().then(() => {
+  logger.info('Server running at: ' + server.info.uri);
+});

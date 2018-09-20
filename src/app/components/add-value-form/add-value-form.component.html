@@ -23,6 +23,7 @@
 
     <mat-form-field *ngIf="type === 'Hash Map'">
       <input matInput placeholder="Key"
+             [readonly]="isEditMode"
              (change)="onValueChange()"
              [(ngModel)]="getItemArray()[i].key">
     </mat-form-field>
@@ -33,13 +34,13 @@
              [(ngModel)]="getItemArray()[i].value">
     </mat-form-field>
 
-    <button mat-icon-button (click)="onRemoveItem(getItemArray(),i)">
+    <button mat-icon-button (click)="onRemoveItem(getItemArray(),i)" [disabled]="isEditMode">
       <i class="material-icons delete-icon">delete</i>
     </button>
   </div>
 
   <div class="line buttons">
-    <button mat-button color="primary" (click)="onAddItem(getItemArray())">
+    <button mat-button color="primary" (click)="onAddItem(getItemArray())" [disabled]="isEditMode">
       <i class="material-icons">add</i>Add new value
     </button>
   </div>

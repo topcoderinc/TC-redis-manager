@@ -42,44 +42,6 @@ export class HttpHelperService {
   }
 
   /**
-   * Performs a request with `put` http method.
-   * @param url the url
-   * @param body the body
-   * @param options the request options
-   * @returns {Observable<any>}
-   */
-  put(url: string, body?: any, options?: any, isUpload?: boolean): Observable<any> {
-    return this.http
-      .put(API_BASE_URL + url, body, this.requestOptions(options, isUpload))
-      .pipe(catchError(err => this.catchError(err)));
-  }
-
-  /**
-   * Performs a request with `put` http method.
-   * @param url the url
-   * @param body the body
-   * @param options the request options
-   * @returns {Observable<any>}
-   */
-  patch(url: string, body?: any, options?: any, isUpload?: boolean): Observable<any> {
-    return this.http
-      .patch(API_BASE_URL + url, body, this.requestOptions(options, isUpload))
-      .pipe(catchError(err => this.catchError(err)));
-  }
-
-  /**
-   * Performs a request with `delete` http method.
-   * @param url the url
-   * @param options the request options
-   * @returns {Observable<any>}
-   */
-  delete(url: string, options?: any): Observable<any> {
-    return this.http.delete(API_BASE_URL + url, this.requestOptions(options))
-      .pipe(catchError(err => this.catchError(err)));
-  }
-
-
-  /**
    * catches the auth error
    * @param error the error response
    */

@@ -8,6 +8,8 @@ export class RedisInstance {
   working = false;
   serverModel: AddServerModel;
   id = '';
+  selected = false;
   expanded = false;
   children = [];
+  rootInfo = {};
 }

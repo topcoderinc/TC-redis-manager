@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>Add new value</h1>
+<h1 mat-dialog-title>{{isEditMode()?'Edit value':'Add new value'}}</h1>
 <div mat-dialog-content>
   <mat-form-field>
     <input matInput placeholder="Key" [readonly]="data.hideType" [(ngModel)]="data.key">
@@ -14,11 +14,15 @@
   </mat-form-field>
 
   <app-add-value-form [type]="data.type"
+                      [initValues]="data.values.values"
+                      [initHashMapValues]="data.values.hashMapValues"
+                      [initOrderedValues]="data.values.orderedValues"
+                      [isEditMode]="isEditMode()"
                       (onValueUpdate)="data.values = $event">
 
   </app-add-value-form>
 </div>
 <div mat-dialog-actions>
   <button mat-button [mat-dialog-close]="null">Cancel</button>
-  <button mat-raised-button color="primary" (click)="onAdd()">Add</button>
+  <button mat-raised-button color="primary" (click)="onAdd()">{{isEditMode()?'Update':'Add'}}</button>
 </div>

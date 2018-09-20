@@ -48,6 +48,16 @@ import {AddValueFormComponent} from './components/add-value-form/add-value-form.
 import {DataViewerComponent} from './components/data-viewer/data-viewer.component';
 import {TreeNodeComponent} from './components/tree-node/tree-node.component';
 import {ImportDataDialogComponent} from './components/import-data-dialog/import-data-dialog.component';
+import {EffectsModule} from '@ngrx/effects';
+import {StoreModule} from '@ngrx/store';
+
+import {RedisEffect} from './ngrx/effects/redis-effect';
+import {PageEffect} from './ngrx/effects/page-effect';
+import {CliEffect} from './ngrx/effects/cli-effect';
+import {reducer as redisReducer} from './ngrx/reducer/redis-reducer';
+import {reducer as pageReducer} from './ngrx/reducer/page-reducer';
+import {reducer as cliReducer} from './ngrx/reducer/cli-reducer';
+
 
 @NgModule({
   declarations: [
@@ -99,7 +109,13 @@ import {ImportDataDialogComponent} from './components/import-data-dialog/import-
     MatSnackBarModule,
     MatTableModule,
     MatSortModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    StoreModule.forRoot({
+      redis: redisReducer,
+      page: pageReducer,
+      cli: cliReducer,
+    }),
+    EffectsModule.forRoot([RedisEffect, PageEffect, CliEffect]),
   ],
   providers: [
     HttpHelperService,

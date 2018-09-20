@@ -24,7 +24,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 ### Local run
 
 - goto submission folder, run `npm i` first
-- just run `npm run start`, and use browers open http://127.0.0.1:3003
+- just run `npm run start`, and use browsers open http://127.0.0.1:3003
 
 ### Configs
 
@@ -43,25 +43,23 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
   - Angular 6
   - Angular Material https://material.angular.io/
+  - Ngrx
   - Material Icons https://material.io/tools/icons/?style=baseline
 
 - Backend
 
-  - express
+  - hapi.js
   - ioredis https://github.com/luin/ioredis
 
 - Commands
 
   - what commands are included ? 
 
-    INFO,GET,SET,RPUSH,SADD,ZADD,HMSET,LRANGE,ZRANGE,SMEMBERS,HGETALL,LLEN, SCARD, ZCARD,HLEN
-
-  - what commands should be added next?
-
-    - SREM remove one element from set
-    - ZREM remove one element from ordered set
-    - HSET, HMSET, HDEL, update/delete single/values from hash map
-    - Other commands may need accroding to functions.
+    INFO,GET,SET,RPUSH,SADD,ZADD,HMSET,LRANGE,ZRANGE,SMEMBERS,HGETALL,LLEN, SCARD, ZCARD,HLEN,SREM,ZREM,HSET,HMSET,HDEL
+  
+- what commands should be added next?
+  
+    - Other commands may need according to functions.
 
   - which commands are dependent on one another?
 

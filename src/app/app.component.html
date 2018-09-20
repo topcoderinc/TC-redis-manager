@@ -26,8 +26,9 @@
         </button>
       </div>
 
-      <div class="tree-list" *ngIf="instances && instances.length > 0">
-        <app-instance-tree *ngFor="let instance of instances"
+
+      <div class="{{'tree-list ' + ((cli$ | async)?.expanded ? 'cli-expanded':'')}}">
+        <app-instance-tree *ngFor="let instance of instances$ | async"
                            (updatePage)="updatePage($event)"
                            [instance]="instance"></app-instance-tree>
       </div>
@@ -40,23 +41,62 @@
     </div>
     <div class="right-part">
       <app-instance-root-panel
-        [pageData]="currentPage"
+        [pageData]="currentPage$ | async"
         (onDisconnect)="onDisconnect($event)"
         (onNewValue)="onNewValue($event)"
         [instance]=""
-        *ngIf="currentPage.type === 'root-instance' && currentInstance.status === 'connected'"
+        *ngIf=" (currentPage$| async)?.type === 'root-instance'"
       ></app-instance-root-panel>
 
       <app-data-viewer
         (onDeleteValue)="onDeleteValue()"
-        *ngIf="currentPage.type === 'data-viewer'"
-        [pageData]="currentPage"
+        *ngIf="(currentPage$| async)?.type === 'data-viewer'"
+        [pageData]="(currentPage$| async)"
         (onNewValue)="onNewValue($event)">
       </app-data-viewer>
     </div>
   </div>
 
-  <div class="cli">
 
+  <!--redis cli panel-->
+  <div class="{{'cli mat-elevation-z12 ' + ((cli$ | async)?.expanded ? 'cli-expanded':'')}}">
+    <div class="title">
+      <span
+        class="current-instance">{{currentInstance ? getShortName(currentInstance) : 'No redis instance select'}}</span>
+      <span class="flex1"></span>
+
+      <button mat-icon-button (click)="clearHistory()"
+              [disabled]="!currentInstance"
+              matTooltip="Clear all history">
+        <i class="material-icons">clear_all</i>
+      </button>
+
+      <button mat-icon-button (click)="toggleCli()"
+              [disabled]="!currentInstance"
+              matTooltip="Toggle Cli panel">
+        <i class="material-icons">{{(cli$ | async)?.expanded ? 'keyboard_arrow_down':'keyboard_arrow_up'}}</i>
+      </button>
+
+    </div>
+
+    <div class="scroll-content" *ngIf="(cli$ | async)?.expanded" #cliScrollContent>
+      <div class="item" *ngFor="let item of (cli$ | async)?.items">
+        <div class="command">
+          <span class="time">[{{item.time | date:'medium'}}] ></span>
+          <span (click)="onRawContentClick(item.rawCommand)">{{item.rawCommand}}</span></div>
+        <div class="{{'result ' + (item.error ? 'error':'')}}">{{item.result}}</div>
+      </div>
+    </div>
+
+    <div class="input">
+      <mat-form-field class="example-full-width">
+        <input matInput placeholder="{{!currentInstance ?'Please select a redis instance to Enter Redis command'
+        : 'Enter Redis command'}}" value=""
+               (keydown)="onCliInputKeyDown($event)"
+               [(ngModel)]="cliInputValue"
+               (focus)="onCliInputFocus()"
+               [readonly]="!currentInstance">
+      </mat-form-field>
+    </div>
   </div>
 </div>

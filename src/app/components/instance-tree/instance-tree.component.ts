@@ -1,6 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {RedisInstance} from '../../models/redis-instance';
 import {RedisService} from '../../services/redis.service';
+import {Store} from '@ngrx/store';
+import {REQ_FETCH_TREE, TOGGLE_REDIS} from '../../ngrx/actions/redis-actions';
 
 /**
  * a redis instance tree component
@@ -16,26 +18,20 @@ export class InstanceTreeComponent implements OnInit {
   public selectedMap = {};
   public expandedMap = {};
 
-  constructor(private redisService: RedisService) {
+  constructor(private redisService: RedisService, private _store: Store<any>) {
   }
 
   /**
    * on redis expand
    */
   onExpand() {
+    const id = this.instance.id;
     if (this.instance.expanded) {
-      this.instance.expanded = false;
+      this._store.dispatch({type: TOGGLE_REDIS, payload: {id}});
       return;
     }
-    this.instance.working = true;
-    this.redisService.fetchTree({id: this.instance.id}).subscribe(ret => {
-      this.instance.working = false;
-      this.instance.expanded = true;
-      this.instance.children = ret;
-    }, e => {
-      this.instance.status = 'failed';
-      this.instance.working = false;
-    });
+    this._store.dispatch({type: REQ_FETCH_TREE, payload: {id}});
+    this._store.dispatch({type: TOGGLE_REDIS, payload: {id}});
   }
 
   /**
@@ -62,7 +58,6 @@ export class InstanceTreeComponent implements OnInit {
       item: item,
     });
   }
-
 
   ngOnInit() {
   }

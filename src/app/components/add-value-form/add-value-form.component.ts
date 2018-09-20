@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-
+import _ from 'lodash';
 
 /**
  * the new value form dialog component
@@ -11,12 +11,15 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 })
 export class AddValueFormComponent implements OnInit {
   @Input() type = null;
+  @Input() initValues = null;
+  @Input() initOrderedValues = null;
+  @Input() initHashMapValues = null;
+  @Input() isEditMode = false;
   @Output() onValueUpdate = new EventEmitter();
 
   values = [];
   orderedValues = [];
   hashMapValues = [];
-
 
   constructor() {
   }
@@ -39,9 +42,9 @@ export class AddValueFormComponent implements OnInit {
    * the component init
    */
   ngOnInit() {
-    this.values = [{value: ''}];
-    this.orderedValues = [{value: '', score: 0}];
-    this.hashMapValues = [{value: '', key: ''}];
+    this.values = this.initValues ? _.clone(this.initValues) : [{value: ''}];
+    this.orderedValues = this.initOrderedValues ? _.clone(this.initOrderedValues) : [{value: '', score: 0}];
+    this.hashMapValues = this.initHashMapValues ? _.clone(this.initHashMapValues) : [{value: '', key: ''}];
   }
 
   /**

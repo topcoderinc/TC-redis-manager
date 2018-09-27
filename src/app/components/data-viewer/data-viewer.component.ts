@@ -32,6 +32,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
   @Input() pageData = null;
   @Output() onNewValue = new EventEmitter();
   @Output() onDeleteValue = new EventEmitter();
+  loadingPageData = false;
 
   public page = {
     pageIndex: 0,
@@ -165,11 +166,14 @@ export class DataViewerComponent implements OnInit, OnChanges {
 
 
     if (type === 'list') {
+      this.loadingPageData = true;
       this.redisService.call(instanceId, [['LRANGE', key, start, end]]).subscribe(ret => {
           this.data = injectValuesToArray(ret[0]);
+          this.loadingPageData = false;
         }
       );
     } else if (type === 'zset') {
+      this.loadingPageData = true;
       this.redisService.call(instanceId, [['ZRANGE', key, start, end, 'withscores']]).subscribe(ret => {
           this.data = [];
           for (let i = 0; i < ret[0].length;) {
@@ -179,20 +183,24 @@ export class DataViewerComponent implements OnInit, OnChanges {
               value: ret[0][i],
             });
             i += 2;
+            this.loadingPageData = false;
           }
         }
       );
     } else if (type === 'set') {
       if (!this.setCachedData) {
+        this.loadingPageData = true;
         this.redisService.call(instanceId, [['SMEMBERS', key]]).subscribe(ret => {
           this.setCachedData = injectValuesToArray(ret[0]);
           this.data = this.setCachedData.slice(start, end);
+          this.loadingPageData = false;
         });
       } else {
         this.data = this.setCachedData.slice(start, end);
       }
     } else if (type === 'hash') {
       if (!this.hashCachedData) {
+        this.loadingPageData = true;
         this.redisService.call(instanceId, [['HGETALL', key]]).subscribe(ret => {
             this.hashCachedData = [];
             for (let i = 0; i < ret[0].length;) {
@@ -203,6 +211,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
               i += 2;
             }
             this.data = this.hashCachedData.slice(start, end);
+            this.loadingPageData = false;
           }
         );
       } else {
@@ -230,7 +239,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
       viewMode.isEditMode = true;
     }
     this.dialogService.open(AddValueDialogComponent, {
-      width: '480px',
+      width: Math.min(1000, Math.max(480, (viewMode.key.length / 50) * 480)) + 'px',
       data: viewMode,
     }).afterClosed().subscribe(ret => {
       if (ret) {

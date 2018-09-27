@@ -1,7 +1,13 @@
 <h1 mat-dialog-title>{{isEditMode()?'Edit value':'Add new value'}}</h1>
 <div mat-dialog-content>
   <mat-form-field>
-    <input matInput placeholder="Key" [readonly]="data.hideType" [(ngModel)]="data.key">
+    <textarea matInput placeholder="Key"
+            [readonly]="data.hideType"
+            [(ngModel)]="data.key"
+            cdkTextareaAutosize
+            #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="1"
+            cdkAutosizeMaxRows="7"></textarea>
   </mat-form-field>
 
 

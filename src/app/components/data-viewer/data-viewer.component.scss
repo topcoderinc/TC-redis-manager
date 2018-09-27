@@ -10,6 +10,24 @@
     }
   }
 
+  .title {
+    margin-top: 16px;
+    padding: 16px;
+    .key {
+      font-size: 14px;
+      .t {
+        font-weight: bold;
+        margin-right: 6px;
+      }
+    }
+  }
+
+  .loading-data {
+    padding: 16px;
+    display: flex;
+    align-items: center;
+  }
+
   .table-content {
     margin: 6px 16px 16px 16px;
     position: relative;
@@ -29,18 +47,9 @@
   }
 
   .string-editor {
-    margin-top: 16px;
     padding: 16px;
     display: flex;
     flex-direction: column;
-    .key {
-      font-size: 14px;
-      .t {
-        font-weight: bold;
-        margin-right: 6px;
-      }
-      margin-bottom: 16px;
-    }
     button {
       width: 120px;
     }

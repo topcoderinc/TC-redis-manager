@@ -63,6 +63,9 @@ export class RedisEffect {
         const id = action['payload'].id;
         return this.redisService.fetchTree({id}).pipe(
           map(data => {
+            if (action['payload'].scb) {
+              action['payload'].scb(data);
+            }
             return {type: FETCHED_TREE, payload: {id, data}};
           }),
           catchError(() => {

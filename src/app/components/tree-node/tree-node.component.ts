@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, OnChanges} from '@angular/core';
 
 /**
  * tree node component
@@ -8,7 +8,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
   templateUrl: './tree-node.component.html',
   styleUrls: ['./tree-node.component.scss']
 })
-export class TreeNodeComponent implements OnInit {
+export class TreeNodeComponent implements OnInit, OnChanges {
   @Input() itemNode = null;
   @Input() selectedMap = null;
   @Input() expandedMap = null;
@@ -18,6 +18,7 @@ export class TreeNodeComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.ngOnChanges();
   }
 
 
@@ -34,5 +35,35 @@ export class TreeNodeComponent implements OnInit {
       string: 'abc'
     };
     return typesMap[type];
+  }
+
+  ngOnChanges() {
+    if (!this.itemNode || !this.itemNode.children || !this.itemNode.key) {
+      return;
+    }
+
+    const setDisplayName = item => {
+      if (item.key.indexOf('{') === -1) {
+        return item.displayName = item.name;
+      }
+
+      if (item.key.indexOf(',') === -1) {
+        return item.displayName = 'API Request' + '*';
+      }
+
+      const regexResults = item.key.match(/(?<=,|{)[^,{}]+(?=,|{|})/g);
+      let index = regexResults.length - 1;
+      item.displayName = regexResults[index];
+      while (item.displayName.indexOf(':') === -1) {
+        index -= 1;
+        item.displayName = regexResults[index] + item.displayName;
+      }
+
+      item.displayName += item.children ? '*' : '';
+    };
+
+    setDisplayName(this.itemNode);
+    this.itemNode.children.forEach(setDisplayName);
+
   }
 }

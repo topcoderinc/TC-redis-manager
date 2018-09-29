@@ -28,7 +28,7 @@
              [(ngModel)]="getItemArray()[i].key">
     </mat-form-field>
 
-    <mat-form-field *ngIf="type === 'Hash Map'">
+    <mat-form-field *ngIf="type === 'Hash Map'" [ngStyle]="{'width': 8 * getItemArray()[i].value.length + 'px'}" style="max-width:70%">
       <textarea matInput placeholder="Value"
              (change)="onValueChange()"
              [(ngModel)]="getItemArray()[i].value"

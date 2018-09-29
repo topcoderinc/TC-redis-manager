@@ -239,7 +239,8 @@ export class DataViewerComponent implements OnInit, OnChanges {
       viewMode.isEditMode = true;
     }
     this.dialogService.open(AddValueDialogComponent, {
-      width: Math.min(1000, Math.max(480, (viewMode.key.length / 50) * 480)) + 'px',
+      minWidth: Math.min(1000, Math.max(480, (viewMode.key.length / 50) * 480)) + 'px',
+      minHeight: '400px',
       data: viewMode,
     }).afterClosed().subscribe(ret => {
       if (ret) {

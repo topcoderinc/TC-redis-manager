@@ -16,3 +16,8 @@ html, body {
 mat-form-field {
   width: 100%;
 }
+
+.cdk-overlay-pane {
+  resize: both;
+  overflow: hidden;
+}

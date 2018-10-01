@@ -21,17 +21,21 @@
              [(ngModel)]="getItemArray()[i].score">
     </mat-form-field>
 
-    <mat-form-field *ngIf="type === 'Hash Map'">
+    <mat-form-field *ngIf="type === 'Hash Map'" style="flex-grow:0">
       <input matInput placeholder="Key"
              [readonly]="isEditMode"
              (change)="onValueChange()"
              [(ngModel)]="getItemArray()[i].key">
     </mat-form-field>
 
-    <mat-form-field *ngIf="type === 'Hash Map'">
-      <input matInput placeholder="Value"
+    <mat-form-field *ngIf="type === 'Hash Map'" [ngStyle]="{'width': 8 * getItemArray()[i].value.length + 'px'}" style="max-width:70%">
+      <textarea matInput placeholder="Value"
              (change)="onValueChange()"
-             [(ngModel)]="getItemArray()[i].value">
+             [(ngModel)]="getItemArray()[i].value"
+             cdkTextareaAutosize
+             #autosize="cdkTextareaAutosize"
+             cdkAutosizeMinRows="1"
+             cdkAutosizeMaxRows="7"></textarea>
     </mat-form-field>
 
     <button mat-icon-button (click)="onRemoveItem(getItemArray(),i)" [disabled]="isEditMode">

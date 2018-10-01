@@ -13,7 +13,7 @@ import {
   REQ_REDIS_CONNECT,
   SELECT_REDIS
 } from './ngrx/actions/redis-actions';
-import {Observable} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {REQ_LOAD_PAGE, REQ_LOAD_ROOT_PAGE} from './ngrx/actions/page-actions';
 import {PageModel} from './models/page-model';
 import {ADD_COMMAND, CLEAR_HISTORY, TOGGLE_CLI} from './ngrx/actions/cli-actions';
@@ -44,6 +44,7 @@ export class AppComponent implements OnInit {
   cli$: Observable<any> = null;
   currentInstance = null;
   cliInputValue = '';
+  expandDeepCommand$: Subject<void> = new Subject();
 
   @ViewChild('cliScrollContent') private cliScrollContent: ElementRef;
 
@@ -59,7 +60,7 @@ export class AppComponent implements OnInit {
   constructor(public dialogService: MatDialog,
               private redisService: RedisService,
               private util: UtilService,
-              private _store: Store<any>
+              private _store: Store<any>,
   ) {
     this.instances$ = this._store.select('redis');
     this.currentPage$ = this._store.select('page');
@@ -97,7 +98,7 @@ export class AppComponent implements OnInit {
   /**
    * on refresh event
    */
-  onRefresh() {
+  onRefresh(expandNodes = false) {
     this.instances$.subscribe(instances => {
       const ins = instances.find(i => i.selected === true);
       if (!ins) {
@@ -107,8 +108,15 @@ export class AppComponent implements OnInit {
       this._store.dispatch({
         type: REQ_REDIS_CONNECT, payload: {
           instance: ins, scb: () => {
+            if (expandNodes) {
+              ins.expanded = true;
+            }
             if (ins.expanded) {
-              this._store.dispatch({type: REQ_FETCH_TREE, payload: {id: ins.id}});
+              this._store.dispatch({type: REQ_FETCH_TREE, payload: {id: ins.id, scb: () => {
+                if (expandNodes) {
+                  setTimeout(() => this.expandDeepCommand$.next(), 0);
+                }
+              }}});
             }
           }
         }
@@ -165,9 +173,6 @@ export class AppComponent implements OnInit {
    */
   onDeleteValue() {
     this._store.dispatch({type: REQ_LOAD_PAGE, payload: getNewPage()});
-  }
-
-  refreshAndExpand() {
   }
 
   /**

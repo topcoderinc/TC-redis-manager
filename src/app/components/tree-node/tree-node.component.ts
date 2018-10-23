@@ -50,7 +50,9 @@ export class TreeNodeComponent implements OnInit, OnChanges {
       if (item.key.indexOf(',') === -1) {
         return item.displayName = 'API Request' + '*';
       }
+
       const regexResults = item.key.match(/[^,{}]+(?=,|{|})(?=,|\{)/g);
+
       let index = regexResults.length - 1;
       item.displayName = regexResults[index];
       while (item.displayName.indexOf(':') === -1) {

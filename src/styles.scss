@@ -16,3 +16,10 @@ html, body {
 mat-form-field {
   width: 100%;
 }
+
+.cdk-global-overlay-wrapper {
+  .cdk-overlay-pane {
+    resize: both;
+    overflow: hidden;
+  }
+}

@@ -48,6 +48,7 @@ import {AddValueFormComponent} from './components/add-value-form/add-value-form.
 import {DataViewerComponent} from './components/data-viewer/data-viewer.component';
 import {TreeNodeComponent} from './components/tree-node/tree-node.component';
 import {ImportDataDialogComponent} from './components/import-data-dialog/import-data-dialog.component';
+import { InformationDialogComponent } from './components/information-dialog/information-dialog.component';
 import {EffectsModule} from '@ngrx/effects';
 import {StoreModule} from '@ngrx/store';
 
@@ -57,6 +58,7 @@ import {CliEffect} from './ngrx/effects/cli-effect';
 import {reducer as redisReducer} from './ngrx/reducer/redis-reducer';
 import {reducer as pageReducer} from './ngrx/reducer/page-reducer';
 import {reducer as cliReducer} from './ngrx/reducer/cli-reducer';
+
 
 
 @NgModule({
@@ -70,7 +72,8 @@ import {reducer as cliReducer} from './ngrx/reducer/cli-reducer';
     AddValueFormComponent,
     DataViewerComponent,
     TreeNodeComponent,
-    ImportDataDialogComponent
+    ImportDataDialogComponent,
+    InformationDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -127,6 +130,7 @@ import {reducer as cliReducer} from './ngrx/reducer/cli-reducer';
     AddValueDialogComponent,
     AddServerDialogComponent,
     ImportDataDialogComponent,
+    InformationDialogComponent,
   ],
 })
 export class AppModule {

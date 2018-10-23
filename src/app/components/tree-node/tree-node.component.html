@@ -15,7 +15,7 @@
       {{expandedMap[item.key]?'expand_more':'chevron_right'}}
     </i>
 
-    <span>{{item.name}}</span>
+    <span class="name">{{item.displayName || item.name}}</span>
     <span class="len" *ngIf="item.len">({{item.len}})</span>
     <span class="len" *ngIf="item.type === 'folder'">({{item.children.length}})</span>
   </div>
@@ -27,4 +27,3 @@
   >
   </app-tree-node>
 </div>
-

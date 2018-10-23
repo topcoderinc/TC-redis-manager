@@ -34,6 +34,9 @@ $header-height: 60px;
       .side-header {
         display: flex;
         flex-direction: row;
+        .delete-btn{
+          color: red;
+        }
       }
       .slider-point {
         cursor: col-resize;

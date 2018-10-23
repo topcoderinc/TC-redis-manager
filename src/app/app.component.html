@@ -14,10 +14,18 @@
         <button mat-icon-button matTooltip="Add new redis Server" (click)="onAddServer()">
           <i class="material-icons">add_circle</i>
         </button>
-        <button mat-icon-button matTooltip="Redis API Document"><i class="material-icons">info</i></button>
+        <button mat-icon-button
+                matTooltip="remove this redis Server"
+                class="delete-btn"
+                (click)="onDeleteServer()">
+          <i class="material-icons">delete</i>
+        </button>
+        <button mat-icon-button
+                (click)="onInformationEvt()"
+                matTooltip="Redis API Document"><i class="material-icons">info</i></button>
         <div class="flex1"></div>
         <mat-menu #sideMenu="matMenu">
-          <button mat-menu-item (click)="refreshAndExpand()">Refresh + Expand All Nodes</button>
+          <button mat-menu-item (click)="onRefresh(true)">Refresh + Expand All Nodes</button>
           <button mat-menu-item>Import</button>
           <button mat-menu-item>Export</button>
         </mat-menu>
@@ -30,6 +38,7 @@
       <div class="{{'tree-list ' + ((cli$ | async)?.expanded ? 'cli-expanded':'')}}">
         <app-instance-tree *ngFor="let instance of instances$ | async"
                            (updatePage)="updatePage($event)"
+                           [expandDeep]="expandDeepCommand$"
                            [instance]="instance"></app-instance-tree>
       </div>
 

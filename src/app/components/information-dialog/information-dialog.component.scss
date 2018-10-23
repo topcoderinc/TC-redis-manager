@@ -1,0 +1,30 @@
+.information-dialog{
+  .title{
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    button{
+      position: absolute;
+      right: 0;
+      top: 0;
+      float: right;
+    }
+  }
+  display: flex;
+  flex-direction: column;
+  .dialog-root {
+    padding: 4px 24px;
+    flex:1;
+
+    mat-panel-title{
+      font-weight: bold;
+    }
+
+    .help-content{
+      .img{
+        max-width: 80%;
+      }
+      font-size: 14px;
+    }
+  }
+}

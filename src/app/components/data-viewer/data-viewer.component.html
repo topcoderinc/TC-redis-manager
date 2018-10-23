@@ -16,9 +16,18 @@
     </button>
   </div>
 
+  <div class="title">
+    <span class="key"><span class="t">Key</span>: {{pageData.item.key}}</span>
+  </div>
+
+  <div *ngIf="loadingPageData" class="material-icons" class="loading-data">
+    <mat-spinner class="loading-spinner"
+                 [diameter]="20"
+                 [strokeWidth]="2"></mat-spinner>
+  </div>
+
   <div class="string-editor" *ngIf="pageData.item.type === 'string'">
 
-    <span class="key"><span class="t">Key</span>: {{pageData.item.key}}</span>
     <mat-form-field [style.fontSize]="14">
       <mat-label>Value</mat-label>
       <textarea matInput
@@ -96,6 +105,7 @@
     *ngIf="isNeedShowTable()"
     [length]="pageData.item.len"
     [pageSizeOptions]="[10,20,50,100]"
+    [pageIndex]="page.pageIndex"
     (page)="onPageEvent($event)"
     [pageSize]="page.pageSize"></mat-paginator>
 </div>

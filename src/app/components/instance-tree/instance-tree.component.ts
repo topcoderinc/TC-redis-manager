@@ -1,4 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Subject} from 'rxjs';
 import {RedisInstance} from '../../models/redis-instance';
 import {RedisService} from '../../services/redis.service';
 import {Store} from '@ngrx/store';
@@ -13,7 +14,8 @@ import {REQ_FETCH_TREE, TOGGLE_REDIS} from '../../ngrx/actions/redis-actions';
   styleUrls: ['./instance-tree.component.scss']
 })
 export class InstanceTreeComponent implements OnInit {
-  @Input() instance: RedisInstance = null;
+  @Input() instance: RedisInstance;
+  @Input() expandDeep: Subject<void>;
   @Output() updatePage = new EventEmitter();
   public selectedMap = {};
   public expandedMap = {};
@@ -59,6 +61,20 @@ export class InstanceTreeComponent implements OnInit {
     });
   }
 
+  deepExpandItem(item) {
+    this.expandedMap[item.key] = true;
+    if (item.children) {
+      item.children.forEach(child => { this.deepExpandItem(child); });
+    }
+  }
+
   ngOnInit() {
+    this.expandDeep.subscribe(() => {
+      this.instance.children.forEach(item => {
+        if (item.children) {
+          this.deepExpandItem(item);
+        }
+      });
+    });
   }
 }

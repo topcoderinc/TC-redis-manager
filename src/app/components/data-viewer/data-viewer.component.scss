@@ -1,8 +1,7 @@
 .data-viewer-root {
   width: 100%;
   .header {
-    height: 60px;
-    margin-top: 12px;
+    margin-top: 8px;
     padding: 16px 12px 2px 12px;
     button {
       margin-left: 6px;
@@ -11,7 +10,6 @@
   }
 
   .title {
-    margin-top: 16px;
     padding: 16px;
     .key {
       font-size: 14px;
@@ -29,7 +27,7 @@
   }
 
   .table-content {
-    margin: 6px 16px 16px 16px;
+    margin: 2px 16px 2px 16px;
     position: relative;
     height: calc(100vh - 60px - 78px - 56px - 36px - 80px);
     overflow: auto;

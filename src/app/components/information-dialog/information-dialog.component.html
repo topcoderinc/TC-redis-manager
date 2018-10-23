@@ -1,0 +1,84 @@
+<div class="information-dialog">
+  <h1 mat-dialog-title class="title">Help
+    <button mat-icon-button [mat-dialog-close]="null"><i class="material-icons">close</i></button>
+  </h1>
+  <div mat-dialog-content class="dialog-root">
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          How to create a server ?
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="help-content">
+        <p>See this image, the detail steps are below:</p>
+        <img class="img" src="assets/help/add-server.png"/>
+        <p>1. Click "Add Icon" button on left side panel</p>
+        <p>2. Enter redis values (name,host,port,password,database index) </p>
+        <p>3. Click Add button</p>
+      </div>
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          How to connect to an existing server ?
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="help-content">
+        <p>See this image, in fact, there is no explicit connect action</p>
+        <img class="img" src="assets/help/connect.jpg"/>
+        <p>when redis instance icon is "Two arrows", that mean the redis is <strong>disconnect</strong> status.
+          <strong>just click it</strong>, it will start auto connect.</p>
+      </div>
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          How to disconnect from a server ?
+        </mat-panel-title>
+
+      </mat-expansion-panel-header>
+
+      <div class="help-content">
+        <p>See this image, the detail steps are below:</p>
+        <img class="img" src="assets/help/disconnect.jpg"/>
+
+        <p>1. select the redis instance that you want disconnect.</p>
+        <p>2. click <strong>"Disconnect"</strong> button</p>
+      </div>
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          How to unregister/delete a redis server?
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="help-content">
+        <p>See this image, the detail steps are below:</p>
+        <img class="img" src="assets/help/delete.png"/>
+
+        <p>1. select the redis instance that you want disconnect.</p>
+        <p>2. click <strong>"Delete"</strong> button</p>
+        <p>3. click <strong>"Yes"</strong> button</p>
+      </div>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Official Redis.io documentation
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="help-content">
+        <a target="_blank" href="https://redis.io/commands">Official Redis Command Document</a>
+        <br/>
+        <a target="_blank" href="https://redis.io/documentation">Official Redis Document</a>
+      </div>
+    </mat-expansion-panel>
+
+
+  </div>
+</div>

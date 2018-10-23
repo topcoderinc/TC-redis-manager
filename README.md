@@ -6,6 +6,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 - Node 8.11.x , npm 5.6.x
 - redis 4.x
+- docker
 
 ### Redis
 
@@ -18,7 +19,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
   $ make
   ```
 
-- start up redis server `cd src` `./redis-server`
+- start up redis server `cd src` `./redis-server --bind 0.0.0.0`
 - load sample data into redis server, `cd src`,  then run this `cat <submission-folder>/simple-data-txt.txt | ./redis-cli --pipe` import simple data.
 
 ### Local run
@@ -26,14 +27,22 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 - goto submission folder, run `npm i` first
 - just run `npm run start`, and use browsers open http://127.0.0.1:3003
 
+### Docker build and run
+
+- build image, make sure your dokcer already startup
+  - run `./build-docker-image.sh` to build docker image, the image named **tc/redis-manager**
+  - after build succeed, run `docker run -p 3003:3003 -it tc/redis-manager` to run image
+  - then use browsers open http://127.0.0.1:3003
+
 ### Configs
 
-| Key                                      | default          | Description                      |
-| ---------------------------------------- | ---------------- | -------------------------------- |
-| config/default.js **PORT**               | 3003             | the web app run port             |
-| config/default.js **API_VERSION**        | api/1.0          | the backend endpoint prefix      |
-| config/default.js **LOG_LEVEL**          | Debug            | the backend log level            |
-| src/environments/environments.ts **URI** | /backend/api/1.0 | the backend uri used in frontend |
+| Key                                             | default          | Description                      |
+| ----------------------------------------------- | ---------------- | -------------------------------- |
+| config/default.js **PORT**                      | 3003             | the web app run port             |
+| config/default.js **API_VERSION**               | api/1.0          | the backend endpoint prefix      |
+| config/default.js **LOG_LEVEL**                 | Debug            | the backend log level            |
+| config/default.js **defaultExternalConfigLink** | None             | the default external config link |
+| src/environments/environments.ts **URI**        | /backend/api/1.0 | the backend uri used in frontend |
 
 
 

@@ -9,7 +9,7 @@ import {Store} from '@ngrx/store';
 import {
   ADD_REDIS_SERVER,
   DESELECT_ALL_REDIS,
-  REDIS_DISCONNECT, REQ_FETCH_TREE,
+  REDIS_DISCONNECT, REMOVE_REDIS_SERVER, REQ_FETCH_TREE,
   REQ_REDIS_CONNECT,
   SELECT_REDIS
 } from './ngrx/actions/redis-actions';
@@ -17,6 +17,8 @@ import {Observable, Subject} from 'rxjs';
 import {REQ_LOAD_PAGE, REQ_LOAD_ROOT_PAGE} from './ngrx/actions/page-actions';
 import {PageModel} from './models/page-model';
 import {ADD_COMMAND, CLEAR_HISTORY, TOGGLE_CLI} from './ngrx/actions/cli-actions';
+import {ConfirmDialogComponent} from './components/confirm-dialog/confirm-dialog.component';
+import {InformationDialogComponent} from './components/information-dialog/information-dialog.component';
 
 /**
  * return a new right page component
@@ -95,6 +97,24 @@ export class AppComponent implements OnInit {
     });
   }
 
+  onDeleteServer() {
+    if (!this.currentInstance) {
+      this.util.showMessage('you need select Redis instance first');
+      return;
+    }
+    this.dialogService.open(ConfirmDialogComponent, {
+      width: '250px', data: {
+        title: 'Delete Confirm',
+        message: `Are you sure you want delete this server?`
+      }
+    }).afterClosed().subscribe(ret => {
+      if (ret) {
+        this._store.dispatch({type: REMOVE_REDIS_SERVER, payload: {instance: this.currentInstance}}); // remove
+        this._store.dispatch({type: REQ_LOAD_PAGE, payload: getNewPage()});
+      }
+    });
+  }
+
   /**
    * on refresh event
    */
@@ -139,7 +159,6 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
   }
 
   /**
@@ -149,6 +168,17 @@ export class AppComponent implements OnInit {
   onDisconnect(id) {
     this._store.dispatch({type: REDIS_DISCONNECT, payload: {id}});
     this._store.dispatch({type: REQ_LOAD_PAGE, payload: getNewPage()});
+  }
+
+  onInformationEvt() {
+    this.dialogService.open(InformationDialogComponent, {
+      width: '80%',
+      height: '80%',
+      data: {
+        title: 'Delete Confirm',
+        message: `Are you sure you want delete this server?`
+      }
+    });
   }
 
   /**

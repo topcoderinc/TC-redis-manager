@@ -11,6 +11,7 @@ export const REQ_FETCH_TREE = 'REQ_FETCH_TREE'; // request to fetch a redis inst
 export const FETCHED_TREE = 'FETCHED_TREE'; // when fetch tree finished
 export const TOGGLE_REDIS = 'TOGGLE_REDIS'; // toggle redis instance
 export const ADD_REDIS_SERVER = 'ADD_REDIS_SERVER'; // add redis server
+export const REMOVE_REDIS_SERVER = 'REMOVE_REDIS_SERVER'; // delete redis server
 
 export default {
   REQ_REDIS_CONNECT,
@@ -24,4 +25,5 @@ export default {
   FETCHED_TREE,
   TOGGLE_REDIS,
   ADD_REDIS_SERVER,
+  REMOVE_REDIS_SERVER,
 };

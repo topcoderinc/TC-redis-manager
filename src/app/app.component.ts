@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, HostBinding, OnInit, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {AddServerDialogComponent} from './components/add-server-dialog/add-server-dialog.component';
 import {RedisInstance} from './models/redis-instance';
@@ -19,6 +19,8 @@ import {PageModel} from './models/page-model';
 import {ADD_COMMAND, CLEAR_HISTORY, TOGGLE_CLI} from './ngrx/actions/cli-actions';
 import {ConfirmDialogComponent} from './components/confirm-dialog/confirm-dialog.component';
 import {InformationDialogComponent} from './components/information-dialog/information-dialog.component';
+import {SettingsDialogComponent} from './components/settings-dialog/settings-dialog.component';
+import {ThemeConfig} from './theme-config';
 
 /**
  * return a new right page component
@@ -58,6 +60,7 @@ export class AppComponent implements OnInit {
   };
 
   private requireId = '';
+
 
   constructor(public dialogService: MatDialog,
               private redisService: RedisService,
@@ -132,11 +135,15 @@ export class AppComponent implements OnInit {
               ins.expanded = true;
             }
             if (ins.expanded) {
-              this._store.dispatch({type: REQ_FETCH_TREE, payload: {id: ins.id, scb: () => {
-                if (expandNodes) {
-                  setTimeout(() => this.expandDeepCommand$.next(), 0);
+              this._store.dispatch({
+                type: REQ_FETCH_TREE, payload: {
+                  id: ins.id, scb: () => {
+                    if (expandNodes) {
+                      setTimeout(() => this.expandDeepCommand$.next(), 0);
+                    }
+                  }
                 }
-              }}});
+              });
             }
           }
         }
@@ -159,6 +166,9 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // set theme
+    const theme = localStorage.getItem(ThemeConfig.THEME_KEY) || ThemeConfig.THEMES[0];
+    document.getElementById(ThemeConfig.BODY_ID).classList.add(`${theme}-theme`);
   }
 
   /**
@@ -178,6 +188,13 @@ export class AppComponent implements OnInit {
         title: 'Delete Confirm',
         message: `Are you sure you want delete this server?`
       }
+    });
+  }
+
+  onSettingsEvt() {
+    this.dialogService.open(SettingsDialogComponent, {
+      width: '300px',
+      height: '400px'
     });
   }
 

@@ -58,6 +58,7 @@ import {CliEffect} from './ngrx/effects/cli-effect';
 import {reducer as redisReducer} from './ngrx/reducer/redis-reducer';
 import {reducer as pageReducer} from './ngrx/reducer/page-reducer';
 import {reducer as cliReducer} from './ngrx/reducer/cli-reducer';
+import {SettingsDialogComponent} from './components/settings-dialog/settings-dialog.component';
 
 
 
@@ -73,7 +74,8 @@ import {reducer as cliReducer} from './ngrx/reducer/cli-reducer';
     DataViewerComponent,
     TreeNodeComponent,
     ImportDataDialogComponent,
-    InformationDialogComponent
+    InformationDialogComponent,
+    SettingsDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -131,6 +133,7 @@ import {reducer as cliReducer} from './ngrx/reducer/cli-reducer';
     AddServerDialogComponent,
     ImportDataDialogComponent,
     InformationDialogComponent,
+    SettingsDialogComponent,
   ],
 })
 export class AppModule {

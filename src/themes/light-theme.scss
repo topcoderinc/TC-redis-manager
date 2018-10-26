@@ -1,0 +1,60 @@
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+// Light theme
+$light-primary: mat-palette($mat-grey, 200, 500, 300);
+$light-accent: mat-palette($mat-brown, 300);
+$light-warn: mat-palette($mat-deep-orange, 200);
+
+$light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
+
+$app-bg-color: white;
+
+@mixin light-app-colors {
+  .bg-color {
+    background-color: white;
+  }
+  .cli-bg-color {
+    background-color: white;
+  }
+  .material-icons {
+    color: black;
+  }
+  .common-font-color {
+    color: black;
+  }
+  input, textarea {
+    color: black;
+  }
+  .link-color {
+    color: #5c79ff;
+  }
+  .node-color {
+    background-color: white;
+    color: black;
+    &:hover {
+      background-color: #f6f6f6;
+    }
+    &.selected {
+      background-color: #dfdfdf;
+    }
+  }
+  .tree-child-color {
+    color: black;
+    &:hover {
+      background-color: #f6f6f6;
+    }
+    &.selected {
+      background-color: #dfdfdf;
+    }
+    .value-type {
+      color: #4157af;
+    }
+  }
+}
+
+.light-theme {
+  @include angular-material-theme($light-theme);
+  @include light-app-colors
+}

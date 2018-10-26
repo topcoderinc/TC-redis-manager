@@ -18,15 +18,8 @@
       align-items: center;
       justify-content: center;
       &.error {
-        color: red;
+        color: red !important;
       }
-    }
-
-    &:hover {
-      background-color: #f6f6f6;
-    }
-    &.selected {
-      background-color: #dfdfdf;
     }
   }
   .sub-items {

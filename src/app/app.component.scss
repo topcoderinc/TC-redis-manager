@@ -35,7 +35,7 @@ $header-height: 60px;
         display: flex;
         flex-direction: row;
         .delete-btn{
-          color: red;
+          color: #e2552e !important;
         }
       }
       .slider-point {
@@ -60,7 +60,6 @@ $header-height: 60px;
   }
   .cli {
     height: 80px;
-    background-color: white;
     position: fixed;
     left: 0;
     right: 0;

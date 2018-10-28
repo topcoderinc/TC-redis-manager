@@ -2,7 +2,7 @@
      [style.marginLeft.px]="12"
      [class]="'item-line item-line__sub ' + (item['deleted'] ? 'none':'') ">
 
-  <div [class]=" 'single-line ' + (selectedMap[item.key+item.type] ? 'selected':'') "
+  <div [class]=" 'single-line tree-child-color ' + (selectedMap[item.key+item.type] ? 'selected':'') "
        (click)="onItemClick.emit(item)"
   >
       <span [class]="'value-type ' + item.type" *ngIf="item.type !== 'folder'">

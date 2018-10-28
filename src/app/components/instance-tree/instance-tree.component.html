@@ -1,5 +1,5 @@
 <div class="instance-root">
-  <div [class]="'item-line mat-elevation-z1 ' + (instance['selected'] ? 'selected':'')"
+  <div [class]="'item-line mat-elevation-z1 node-color ' + (instance['selected'] ? 'selected':'')"
        (click)="onClickRootItem()">
 
     <div *ngIf="instance.working" class="material-icons">

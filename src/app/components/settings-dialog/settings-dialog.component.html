@@ -1,0 +1,14 @@
+<div class="information-dialog">
+  <h1 mat-dialog-title class="title">Settings
+    <button mat-icon-button [mat-dialog-close]="null"><i class="material-icons">close</i></button>
+  </h1>
+  <div mat-dialog-content class="dialog-root">
+    <mat-form-field>
+      <mat-select placeholder="App Theme" [value]="currentTheme" (selectionChange)="onChange($event.value)">
+        <mat-option *ngFor="let t of THEMES" [value]="t">
+          {{t}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>

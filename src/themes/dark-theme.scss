@@ -1,0 +1,58 @@
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+// Dark theme
+$dark-primary: mat-palette($mat-blue-grey);
+$dark-accent: mat-palette($mat-amber, A200, A100, A400);
+$dark-warn: mat-palette($mat-deep-orange);
+
+$dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+
+@mixin dark-app-colors {
+  .bg-color {
+    background-color: #424242;
+  }
+  .cli-bg-color {
+    background-color: #424242;
+  }
+  .material-icons {
+    color: #ffffff;
+  }
+  .common-font-color {
+    color: #ffffff;
+  }
+  input, textarea {
+    color: #ffffff;
+  }
+  .link-color {
+    color: #5c79ff;
+  }
+  .node-color {
+    background-color: #323232;
+    color: white;
+    &:hover {
+      background-color: #747474;
+    }
+    &.selected {
+      background-color: #878787;
+    }
+  }
+  .tree-child-color {
+    color: white;
+    &:hover {
+      background-color: #747474;
+    }
+    &.selected {
+      background-color: #878787;
+    }
+    .value-type {
+      color: #607eff;
+    }
+  }
+}
+
+.dark-theme {
+  @include angular-material-theme($dark-theme);
+  @include dark-app-colors
+}

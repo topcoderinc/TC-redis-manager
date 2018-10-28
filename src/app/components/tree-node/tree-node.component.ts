@@ -1,4 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output, OnChanges} from '@angular/core';
+import {UtilService} from '../../services/util.service';
 
 /**
  * tree node component
@@ -14,7 +15,7 @@ export class TreeNodeComponent implements OnInit, OnChanges {
   @Input() expandedMap = null;
   @Output() onItemClick = new EventEmitter();
 
-  constructor() {
+  constructor(private utilService: UtilService) {
   }
 
   ngOnInit() {
@@ -50,9 +51,7 @@ export class TreeNodeComponent implements OnInit, OnChanges {
       if (item.key.indexOf(',') === -1) {
         return item.displayName = 'API Request' + '*';
       }
-
-      const regexResults = item.key.match(/[^,{}]+(?=,|{|})(?=,|\{)/g);
-
+      const regexResults = this.utilService.splitKey(item.key);
       let index = regexResults.length - 1;
       item.displayName = regexResults[index];
       while (item.displayName.indexOf(':') === -1) {

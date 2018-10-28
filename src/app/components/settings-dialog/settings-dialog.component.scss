@@ -1,0 +1,15 @@
+.information-dialog {
+  .title {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    button {
+      position: absolute;
+      right: 0;
+      top: 0;
+      float: right;
+    }
+  }
+  display: flex;
+  flex-direction: column;
+}

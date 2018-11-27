@@ -52,6 +52,20 @@ $app-bg-color: white;
       color: #4157af;
     }
   }
+  .right-part {
+    flex: 1;
+    position: relative;
+    &::after{
+      content: ""; 
+      background:url(assets/watermark.png) no-repeat;
+       opacity: 0.1;
+       top: 25%;
+       left: 50%;
+       bottom: 0;
+       right: 0;
+       position: absolute;
+    }
+  }
 }
 
 .light-theme {

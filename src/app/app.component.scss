@@ -12,6 +12,10 @@ $header-height: 60px;
     height: $header-height;
     background-color: #4054b2;
     color: white;
+    .logo{
+      height: 26px;
+      margin-right: 2px;
+    }
   }
 
   .body {
@@ -56,6 +60,18 @@ $header-height: 60px;
     }
     .right-part {
       flex: 1;
+      position: relative;
+      &::after{
+        content: ""; 
+        background:url(../assets/watermark.png) no-repeat;
+        opacity: 0.1;
+        top: 25%;
+        left: 35%;
+        bottom: 0;
+        right: 0;
+        position: absolute;
+        background-size: 350px;
+      }
     }
   }
   .cli {

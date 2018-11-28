@@ -42,7 +42,7 @@ const getNewPage = () => ({
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title = 'REDIS MANAGER GUI TOOLS';
+  title = 'Easy Redis Manager';
   instances$: Observable<RedisInstance[]> = null;
   currentPage$: Observable<PageModel> = null;
   cli$: Observable<any> = null;

@@ -64,7 +64,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
   - what commands are included ? 
 
-    INFO,GET,SET,RPUSH,SADD,ZADD,HMSET,LRANGE,ZRANGE,SMEMBERS,HGETALL,LLEN, SCARD, ZCARD,HLEN,SREM,ZREM,HSET,HMSET,HDEL
+    INFO, GET, SET, RPUSH, SADD, ZADD, HMSET, LRANGE, ZRANGE, SMEMBERS, HGETALL, LLEN, SCARD, ZCARD, HLEN, SREM, ZREM, HSET, HDEL
   
 - what commands should be added next?
   
@@ -73,3 +73,5 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
   - which commands are dependent on one another?
 
     a web app function  dependent a lot of command, so, in fact, there is no command dependent on one another command.
+
+Please note this app does not function in IE11+

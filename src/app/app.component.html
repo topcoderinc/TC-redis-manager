@@ -94,7 +94,7 @@
         <div class="command">
           <span class="time">[{{item.time | date:'medium'}}] ></span>
           <span class="common-font-color" (click)="onRawContentClick(item.rawCommand)">{{item.rawCommand}}</span></div>
-        <div class="{{'result ' + (item.error ? 'error':'')}}">{{item.result}}</div>
+        <div class="{{'result ' + (item.error ? 'error-font-color':'')}}">{{item.result}}</div>
       </div>
     </div>
 

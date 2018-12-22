@@ -50,6 +50,9 @@ $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
       color: #607eff;
     }
   }
+  .error-font-color {
+    color: lightsalmon;
+  }
 }
 
 .dark-theme {

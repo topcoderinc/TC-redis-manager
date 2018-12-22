@@ -269,6 +269,14 @@ export class AppComponent implements OnInit {
    */
   toggleCli() {
     this._store.dispatch({type: TOGGLE_CLI});
+    setTimeout(() => {
+      try {
+        this.cliScrollContent.nativeElement.scrollTop = this.cliScrollContent.nativeElement.scrollHeight;
+      } catch (e) {
+
+      }
+    }, 200);
+
   }
 
   /**

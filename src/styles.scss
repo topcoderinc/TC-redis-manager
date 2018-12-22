@@ -25,3 +25,8 @@ mat-form-field {
     overflow: hidden;
   }
 }
+
+/* webkit, opera, IE9 */
+::selection { background: transparent; }
+/* mozilla firefox */
+::-moz-selection { background:transparent; }

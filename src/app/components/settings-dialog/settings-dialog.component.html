@@ -4,7 +4,7 @@
   </h1>
   <div mat-dialog-content class="dialog-root">
     <mat-form-field>
-      <mat-select placeholder="App Theme" [value]="currentTheme" (selectionChange)="onChange($event.value)">
+      <mat-select disableOptionCentering placeholder="App Theme" [value]="currentTheme" (selectionChange)="onChange($event.value)">
         <mat-option *ngFor="let t of THEMES" [value]="t">
           {{t}}
         </mat-option>

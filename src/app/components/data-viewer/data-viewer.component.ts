@@ -304,7 +304,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
     this.dialogService.open(ConfirmDialogComponent, {
       width: '320px', data: {
         title: 'Delete Confirm',
-        message: `Are you sure you want delete all values that belongs to "${this.pageData.item.key}" ?`,
+        message: `Are you sure you want delete all values that belong to "${this.pageData.item.key}" ?`,
       }
     }).afterClosed().subscribe(ret => {
       if (ret) {

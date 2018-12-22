@@ -114,6 +114,7 @@ export class AppComponent implements OnInit {
       if (ret) {
         this._store.dispatch({type: REMOVE_REDIS_SERVER, payload: {instance: this.currentInstance}}); // remove
         this._store.dispatch({type: REQ_LOAD_PAGE, payload: getNewPage()});
+        this.currentInstance = null;
       }
     });
   }

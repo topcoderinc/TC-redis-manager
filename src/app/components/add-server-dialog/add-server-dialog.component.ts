@@ -56,7 +56,7 @@ export class AddServerDialogComponent implements OnInit {
 
       this.data.db = parseInt(this.data.db + '', 10);
       if (this.data.db < 0 || this.data.db > 16) {
-        return this.util.showMessage('Database must be in 0 - 16');
+        return this.util.showMessage('Database Index must be in 0 - 16');
       }
 
 

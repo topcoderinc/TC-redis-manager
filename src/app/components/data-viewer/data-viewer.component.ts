@@ -183,8 +183,8 @@ export class DataViewerComponent implements OnInit, OnChanges {
               value: ret[0][i],
             });
             i += 2;
-            this.loadingPageData = false;
           }
+          this.loadingPageData = false;
         }
       );
     } else if (type === 'set') {

@@ -1,7 +1,5 @@
 <div class="information-dialog">
-  <h1 mat-dialog-title class="title">Settings
-    <button mat-icon-button [mat-dialog-close]="null"><i class="material-icons">close</i></button>
-  </h1>
+  <h1 mat-dialog-title class="title">Settings</h1>
   <div mat-dialog-content class="dialog-root">
     <mat-form-field>
       <mat-select placeholder="App Theme" [value]="currentTheme" (selectionChange)="onChange($event.value)">

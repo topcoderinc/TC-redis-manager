@@ -72,7 +72,7 @@
   <div class="{{'cli mat-elevation-z12 ' + ((cli$ | async)?.expanded ? 'cli-expanded':'') + ' cli-bg-color'}}">
     <div class="title">
       <span
-        class="current-instance">{{currentInstance ? getShortName(currentInstance) : 'No redis instance select'}}</span>
+        class="current-instance">{{currentInstance ? getShortName(currentInstance) : 'No redis instance selected'}}</span>
       <span class="flex1"></span>
 
       <button mat-icon-button (click)="clearHistory()"
@@ -102,7 +102,7 @@
       <mat-form-field class="example-full-width">
         <input matInput
                class="common-font-color"
-               placeholder="{{!currentInstance ?'Please select a redis instance to Enter Redis command'
+               placeholder="{{!currentInstance ?'Please select a redis instance to enter redis command'
         : 'Enter Redis command'}}" value=""
                (keydown)="onCliInputKeyDown($event)"
                [(ngModel)]="cliInputValue"

@@ -21,6 +21,7 @@ import {ConfirmDialogComponent} from './components/confirm-dialog/confirm-dialog
 import {InformationDialogComponent} from './components/information-dialog/information-dialog.component';
 import {SettingsDialogComponent} from './components/settings-dialog/settings-dialog.component';
 import {ThemeConfig} from './theme-config';
+import _ from 'lodash';
 
 /**
  * return a new right page component
@@ -83,6 +84,14 @@ export class AppComponent implements OnInit {
     });
   }
 
+  findInstanceByName(name) {
+    return new Promise(resolve => {
+      this.instances$.subscribe(instances => {
+        resolve(instances.find(ins => ins.serverModel.name === name));
+      });
+    });
+  }
+
   /**
    * on add server event
    */
@@ -93,9 +102,16 @@ export class AppComponent implements OnInit {
     });
     ref.afterClosed().subscribe(result => {
       if (result) {
-        const instance = {id: uuid(), serverModel: result};
-        this._store.dispatch({type: ADD_REDIS_SERVER, payload: instance});  // add new server
-        this._store.dispatch({type: REQ_REDIS_CONNECT, payload: {instance}}); // connect
+        this.findInstanceByName(result.name).then(instance => {
+          if (instance) {
+            this.util.showMessage('instance name exists');
+            return;
+          } else {
+            const newInstance = {id: uuid(), serverModel: result};
+            this._store.dispatch({type: ADD_REDIS_SERVER, payload: newInstance});  // add new server
+            this._store.dispatch({type: REQ_REDIS_CONNECT, payload: {newInstance}}); // connect
+          }
+        });
       }
     });
   }

@@ -87,7 +87,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
     }
     this.dialogService.open(ConfirmDialogComponent, {
       width: '250px', data: {
-        title: 'Delete Confirm',
+        title: 'Delete Confirmation',
         message: `Are you sure you want delete ${element ? 'this' : 'select'} value${values.length > 1 ? 's' : ''} ?`
       }
     }).afterClosed().subscribe(ret => {
@@ -303,7 +303,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
     }
     this.dialogService.open(ConfirmDialogComponent, {
       width: '320px', data: {
-        title: 'Delete Confirm',
+        title: 'Delete Confirmation',
         message: `Are you sure you want delete all values that belongs to "${this.pageData.item.key}" ?`,
       }
     }).afterClosed().subscribe(ret => {

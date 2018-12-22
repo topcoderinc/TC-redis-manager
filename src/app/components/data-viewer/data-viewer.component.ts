@@ -347,7 +347,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
     });
 
     if (keys.length <= 0) {
-      return this.util.showMessage('you need select some row first');
+      return this.util.showMessage('You need to select a row first');
     }
 
     if (this.pageData.item.type === 'hash') {

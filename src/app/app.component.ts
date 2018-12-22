@@ -194,7 +194,6 @@ export class AppComponent implements OnInit {
   onSettingsEvt() {
     this.dialogService.open(SettingsDialogComponent, {
       width: '300px',
-      height: '400px'
     });
   }
 

@@ -25,7 +25,7 @@
                 matTooltip="Redis API Document"><i class="material-icons">info</i></button>
         <div class="flex1"></div>
         <mat-menu #sideMenu="matMenu">
-          <button mat-menu-item (click)="onRefresh(true)">Refresh + Expand All Nodes</button>
+          <button [disabled]="!currentInstance" mat-menu-item (click)="onRefresh(true)">Refresh + Expand All Nodes</button>
           <button mat-menu-item>Import</button>
           <button mat-menu-item>Export</button>
         </mat-menu>

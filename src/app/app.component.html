@@ -40,7 +40,8 @@
         <app-instance-tree *ngFor="let instance of instances$ | async"
                            (updatePage)="updatePage($event)"
                            [expandDeep]="expandDeepCommand$"
-                           [instance]="instance"></app-instance-tree>
+                           [instance]="instance"
+                           [isActive]="currentInstance !== null && instance.id === currentInstance.id"></app-instance-tree>
       </div>
 
       <div class="slider-point"

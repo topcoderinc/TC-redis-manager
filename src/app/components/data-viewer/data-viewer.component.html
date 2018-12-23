@@ -2,7 +2,7 @@
   <div class="header">
     <button mat-raised-button
             *ngIf="pageData.item.type !== 'string'"
-            (click)="onAddNewRecords()"
+            (click)="onAddNewRecords()" onclick="this.blur()"
     >Add new Value
     </button>
     <button mat-raised-button color="warn"

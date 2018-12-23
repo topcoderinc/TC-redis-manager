@@ -48,6 +48,9 @@ export class AddServerDialogComponent implements OnInit {
       else if (!isPortInteger || portNumber < 1 || portNumber > 65535) {
         return this.util.showMessage('Port must be in 1 - 65535');
       }
+      else {
+        this.data.port = portNumber;
+      }
 
       this.data.db = this.util.getValue(this.data.db + '');
       if (!this.data.db) {

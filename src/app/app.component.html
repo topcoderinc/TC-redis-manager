@@ -77,13 +77,13 @@
 
       <button mat-icon-button (click)="clearHistory()"
               [disabled]="!currentInstance"
-              matTooltip="Clear all history">
+              matTooltip="{{currentInstance?'Clear all history':''}}">
         <i class="material-icons">clear_all</i>
       </button>
 
       <button mat-icon-button (click)="toggleCli()"
               [disabled]="!currentInstance"
-              matTooltip="Toggle Cli panel">
+              matTooltip="{{currentInstance?'Toggle Cli panel':''}}">
         <i class="material-icons">{{(cli$ | async)?.expanded ? 'keyboard_arrow_down':'keyboard_arrow_up'}}</i>
       </button>
 

@@ -15,6 +15,7 @@
   .dialog-root {
     padding: 4px 24px;
     flex:1;
+    overflow: visible;
 
     mat-panel-title{
       font-weight: bold;
@@ -26,8 +27,5 @@
       }
       font-size: 14px;
     }
-  }
-  .help-dialog-content{
-    overflow: visible;
   }
 }

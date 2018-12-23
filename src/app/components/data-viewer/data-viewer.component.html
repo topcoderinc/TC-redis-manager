@@ -11,7 +11,7 @@
     </button>
 
     <button mat-raised-button *ngIf="pageData.item.type==='hash'"
-            color="primary"
+            color="primary" onclick="this.blur()"
             (click)="onEdit()">Edit
     </button>
   </div>
@@ -92,8 +92,6 @@
           <button mat-icon-button matTooltip="Delete Forever" (click)="removeElement(element)">
             <i class="material-icons">delete_forever</i>
           </button>
-
-
         </td>
       </ng-container>
 

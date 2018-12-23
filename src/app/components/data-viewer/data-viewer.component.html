@@ -5,7 +5,7 @@
             (click)="onAddNewRecords()"
     >Add new Value
     </button>
-    <button mat-raised-button color="warn"
+    <button mat-raised-button color="warn" onclick="this.blur()"
             (click)="onDelete()">Delete {{pageData.item.type === 'folder'?
       'Branch':'Key'}}
     </button>

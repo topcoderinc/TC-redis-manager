@@ -67,6 +67,7 @@ export class AddValueFormComponent implements OnInit {
    */
   onRemoveItem(arr, index) {
     arr.splice(index, 1);
+    this.onValueChange();
   }
 
   /**

@@ -104,7 +104,11 @@ export class AddValueDialogComponent implements OnInit {
           if (!values[i].score) {
             return this.showError(`${this.data.type} Score of row ${i + 1} cannot be empty`);
           }
-          this.data.rawLine.push(parseInt(values[i].score, 10));
+          const score = parseInt(values[i].score, 10);
+          if (score === 0) {
+            return this.showError(`${this.data.type} Score of row ${i + 1} cannot be 0`);
+          }
+          this.data.rawLine.push(score);
           this.data.rawLine.push(values[i].value);
         }
         this.data.len = values.length;

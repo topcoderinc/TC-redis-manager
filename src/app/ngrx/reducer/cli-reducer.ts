@@ -29,7 +29,6 @@ export function reducer(state = initialState, action) {
       } else {
         i.result = action.payload.result;
       }
-      console.log(i.result);
       i.status = 'end';
       i.error = action.payload.error;
       return state;

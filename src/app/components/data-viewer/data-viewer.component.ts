@@ -88,7 +88,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
     this.dialogService.open(ConfirmDialogComponent, {
       width: '250px', data: {
         title: 'Delete Confirm',
-        message: `Are you sure you want delete ${element ? 'this' : 'select'} value${values.length > 1 ? 's' : ''} ?`
+        message: `Are you sure you want to delete ${element ? 'this' : 'selected'} value${values.length > 1 ? 's' : ''} ?`
       }
     }).afterClosed().subscribe(ret => {
       if (ret) {
@@ -183,8 +183,8 @@ export class DataViewerComponent implements OnInit, OnChanges {
               value: ret[0][i],
             });
             i += 2;
-            this.loadingPageData = false;
           }
+          this.loadingPageData = false;
         }
       );
     } else if (type === 'set') {
@@ -304,7 +304,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
     this.dialogService.open(ConfirmDialogComponent, {
       width: '320px', data: {
         title: 'Delete Confirm',
-        message: `Are you sure you want delete all values that belongs to "${this.pageData.item.key}" ?`,
+        message: `Are you sure you want delete all values that belong to "${this.pageData.item.key}" ?`,
       }
     }).afterClosed().subscribe(ret => {
       if (ret) {
@@ -347,7 +347,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
     });
 
     if (keys.length <= 0) {
-      return this.util.showMessage('you need select some row first');
+      return this.util.showMessage('You need to select a row first');
     }
 
     if (this.pageData.item.type === 'hash') {

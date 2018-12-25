@@ -18,7 +18,8 @@
     <mat-form-field *ngIf="type === 'Ordered Set'">
       <input matInput type="number" placeholder="Score"
              (change)="onValueChange()"
-             [(ngModel)]="getItemArray()[i].score">
+             [(ngModel)]="getItemArray()[i].score"
+             type="number">
     </mat-form-field>
 
     <mat-form-field *ngIf="type === 'Hash Map'" style="flex-grow:0">

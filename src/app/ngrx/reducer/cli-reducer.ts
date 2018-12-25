@@ -11,6 +11,7 @@ export const initialState = {
 };
 
 const getItemById = (id, state) => state.items.find(i => i.id === id);
+const errorSuffixString = ', with args beginning with: ';
 
 export function reducer(state = initialState, action) {
   switch (action.type) {
@@ -21,7 +22,13 @@ export function reducer(state = initialState, action) {
     case actions.COMMAND_RUN_FINISHED: {
       const id = action.payload.id;
       const i = getItemById(id, state);
-      i.result = action.payload.result;
+      if (action.payload.result instanceof Array) {
+        i.result = action.payload.result.map(res => {
+          return res.endsWith(errorSuffixString) ? res.slice(0, -errorSuffixString.length) : res;
+        });
+      } else {
+        i.result = action.payload.result;
+      }
       i.status = 'end';
       i.error = action.payload.error;
       return state;

@@ -6,8 +6,7 @@
     >Add new Value
     </button>
     <button mat-raised-button color="warn"
-            (click)="onDelete()">Delete {{pageData.item.type === 'folder'?
-      'Branch':'Key'}}
+            (click)="onDelete()">Delete {{pageData.item.type === 'folder'?'Branch':pageData.item.type === 'zset'?hasKeys()?'Selected':'Key':'Key'}}
     </button>
 
     <button mat-raised-button *ngIf="pageData.item.type==='hash'"

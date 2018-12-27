@@ -59,6 +59,13 @@ export class DataViewerComponent implements OnInit, OnChanges {
 
   }
 
+  /*
+  * check if object has keys to use in view
+  */
+  hasKeys(){
+    return Object.keys(this.selectedMap).length > 0 ? true : false;
+  }
+
 
   /**
    * is need show table,string type not need table?

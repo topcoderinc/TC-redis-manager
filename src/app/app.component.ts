@@ -252,7 +252,12 @@ export class AppComponent implements OnInit {
         });
       });
     } else if (page.type === 'data-viewer') {
-      this._store.dispatch({type: REQ_LOAD_PAGE, payload: {id, type, loading: true, item: page.item}});
+      this._store.dispatch({type: DESELECT_ALL_REDIS});
+      this._store.dispatch({type: SELECT_REDIS, payload: {id}});
+      this.findInstance(id).then(instance => {
+        this.currentInstance = instance;
+        this._store.dispatch({type: REQ_LOAD_PAGE, payload: {id, type, loading: true, item: page.item}});
+      });
     }
   }
 

@@ -19,7 +19,7 @@
   </div>
 
   <div *ngIf="instance.expanded" class="sub-items">
-    <app-tree-node [itemNode]="instance" [selectedMap]="selectedMap"
+    <app-tree-node [itemNode]="instance" [selectedMap]="isActive ? selectedMap : {}"
                    [expandedMap]="expandedMap"
                    (onItemClick)="onClickItem($event)"></app-tree-node>
   </div>

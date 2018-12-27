@@ -114,7 +114,7 @@ export class AddValueDialogComponent implements OnInit {
           if (!values[i].score) {
             return this.showError(`${this.data.type} Score of row ${i + 1} cannot be empty`);
           }
-          this.data.rawLine.push(parseFloat(values[i].score));
+          this.data.rawLine.push(parseInt(values[i].score, 10));
           this.data.rawLine.push(values[i].value);
         }
         this.data.len = values.length;

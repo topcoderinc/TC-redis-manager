@@ -43,7 +43,7 @@ export class AddServerDialogComponent implements OnInit {
       const portNumber = parseInt(this.data.port + '', 10);
       const isPortInteger = (+this.data.port === portNumber);
       if (!this.data.port) {
-        return this.util.showMessage('Port cannot be empty');
+        return this.util.showMessage('Invalid Port. Port should be positive number 1 - 65535.');
       }
       else if (!isPortInteger || portNumber < 1 || portNumber > 65535) {
         return this.util.showMessage('Port must be in 1 - 65535');

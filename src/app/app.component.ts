@@ -102,7 +102,7 @@ export class AppComponent implements OnInit {
 
   onDeleteServer() {
     if (!this.currentInstance) {
-      this.util.showMessage('you need select Redis instance first');
+      this.util.showMessage('You need to select Redis instance first');
       return;
     }
     this.dialogService.open(ConfirmDialogComponent, {
@@ -114,6 +114,7 @@ export class AppComponent implements OnInit {
       if (ret) {
         this._store.dispatch({type: REMOVE_REDIS_SERVER, payload: {instance: this.currentInstance}}); // remove
         this._store.dispatch({type: REQ_LOAD_PAGE, payload: getNewPage()});
+        this.currentInstance = false;
       }
     });
   }
@@ -208,7 +209,7 @@ export class AppComponent implements OnInit {
       if (newValue.onSuccess) {
         newValue.onSuccess(newValue);
       }
-      this.util.showMessage('new value added successful');
+      this.util.showMessage('new value added successfully');
     }, e => {
       console.error(e);
       this.util.showMessage('new value add failed');
@@ -252,7 +253,12 @@ export class AppComponent implements OnInit {
         });
       });
     } else if (page.type === 'data-viewer') {
-      this._store.dispatch({type: REQ_LOAD_PAGE, payload: {id, type, loading: true, item: page.item}});
+      this._store.dispatch({type: DESELECT_ALL_REDIS});
+      this._store.dispatch({type: SELECT_REDIS, payload: {id}});
+      this.findInstance(id).then(instance => {
+        this.currentInstance = instance;
+        this._store.dispatch({type: REQ_LOAD_PAGE, payload: {id, type, loading: true, item: page.item}});
+      });
     }
   }
 
@@ -269,6 +275,14 @@ export class AppComponent implements OnInit {
    */
   toggleCli() {
     this._store.dispatch({type: TOGGLE_CLI});
+    setTimeout(() => {
+      try {
+        this.cliScrollContent.nativeElement.scrollTop = this.cliScrollContent.nativeElement.scrollHeight;
+      } catch (e) {
+
+      }
+    }, 200);
+
   }
 
   /**

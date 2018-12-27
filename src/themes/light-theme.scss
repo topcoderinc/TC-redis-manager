@@ -58,3 +58,16 @@ $app-bg-color: white;
   @include angular-material-theme($light-theme);
   @include light-app-colors
 }
+
+.light-theme .mat-checkbox-checked.mat-primary .mat-checkbox-background,
+.light-theme .mat-checkbox-indeterminate.mat-primary .mat-checkbox-background {
+  background-color: rgb(163, 174, 224);
+}
+
+.light-theme .mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+  color: rgba(0,0,0,.87);
+}
+
+.light-theme .mat-form-field.mat-focused .mat-form-field-label {
+  color: rgba(0,0,0,.54)
+}

@@ -90,15 +90,6 @@
 
     </div>
 
-    <div class="scroll-content" *ngIf="(cli$ | async)?.expanded" #cliScrollContent>
-      <div class="item" *ngFor="let item of (cli$ | async)?.items">
-        <div class="command">
-          <span class="time">[{{item.time | date:'medium'}}] ></span>
-          <span class="common-font-color" (click)="onRawContentClick(item.rawCommand)">{{item.rawCommand}}</span></div>
-        <div class="{{'result ' + (item.error ? 'error':'')}}">{{item.result}}</div>
-      </div>
-    </div>
-
     <div class="input">
       <mat-form-field class="example-full-width">
         <input matInput
@@ -111,5 +102,15 @@
                [readonly]="!currentInstance">
       </mat-form-field>
     </div>
+
+    <div class="scroll-content" *ngIf="(cli$ | async)?.expanded" #cliScrollContent>
+      <div class="item" *ngFor="let item of (cli$ | async)?.items">
+        <div class="command">
+          <span class="time">[{{item.time | date:'medium'}}] ></span>
+          <span class="common-font-color" (click)="onRawContentClick(item.rawCommand)">{{item.rawCommand}}</span></div>
+        <div class="{{'result ' + (item.error ? 'error':'')}}">{{item.result}}</div>
+      </div>
+    </div>
+
   </div>
 </div>

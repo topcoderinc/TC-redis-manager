@@ -56,12 +56,12 @@
         (onDisconnect)="onDisconnect($event)"
         (onNewValue)="onNewValue($event)"
         [instance]=""
-        *ngIf=" (currentPage$| async)?.type === 'root-instance'"
+        *ngIf="(currentPage$| async)?.type === 'root-instance' && currentInstance.status === 'connected'"
       ></app-instance-root-panel>
 
       <app-data-viewer
         (onDeleteValue)="onDeleteValue()"
-        *ngIf="(currentPage$| async)?.type === 'data-viewer'"
+        *ngIf="(currentPage$| async)?.type === 'data-viewer' && currentInstance.status === 'connected'"
         [pageData]="(currentPage$| async)"
         (onNewValue)="onNewValue($event)">
       </app-data-viewer>

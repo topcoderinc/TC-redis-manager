@@ -315,7 +315,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
           keys = [this.pageData.item.key];
         }
         this.redisService.call(this.pageData.id, [['DEL'].concat(keys)]).subscribe(() => {
-          this.util.showMessage('delete successfully');
+          this.util.showMessage('deleted successfully');
           this.pageData.item.deleted = true;
           this.onDeleteValue.emit();
           this._store.dispatch({type: REQ_FETCH_TREE, payload: {id: this.pageData.id}});

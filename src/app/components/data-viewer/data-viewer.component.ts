@@ -59,6 +59,13 @@ export class DataViewerComponent implements OnInit, OnChanges {
 
   }
 
+  /*
+  * check if object has keys to use in view
+  */
+  hasKeys(){
+    return Object.keys(this.selectedMap).length > 0 ? true : false;
+  }
+
 
   /**
    * is need show table,string type not need table?
@@ -88,7 +95,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
     this.dialogService.open(ConfirmDialogComponent, {
       width: '250px', data: {
         title: 'Delete Confirm',
-        message: `Are you sure you want delete ${element ? 'this' : 'select'} value${values.length > 1 ? 's' : ''} ?`
+        message: `Are you sure you want to delete ${element ? 'this' : 'selected'} value${values.length > 1 ? 's' : ''} ?`
       }
     }).afterClosed().subscribe(ret => {
       if (ret) {
@@ -263,7 +270,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
    */
   onSaveString() {
     if (this.pageData.item.value.trim() === '') {
-      this.snackBar.open('Value cannot be empty', 'Ok');
+      this.snackBar.open('Value cannot be empty', 'Ok', {duration: 3000});
     } else {
       this.redisService.call(this.pageData.id,
         [['set', this.pageData.item.key, this.pageData.item.value.trim()]]).subscribe(() => {
@@ -304,7 +311,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
     this.dialogService.open(ConfirmDialogComponent, {
       width: '320px', data: {
         title: 'Delete Confirm',
-        message: `Are you sure you want delete all values that belongs to "${this.pageData.item.key}" ?`,
+        message: `Are you sure you want delete all values that belong to "${this.pageData.item.key}" ?`,
       }
     }).afterClosed().subscribe(ret => {
       if (ret) {

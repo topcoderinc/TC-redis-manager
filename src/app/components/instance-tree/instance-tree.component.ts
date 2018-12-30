@@ -16,6 +16,7 @@ import {REQ_FETCH_TREE, TOGGLE_REDIS} from '../../ngrx/actions/redis-actions';
 export class InstanceTreeComponent implements OnInit {
   @Input() instance: RedisInstance;
   @Input() expandDeep: Subject<void>;
+  @Input() isActive = false;
   @Output() updatePage = new EventEmitter();
   public selectedMap = {};
   public expandedMap = {};

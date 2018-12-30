@@ -44,7 +44,7 @@ $header-height: 60px;
       }
       .slider-point {
         cursor: col-resize;
-        width: 12px;
+        width: 17px;
         position: absolute;
         top: 0;
         bottom: 0;
@@ -71,6 +71,7 @@ $header-height: 60px;
         right: 0;
         position: absolute;
         background-size: 350px;
+        pointer-events: none;
       }
     }
   }
@@ -126,11 +127,6 @@ $header-height: 60px;
         .result {
           margin-top: 2px;
           font-size: 12px;
-          color: gray;
-
-          &.error {
-            color: red;
-          }
         }
         margin-bottom: 6px;
       }

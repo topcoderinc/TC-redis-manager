@@ -40,13 +40,16 @@ export class AddServerDialogComponent implements OnInit {
       }
 
       this.data.port = this.util.getValue(this.data.port);
+      const portNumber = parseInt(this.data.port + '', 10);
+      const isPortInteger = (+this.data.port === portNumber);
       if (!this.data.port) {
-        return this.util.showMessage('Port cannot be empty');
+        return this.util.showMessage('Invalid Port. Port should be positive number 1 - 65535.');
       }
-
-      this.data.port = parseInt(this.data.port + '', 10);
-      if (this.data.port < 1 || this.data.port > 65535) {
+      else if (!isPortInteger || portNumber < 1 || portNumber > 65535) {
         return this.util.showMessage('Port must be in 1 - 65535');
+      }
+      else {
+        this.data.port = portNumber;
       }
 
       this.data.db = this.util.getValue(this.data.db + '');
@@ -56,7 +59,7 @@ export class AddServerDialogComponent implements OnInit {
 
       this.data.db = parseInt(this.data.db + '', 10);
       if (this.data.db < 0 || this.data.db > 16) {
-        return this.util.showMessage('Database must be in 0 - 16');
+        return this.util.showMessage('Database Index must be in 0 - 16');
       }
 
 

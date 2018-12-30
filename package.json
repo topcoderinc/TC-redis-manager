@@ -6,7 +6,10 @@
     "dev": "ng serve --host 0.0.0.0",
     "prestart": "npm run build",
     "start": "node app",
+    "prelocal": "npm run localbuild",
+    "local": "node app",
     "pm2-start": "pm2 start app.js --name redis-manager",
+    "localbuild": "ng build",
     "build": "ng build --prod --aot",
     "lint": "ng lint"
   },

@@ -33,7 +33,8 @@
                 cdkTextareaAutosize
                 [(ngModel)]="pageData.item.value"
                 #autosize="cdkTextareaAutosize"
-                cdkAutosizeMinRows="2"></textarea>
+                cdkAutosizeMinRows="2"
+                [maxLength]="2000"></textarea>
     </mat-form-field>
 
     <button mat-raised-button

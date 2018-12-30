@@ -21,12 +21,29 @@ mat-form-field {
 
 .cdk-global-overlay-wrapper {
   .cdk-overlay-pane {
-    resize: both;
     overflow: hidden;
   }
 }
+
 
 /* webkit, opera, IE9 */
 ::selection { background: transparent; }
 /* mozilla firefox */
 ::-moz-selection { background:transparent; }
+
+.mat-icon-button {
+  z-index: 2;
+}
+.mat-table {
+
+    td.mat-cell,
+    td.mat-footer-cell,
+    th.mat-header-cell {
+    padding: 0 10px;
+  }
+}
+
+.mat-tooltip-panel .mat-tooltip {
+  margin: 0;
+}
+

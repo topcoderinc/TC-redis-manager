@@ -116,6 +116,7 @@ export class AppComponent implements OnInit {
         this._store.dispatch({type: REQ_LOAD_PAGE, payload: getNewPage()});
         this.currentInstance = false;
       }
+      this.currentInstance = null;
     });
   }
 

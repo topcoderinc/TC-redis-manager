@@ -178,6 +178,7 @@ export class AppComponent implements OnInit {
    * @param id the redis instance id
    */
   onDisconnect(id) {
+    this.currentInstance = null;
     this._store.dispatch({type: REDIS_DISCONNECT, payload: {id}});
     this._store.dispatch({type: REQ_LOAD_PAGE, payload: getNewPage()});
   }

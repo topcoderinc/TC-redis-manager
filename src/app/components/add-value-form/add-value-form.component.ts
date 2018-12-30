@@ -34,7 +34,7 @@ export class AddValueFormComponent implements OnInit {
     } else if (this.type === 'Ordered Set') {
       return {value: '', score: 0};
     } else if (this.type === 'Hash Map') {
-      return {value: '', key: ''};
+      return {value: '', key: '', isNew: true};
     }
   }
 
@@ -67,6 +67,7 @@ export class AddValueFormComponent implements OnInit {
    */
   onRemoveItem(arr, index) {
     arr.splice(index, 1);
+    this.onValueChange();
   }
 
   /**
@@ -83,7 +84,7 @@ export class AddValueFormComponent implements OnInit {
   onValueChange() {
     this.onValueUpdate.emit({
       orderedValues: this.orderedValues,
-      hashMapValues: this.hashMapValues,
+      hashMapValues: _.map(this.hashMapValues, (o) => { return _.omit(o, 'isNew'); }),
       values: this.values
     });
   }

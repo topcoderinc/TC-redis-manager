@@ -2,7 +2,7 @@
 <div mat-dialog-content>
   <p>{{data.message || 'Are you sure you want to do this?'}}</p>
 </div>
-<div mat-dialog-actions>
+<div mat-dialog-actions class="center-buttons">
   <button mat-button [mat-dialog-close]="null">NO</button>
   <button mat-raised-button color="primary" [mat-dialog-close]="data">YES</button>
 </div>

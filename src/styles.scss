@@ -26,6 +26,11 @@ mat-form-field {
 }
 
 
+/* webkit, opera, IE9 */
+::selection { background: transparent; }
+/* mozilla firefox */
+::-moz-selection { background:transparent; }
+
 .mat-icon-button {
   z-index: 2;
 }
@@ -41,3 +46,4 @@ mat-form-field {
 .mat-tooltip-panel .mat-tooltip {
   margin: 0;
 }
+

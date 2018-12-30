@@ -4,14 +4,14 @@
             *ngIf="pageData.item.type !== 'string'"
             (click)="onAddNewRecords()"
     >Add New Value
+
     </button>
     <button mat-raised-button color="warn"
-            (click)="onDelete()">Delete {{pageData.item.type === 'folder'?
-      'Branch':'Key'}}
+            (click)="onDelete()">Delete {{pageData.item.type === 'folder'?'Branch':pageData.item.type === 'zset'?hasKeys()?'Selected':'Key':'Key'}}
     </button>
 
     <button mat-raised-button *ngIf="pageData.item.type==='hash'"
-            color="primary"
+            color="primary" onclick="this.blur()"
             (click)="onEdit()">Edit
     </button>
   </div>
@@ -34,7 +34,8 @@
                 cdkTextareaAutosize
                 [(ngModel)]="pageData.item.value"
                 #autosize="cdkTextareaAutosize"
-                cdkAutosizeMinRows="2"></textarea>
+                cdkAutosizeMinRows="2"
+                [maxLength]="2000"></textarea>
     </mat-form-field>
 
     <button mat-raised-button
@@ -80,7 +81,7 @@
       </ng-container>
 
       <ng-container matColumnDef="actions" *ngIf="pageData.item.type !== 'list'">
-        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <th mat-header-cell *matHeaderCellDef>Action</th>
         <td mat-cell *matCellDef="let element">
 
           <button mat-icon-button matTooltip="Edit this item"
@@ -92,8 +93,6 @@
           <button mat-icon-button matTooltip="Delete Forever" (click)="removeElement(element)">
             <i class="material-icons">delete_forever</i>
           </button>
-
-
         </td>
       </ng-container>
 

@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>{{isEditMode()?'Edit value':'Add new value'}}</h1>
+<h1 mat-dialog-title>{{isEditMode()?'Edit Records':'Add new Records'}}</h1>
 <div mat-dialog-content>
   <mat-form-field>
     <textarea matInput placeholder="Key"
@@ -30,5 +30,5 @@
 </div>
 <div mat-dialog-actions>
   <button mat-button [mat-dialog-close]="null">Cancel</button>
-  <button mat-raised-button color="primary" (click)="onAdd()">{{isEditMode()?'Update':'Add'}}</button>
+  <button mat-raised-button color="primary" (click)="onAdd()" [disabled]="data.values.orderedValues.length === 0">{{isEditMode()?'Update':'Add'}}</button>
 </div>

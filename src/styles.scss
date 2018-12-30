@@ -21,7 +21,23 @@ mat-form-field {
 
 .cdk-global-overlay-wrapper {
   .cdk-overlay-pane {
-    resize: both;
     overflow: hidden;
   }
+}
+
+
+.mat-icon-button {
+  z-index: 2;
+}
+.mat-table {
+
+    td.mat-cell,
+    td.mat-footer-cell,
+    th.mat-header-cell {
+    padding: 0 10px;
+  }
+}
+
+.mat-tooltip-panel .mat-tooltip {
+  margin: 0;
 }

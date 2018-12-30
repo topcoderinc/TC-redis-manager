@@ -3,7 +3,8 @@
     <button mat-raised-button
             *ngIf="pageData.item.type !== 'string'"
             (click)="onAddNewRecords()"
-    >Add new value
+    >Add New Value
+
     </button>
     <button mat-raised-button color="warn"
             (click)="onDelete()">Delete {{pageData.item.type === 'folder'?'Branch':pageData.item.type === 'zset'?hasKeys()?'Selected':'Key':'Key'}}
@@ -33,7 +34,8 @@
                 cdkTextareaAutosize
                 [(ngModel)]="pageData.item.value"
                 #autosize="cdkTextareaAutosize"
-                cdkAutosizeMinRows="2"></textarea>
+                cdkAutosizeMinRows="2"
+                [maxLength]="2000"></textarea>
     </mat-form-field>
 
     <button mat-raised-button
@@ -89,7 +91,7 @@
           </button>
 
           <button mat-icon-button matTooltip="Delete Forever" (click)="removeElement(element)">
-            <i class="material-icons">delete_forever</i>
+            <i class="material-icons delete-icon">delete</i>
           </button>
         </td>
       </ng-container>

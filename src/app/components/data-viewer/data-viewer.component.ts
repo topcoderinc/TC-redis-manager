@@ -94,8 +94,10 @@ export class DataViewerComponent implements OnInit, OnChanges {
     }
     this.dialogService.open(ConfirmDialogComponent, {
       width: '250px', data: {
-        title: 'Delete Confirm',
+
+        title: 'Delete Confirmation',
         message: `Are you sure you want to delete ${element ? 'this' : 'selected'} value${values.length > 1 ? 's' : ''} ?`
+
       }
     }).afterClosed().subscribe(ret => {
       if (ret) {
@@ -270,11 +272,11 @@ export class DataViewerComponent implements OnInit, OnChanges {
    */
   onSaveString() {
     if (this.pageData.item.value.trim() === '') {
-      this.snackBar.open('Value cannot be empty', 'Ok', {duration: 3000});
+      this.snackBar.open('Value cannot be empty', 'OK', {duration: 3000});
     } else {
       this.redisService.call(this.pageData.id,
         [['set', this.pageData.item.key, this.pageData.item.value.trim()]]).subscribe(() => {
-        this.snackBar.open('save successful', 'Ok', {duration: 3000});
+        this.snackBar.open('save successful', 'OK', {duration: 3000});
       });
     }
   }
@@ -310,8 +312,8 @@ export class DataViewerComponent implements OnInit, OnChanges {
     }
     this.dialogService.open(ConfirmDialogComponent, {
       width: '320px', data: {
-        title: 'Delete Confirm',
-        message: `Are you sure you want delete all values that belong to "${this.pageData.item.key}" ?`,
+        title: 'Delete Confirmation',
+        message: `Are you sure you want to delete all values that belongs to "${this.pageData.item.key}" ?`,
       }
     }).afterClosed().subscribe(ret => {
       if (ret) {
@@ -322,7 +324,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
           keys = [this.pageData.item.key];
         }
         this.redisService.call(this.pageData.id, [['DEL'].concat(keys)]).subscribe(() => {
-          this.util.showMessage('delete successful');
+          this.util.showMessage('deleted successfully');
           this.pageData.item.deleted = true;
           this.onDeleteValue.emit();
           this._store.dispatch({type: REQ_FETCH_TREE, payload: {id: this.pageData.id}});

@@ -116,6 +116,7 @@ export class AppComponent implements OnInit {
         this._store.dispatch({type: REQ_LOAD_PAGE, payload: getNewPage()});
         this.currentInstance = false;
       }
+      this.currentInstance = null;
     });
   }
 
@@ -177,6 +178,7 @@ export class AppComponent implements OnInit {
    * @param id the redis instance id
    */
   onDisconnect(id) {
+    this.currentInstance = null;
     this._store.dispatch({type: REDIS_DISCONNECT, payload: {id}});
     this._store.dispatch({type: REQ_LOAD_PAGE, payload: getNewPage()});
   }
@@ -195,7 +197,6 @@ export class AppComponent implements OnInit {
   onSettingsEvt() {
     this.dialogService.open(SettingsDialogComponent, {
       width: '300px',
-      height: '400px'
     });
   }
 

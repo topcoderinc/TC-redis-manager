@@ -45,8 +45,8 @@
   </div>
 
   <div class="line buttons">
-    <button mat-button color="primary" (click)="onAddItem(getItemArray())">
-      <i class="material-icons">add</i>Add new value
+    <button mat-button (click)="onAddItem(getItemArray())" [disabled]="isEditMode">
+      <i class="material-icons">add</i>Add New Value
     </button>
   </div>
 </div>

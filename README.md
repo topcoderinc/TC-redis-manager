@@ -25,7 +25,8 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 ### Local run
 
 - goto submission folder, run `npm i` first
-- just run `npm run start`, and use browsers open http://127.0.0.1:3003
+- for a local build, run `npm run local`, and use browsers open http://127.0.0.1:3003
+- for a production build, run `npm run start`, and use browsers open http://127.0.0.1:3003
 
 ### Docker build and run
 

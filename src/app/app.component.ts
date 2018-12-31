@@ -104,7 +104,7 @@ export class AppComponent implements OnInit {
       if (result) {
         this.findInstanceByName(result.name).then(instance => {
           if (instance) {
-            this.util.showMessage('instance name exists');
+            this.util.showMessage('Instance Name Already Exists');
             return;
           } else {
             const newInstance = {id: uuid(), serverModel: result};

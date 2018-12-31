@@ -3,9 +3,10 @@ FROM node:8.11.2
 LABEL app="redis-manager" version="1.0"
 
 WORKDIR /opt/app
+# install and cache app dependencies
+COPY package.json /opt/app/package.json
+RUN npm install
 COPY . .
 
-RUN npm install
-
 EXPOSE 3003
-CMD ["npm", "start"]
+CMD ["npm", "run", "start"]

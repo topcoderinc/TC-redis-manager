@@ -43,7 +43,9 @@ export class RedisEffect {
               action['payload'].fcb(action['payload'].instance);
             }
             const id = action['payload'].instance.id;
-            this.util.showMessage(`redis ${id} connect failed`);
+            const host = action['payload'].instance.serverModel.name;
+            const port = action['payload'].instance.serverModel.port;
+            this.util.showMessage(`redis at ${host} running at port ${port} failed to connect`);
             return of({type: REDIS_CONNECT_FAILED, payload: {id}});
           })
         );

@@ -17,7 +17,7 @@ export class UtilService {
    * @param {string} type
    */
   public showMessage(msg, type = 'normal') {
-    this.snackbar.open(msg, 'OK', {duration: 2000});
+    this.snackbar.open(msg, 'OK', {duration: 2000, verticalPosition: 'top'});
   }
 
   /**

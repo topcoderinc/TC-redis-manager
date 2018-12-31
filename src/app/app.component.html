@@ -9,15 +9,17 @@
   <div class="body bg-color">
     <div class="left-part" [style.width.px]="dragObject.currentWidth">
       <div class="side-header mat-elevation-z1">
-        <button mat-icon-button matTooltip="Refresh redis instance" (click)="onRefresh()">
+        <button mat-icon-button matTooltip="Refresh Redis Instance" (click)="onRefresh()">
           <i class="material-icons">refresh</i>
         </button>
-        <button mat-icon-button matTooltip="Add new redis Server" (click)="onAddServer()" onclick="this.blur()" >
+
+        <button mat-icon-button matTooltip="Add New Redis Server" (click)="onAddServer()" onclick="this.blur()" >
           <i class="material-icons">add_circle</i>
         </button>
         <button mat-icon-button
-                matTooltip="remove this redis Server"
-                (click)="onDeleteServer()" onclick="this.blur()" >
+                matTooltip="Remove This Redis Server"
+                (click)="onDeleteServer()"onclick="this.blur()" >
+
           <i class="material-icons delete-btn">delete</i>
         </button>
         <button mat-icon-button
@@ -25,7 +27,7 @@
                 matTooltip="Redis API Document"><i class="material-icons">info</i></button>
         <div class="flex1"></div>
         <mat-menu #sideMenu="matMenu">
-          <button mat-menu-item (click)="onRefresh(true)">Refresh + Expand All Nodes</button>
+          <button [disabled]="!currentInstance" mat-menu-item (click)="onRefresh(true)">Refresh + Expand All Nodes</button>
           <button mat-menu-item>Import</button>
           <button mat-menu-item>Export</button>
         </mat-menu>
@@ -40,7 +42,8 @@
         <app-instance-tree *ngFor="let instance of instances$ | async"
                            (updatePage)="updatePage($event)"
                            [expandDeep]="expandDeepCommand$"
-                           [instance]="instance"></app-instance-tree>
+                           [instance]="instance"
+                           [isActive]="currentInstance !== null && instance.id === currentInstance.id"></app-instance-tree>
       </div>
 
       <div class="slider-point"
@@ -55,12 +58,12 @@
         (onDisconnect)="onDisconnect($event)"
         (onNewValue)="onNewValue($event)"
         [instance]=""
-        *ngIf=" (currentPage$| async)?.type === 'root-instance'"
+        *ngIf="(currentPage$| async)?.type === 'root-instance' && currentInstance.status === 'connected'"
       ></app-instance-root-panel>
 
       <app-data-viewer
         (onDeleteValue)="onDeleteValue()"
-        *ngIf="(currentPage$| async)?.type === 'data-viewer'"
+        *ngIf="(currentPage$| async)?.type === 'data-viewer' && currentInstance.status === 'connected'"
         [pageData]="(currentPage$| async)"
         (onNewValue)="onNewValue($event)">
       </app-data-viewer>
@@ -72,18 +75,20 @@
   <div class="{{'cli mat-elevation-z12 ' + ((cli$ | async)?.expanded ? 'cli-expanded':'') + ' cli-bg-color'}}">
     <div class="title">
       <span
-        class="current-instance">{{currentInstance ? getShortName(currentInstance) : 'No redis instance select'}}</span>
+        class="current-instance">{{currentInstance ? getShortName(currentInstance) : 'No redis instance selected'}}</span>
       <span class="flex1"></span>
 
       <button mat-icon-button (click)="clearHistory()"
+              *ngIf="currentInstance"
               [disabled]="!currentInstance"
-              matTooltip="Clear all history">
+              matTooltip="{{currentInstance?'Clear all history':''}}">
         <i class="material-icons">clear_all</i>
       </button>
 
       <button mat-icon-button (click)="toggleCli()"
+              *ngIf="currentInstance"
               [disabled]="!currentInstance"
-              matTooltip="Toggle Cli panel">
+              matTooltip="{{currentInstance?'Toggle Cli panel':''}}">
         <i class="material-icons">{{(cli$ | async)?.expanded ? 'keyboard_arrow_down':'keyboard_arrow_up'}}</i>
       </button>
 
@@ -94,15 +99,14 @@
         <div class="command">
           <span class="time">[{{item.time | date:'medium'}}] ></span>
           <span class="common-font-color" (click)="onRawContentClick(item.rawCommand)">{{item.rawCommand}}</span></div>
-        <div class="{{'result ' + (item.error ? 'error':'')}}">{{item.result}}</div>
+        <div class="{{'result ' + (item.error ? 'error-font-color':'')}}">{{item.result}}</div>
       </div>
     </div>
-
     <div class="input">
       <mat-form-field class="example-full-width">
         <input matInput
                class="common-font-color"
-               placeholder="{{!currentInstance ?'Please select a redis instance to Enter Redis command'
+               placeholder="{{!currentInstance ?'Please select a redis instance to enter redis command'
         : 'Enter Redis command'}}" value=""
                (keydown)="onCliInputKeyDown($event)"
                [(ngModel)]="cliInputValue"
@@ -110,5 +114,6 @@
                [readonly]="!currentInstance">
       </mat-form-field>
     </div>
+
   </div>
 </div>

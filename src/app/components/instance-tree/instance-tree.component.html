@@ -13,13 +13,13 @@
        (click)="onExpand()">
       {{instance.expanded?'expand_more':'chevron_right'}}
     </i>
-    <i class="material-icons error" *ngIf="instance.status === 'failed'">close</i>
+    <i class="material-icons" *ngIf="instance.status === 'failed'">refresh</i>
     <i class="material-icons" *ngIf="!instance.status">swap_vertical_circle</i>
     {{instance.serverModel.name}}({{instance.serverModel.ip}}:{{instance.serverModel.port}}:{{instance.serverModel.db}})
   </div>
 
   <div *ngIf="instance.expanded" class="sub-items">
-    <app-tree-node [itemNode]="instance" [selectedMap]="selectedMap"
+    <app-tree-node [itemNode]="instance" [selectedMap]="isActive ? selectedMap : {}"
                    [expandedMap]="expandedMap"
                    (onItemClick)="onClickItem($event)"></app-tree-node>
   </div>

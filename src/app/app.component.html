@@ -12,16 +12,18 @@
         <button mat-icon-button matTooltip="Refresh Redis Instance" (click)="onRefresh()">
           <i class="material-icons">refresh</i>
         </button>
-        <button mat-icon-button matTooltip="Add New Redis Server" (click)="onAddServer()">
+
+        <button mat-icon-button matTooltip="Add New Redis Server" (click)="onAddServer()" onclick="this.blur()" >
           <i class="material-icons">add_circle</i>
         </button>
         <button mat-icon-button
                 matTooltip="Remove This Redis Server"
-                (click)="onDeleteServer()">
+                (click)="onDeleteServer()"onclick="this.blur()" >
+
           <i class="material-icons delete-btn">delete</i>
         </button>
         <button mat-icon-button
-                (click)="onInformationEvt()"
+                (click)="onInformationEvt()" onclick="this.blur()" 
                 matTooltip="Redis API Document"><i class="material-icons">info</i></button>
         <div class="flex1"></div>
         <mat-menu #sideMenu="matMenu">
@@ -29,7 +31,7 @@
           <button mat-menu-item>Import</button>
           <button mat-menu-item>Export</button>
         </mat-menu>
-        <button mat-icon-button matTooltip="Settings" (click)="onSettingsEvt()"><i class="material-icons">settings</i></button>
+        <button mat-icon-button matTooltip="Settings" (click)="onSettingsEvt()" onclick="this.blur()" ><i class="material-icons">settings</i></button>
         <button mat-icon-button matTooltip="More" [matMenuTriggerFor]="sideMenu">
           <i class="material-icons">more_vert</i>
         </button>

@@ -43,6 +43,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
   public setCachedData = null;
   public hashCachedData = null;
   public selectedMap = {};
+  public showPagination = false;
 
   constructor(
     public dialogService: MatDialog,
@@ -173,12 +174,14 @@ export class DataViewerComponent implements OnInit, OnChanges {
       value: v
     })));
 
+    this.showPagination = false;
 
     if (type === 'list') {
       this.loadingPageData = true;
       this.redisService.call(instanceId, [['LRANGE', key, start, end]]).subscribe(ret => {
           this.data = injectValuesToArray(ret[0]);
           this.loadingPageData = false;
+          // this.showPagination = true;
         }
       );
     } else if (type === 'zset') {
@@ -192,6 +195,8 @@ export class DataViewerComponent implements OnInit, OnChanges {
               value: ret[0][i],
             });
             i += 2;
+            this.loadingPageData = false;
+            this.showPagination = true;
           }
           this.loadingPageData = false;
         }
@@ -207,6 +212,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
       } else {
         this.data = this.setCachedData.slice(start, end);
       }
+      this.showPagination = true;
     } else if (type === 'hash') {
       if (!this.hashCachedData) {
         this.loadingPageData = true;
@@ -226,6 +232,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
       } else {
         this.data = this.hashCachedData.slice(start, end);
       }
+      this.showPagination = true;
     }
   }
 

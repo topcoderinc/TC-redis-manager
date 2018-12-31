@@ -101,7 +101,7 @@
     </table>
   </div>
   <mat-paginator
-    *ngIf="isNeedShowTable()"
+    *ngIf="showPagination"
     [length]="pageData.item.len"
     [pageSizeOptions]="[10,20,50,100]"
     [pageIndex]="page.pageIndex"

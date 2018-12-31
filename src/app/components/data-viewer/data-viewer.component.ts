@@ -274,6 +274,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
     if (this.pageData.item.value.trim() === '') {
       this.snackBar.open('Value cannot be empty', 'OK', {duration: 3000});
     } else {
+      this.pageData.item.value = this.pageData.item.value.trim();
       this.redisService.call(this.pageData.id,
         [['set', this.pageData.item.key, this.pageData.item.value.trim()]]).subscribe(() => {
         this.snackBar.open('save successful', 'OK', {duration: 3000});

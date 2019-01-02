@@ -1,6 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar} from '@angular/material';
 import {UtilService} from '../../services/util.service';
+import _ from 'lodash';
 
 
 /**
@@ -78,6 +79,9 @@ export class AddValueDialogComponent implements OnInit {
       case 'List':
       case 'Set': {
         const values = this.data.values.values;
+        if (this.hasDuplicates(values, 'value')) {
+          return this.showError('duplicate values found');
+        }
         this.data.rawLine.push(this.data.type === 'List' ? 'RPUSH' : 'sadd');
         this.data.rawLine.push(this.data.key);
         for (let i = 0; i < values.length; i++) {
@@ -92,6 +96,12 @@ export class AddValueDialogComponent implements OnInit {
       }
       case 'Ordered Set': {
         const values = this.data.values.orderedValues;
+        if (this.hasDuplicates(values, 'value')) {
+          return this.showError('duplicate values found');
+        }
+        if (this.hasDuplicates(values, 'score')) {
+          return this.showError('duplicate scores found');
+        }
         this.data.rawLine.push('zadd');
         this.data.rawLine.push(this.data.key);
         for (let i = 0; i < values.length; i++) {
@@ -104,7 +114,7 @@ export class AddValueDialogComponent implements OnInit {
           if (!values[i].score) {
             return this.showError(`${this.data.type} Score of row ${i + 1} cannot be empty`);
           }
-          this.data.rawLine.push(parseFloat(values[i].score));
+          this.data.rawLine.push(parseInt(values[i].score, 10));
           this.data.rawLine.push(values[i].value);
         }
         this.data.len = values.length;
@@ -112,6 +122,9 @@ export class AddValueDialogComponent implements OnInit {
       }
       case 'Hash Map': {
         const values = this.data.values.hashMapValues;
+        if (this.hasDuplicates(values, 'key')) {
+          return this.showError('duplicate keys found');
+        }
         for (let i = 0; i < values.length; i++) {
           this.data.rawLine.push('HMSET');
           this.data.rawLine.push(this.data.key);
@@ -131,5 +144,25 @@ export class AddValueDialogComponent implements OnInit {
       }
     }
     this.dialogRef.close(this.data);
+  }
+
+  /**
+   * Check for duplicates
+   */
+  hasDuplicates(values, field) {
+    console.log(values);
+    var result = _(values)
+      .groupBy(field)
+      .map((item, itemId) => {
+        var obj = {
+          v: itemId,
+          cnt: _.filter(values, (z) => z[field] === itemId).length
+        };
+        console.log(obj);
+        return obj
+      })
+      .filter((c) => c.cnt > 1)
+      .value() || [];
+    return result.length > 0;
   }
 }

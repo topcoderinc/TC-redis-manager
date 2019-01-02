@@ -117,6 +117,7 @@ export class AppComponent implements OnInit {
   }
 
   onDeleteServer() {
+    console.log('here');
     if (!this.currentInstance) {
       this.util.showMessage('You need to select Redis instance first');
       return;
@@ -130,7 +131,9 @@ export class AppComponent implements OnInit {
       if (ret) {
         this._store.dispatch({type: REMOVE_REDIS_SERVER, payload: {instance: this.currentInstance}}); // remove
         this._store.dispatch({type: REQ_LOAD_PAGE, payload: getNewPage()});
-        this.currentInstance = false;
+        this.currentInstance = null;
+
+        this.util.showMessage('Delete server successfully.');
       }
       this.currentInstance = null;
     });

@@ -188,7 +188,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
           for (let i = 0; i < ret[0].length;) {
             this.data.push({
               index: this.page.pageIndex * this.page.pageSize + (i / 2),
-              score: parseInt(ret[0][i + 1], 10),
+              score: parseFloat(ret[0][i + 1]),
               value: ret[0][i],
             });
             i += 2;

@@ -374,6 +374,7 @@ export class AppComponent implements OnInit {
             rawCommand: v,
             command,
             result: ['running, please wait ...'],
+            instanceId: this.currentInstance.id,
           },
         }
       });

@@ -96,10 +96,11 @@
 
     <div class="scroll-content" *ngIf="(cli$ | async)?.expanded" #cliScrollContent>
       <div class="item" *ngFor="let item of (cli$ | async)?.items">
-        <div class="command">
+        <div class="command" *ngIf="item.instanceId === currentInstance.id">
           <span class="time">[{{item.time | date:'medium'}}] ></span>
-          <span class="common-font-color" (click)="onRawContentClick(item.rawCommand)">{{item.rawCommand}}</span></div>
-        <div class="{{'result ' + (item.error ? 'error-font-color':'')}}">{{item.result}}</div>
+          <span class="common-font-color" (click)="onRawContentClick(item.rawCommand)">{{item.rawCommand}}</span>
+        </div>
+        <div class="{{'result ' + (item.error ? 'error-font-color':'')}}" *ngIf="item.instanceId === currentInstance.id">{{item.result}}</div>
       </div>
     </div>
     <div class="input">

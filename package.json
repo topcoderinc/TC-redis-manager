@@ -28,6 +28,7 @@
     "@angular/router": "^6.1.0",
     "@ngrx/effects": "^6.1.0",
     "@ngrx/store": "^6.1.0",
+    "@ngx-loading-bar/core": "^4.0.0",
     "@ngx-loading-bar/http-client": "latest",
     "config": "^2.0.1",
     "core-js": "^2.5.4",

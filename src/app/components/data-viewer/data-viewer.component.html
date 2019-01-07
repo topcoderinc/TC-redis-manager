@@ -32,7 +32,8 @@
       <mat-label>Value</mat-label>
       <textarea matInput
                 cdkTextareaAutosize
-                [(ngModel)]="pageData.item.value"
+                [value]="pageData.item.value"
+                (input)="pageData.item.newValue=$event.target.value"
                 #autosize="cdkTextareaAutosize"
                 cdkAutosizeMinRows="2"
                 [maxLength]="2000"></textarea>

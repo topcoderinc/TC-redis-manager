@@ -15,6 +15,7 @@ export class ValueMode {
   type: string;
   hideType: boolean;
   isEditMode = false;
+  from: string;
   values = {
     values: [{value: ''}],
     orderedValues: [{value: '', score: '0'}],
@@ -150,9 +151,13 @@ export class AddValueDialogComponent implements OnInit {
         break;
       }
     }
-    this.checkIsExist(this.data, () => {
+    if (this.data.from === 'root') {
+      this.checkIsExist(this.data, () => {
+        this.dialogRef.close(this.data);
+      });
+    } else {
       this.dialogRef.close(this.data);
-    });
+    }
   }
 
   /**

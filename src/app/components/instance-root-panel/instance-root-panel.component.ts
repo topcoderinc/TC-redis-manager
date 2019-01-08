@@ -77,6 +77,7 @@ export class InstanceRootPanelComponent implements OnInit {
     const viewMode = new ValueMode();
     viewMode.type = 'String';
     viewMode.id = this.pageData.id;
+    viewMode.from = 'root';
     this.dialogService.open(AddValueDialogComponent, {
       width: '480px',
       data: viewMode,

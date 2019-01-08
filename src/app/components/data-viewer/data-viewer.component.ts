@@ -178,6 +178,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
 
     this.showPagination = false;
     if (type === 'list') {
+      this.loadingPageData = true;
       this.redisService.call(instanceId, [['LRANGE', key, start, end]]).subscribe(ret => {
           this.data = injectValuesToArray(ret[0]);
           this.showPagination = true;

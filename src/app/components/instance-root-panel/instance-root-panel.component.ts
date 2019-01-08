@@ -85,6 +85,8 @@ export class InstanceRootPanelComponent implements OnInit {
             this.onNewValue.emit(ret);
           }
         });
+      } else {
+        this.onNewValue.emit(ret);
       }
     }, () => {
       this.util.showMessage('network error');

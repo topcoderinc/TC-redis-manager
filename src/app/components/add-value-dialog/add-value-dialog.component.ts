@@ -1,7 +1,9 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar} from '@angular/material';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatSnackBar} from '@angular/material';
 import {UtilService} from '../../services/util.service';
 import _ from 'lodash';
+import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component';
+import {RedisService} from '../../services/redis.service';
 
 
 /**
@@ -37,7 +39,9 @@ export class AddValueDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<AddValueDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ValueMode,
     private snackBar: MatSnackBar,
-    private util: UtilService
+    private util: UtilService,
+    private redisService: RedisService,
+    private dialogService: MatDialog
   ) {
   }
 
@@ -127,8 +131,10 @@ export class AddValueDialogComponent implements OnInit {
           return this.showError('duplicate keys found');
         }
         for (let i = 0; i < values.length; i++) {
-          this.data.rawLine.push('HMSET');
-          this.data.rawLine.push(this.data.key);
+          if (i === 0) {
+            this.data.rawLine.push('HMSET');
+            this.data.rawLine.push(this.data.key);
+          }
           values[i].value = getValue(values[i].value);
           values[i].key = getValue(values[i].key);
           if (!values[i].key) {
@@ -144,7 +150,48 @@ export class AddValueDialogComponent implements OnInit {
         break;
       }
     }
-    this.dialogRef.close(this.data);
+    this.checkIsExist(this.data, () => {
+      this.dialogRef.close(this.data);
+    });
+  }
+
+  /**
+   * remove exist key
+   * @param ret the ret include id and key
+   * @param cb the callback
+   */
+  removeExistKey(ret, cb) {
+    this.redisService.call(ret.id, [['DEL', ret.key]]).subscribe(() => {
+      cb();
+    }, err => {
+      this.util.showMessage('del key failed, ' + this.util.getErrorMessage(err));
+    });
+  }
+
+  /**
+   * check is exist
+   * @param ret the ret include id and key/values
+   * @param cb the callback
+   */
+  checkIsExist(ret, cb) {
+    this.redisService.call(ret.id, [['EXISTS', ret.key]]).subscribe((r) => {
+      if (r && r.length > 0 && r[0] > 0) { // exist
+        this.dialogService.open(ConfirmDialogComponent, {
+          width: '360px', data: {
+            title: `Key "${ret.key}" Exists`,
+            message: `Are you sure you want to to replace original value ?`
+          }
+        }).afterClosed().subscribe(cr => {
+          if (cr) {
+            this.removeExistKey(ret, cb);
+          }
+        });
+      } else {
+        cb();
+      }
+    }, () => {
+      this.util.showMessage('check key is exist failed');
+    });
   }
 
   /**

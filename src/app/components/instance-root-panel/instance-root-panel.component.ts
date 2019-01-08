@@ -31,9 +31,7 @@ export class InstanceRootPanelComponent implements OnInit {
     pageSize: 20,
   };
 
-  constructor(public dialogService: MatDialog, private _store: Store<any>,
-              private util: UtilService,
-              private redisService: RedisService) {
+  constructor(public dialogService: MatDialog, private _store: Store<any>) {
     this.cli$ = this._store.select('cli');
   }
 
@@ -72,27 +70,6 @@ export class InstanceRootPanelComponent implements OnInit {
     });
   }
 
-  checkIsExist(ret) {
-    this.redisService.call(this.pageData.id, [['EXISTS', ret.key]]).subscribe((r) => {
-      if (r && r.length > 0 && r[0] > 0) { // exist
-        this.dialogService.open(ConfirmDialogComponent, {
-          width: '360px', data: {
-            title: `Key "${ret.key}" Exists`,
-            message: `Are you sure you want to to replace original value ?`
-          }
-        }).afterClosed().subscribe(cr => {
-          if (cr) {
-            this.onNewValue.emit(ret);
-          }
-        });
-      } else {
-        this.onNewValue.emit(ret);
-      }
-    }, () => {
-      this.util.showMessage('network error');
-    });
-  }
-
   /**
    * on add new record event, show a dialog
    */
@@ -107,7 +84,7 @@ export class InstanceRootPanelComponent implements OnInit {
       if (ret) {
         ret.from = 'root';
         ret.item = {};
-        this.checkIsExist(ret);
+        this.onNewValue.emit(ret);
       }
     });
   }

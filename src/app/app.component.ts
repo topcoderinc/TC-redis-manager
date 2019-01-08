@@ -223,7 +223,7 @@ export class AppComponent implements OnInit {
       if (newValue.onSuccess) {
         newValue.onSuccess(newValue);
       }
-      this.util.showMessage('new value added successfully');
+      this.util.showMessage(newValue.edit ? 'The value is updated successfully' : 'New value added successfully');
     }, e => {
       console.error(e.error.message);
       this.util.showMessage('new value add failed, ' + this.util.getErrorMessage(e));

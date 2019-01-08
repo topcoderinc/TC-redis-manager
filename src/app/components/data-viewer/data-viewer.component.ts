@@ -237,8 +237,10 @@ export class DataViewerComponent implements OnInit, OnChanges {
 
   /**
    * on add new record
+   * @param values the record base values
+   * @param edit is edit mode
    */
-  onAddNewRecords(values) {
+  onAddNewRecords(values, edit = false) {
     const viewMode = new ValueMode();
     viewMode.type = TYPE_MAP[this.pageData.item.type];
     viewMode.hideType = true;
@@ -274,6 +276,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
             this.fetchData();
           }
         };
+        ret.edit = edit;
         this.onNewValue.emit(ret);
       }
     });
@@ -354,7 +357,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
    * @param elements the element arr
    */
   onEditMapElements(elements) {
-    this.onAddNewRecords({hashMapValues: JSON.parse(JSON.stringify(elements))});
+    this.onAddNewRecords({hashMapValues: JSON.parse(JSON.stringify(elements))}, true);
   }
 
   /**

@@ -4,6 +4,8 @@ import {UtilService} from '../../services/util.service';
 import {RedisService} from '../../services/redis.service';
 import { saveAs } from 'file-saver';
 import _ from 'lodash';
+import {Store} from '@ngrx/store';
+import {REQ_FETCH_TREE} from '../../ngrx/actions/redis-actions';
 
 @Component({
   selector: 'app-import-data-dialog',
@@ -23,6 +25,7 @@ export class ImportDataDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data,
     private dialogRef: MatDialogRef<ImportDataDialogComponent>,
     private redisService: RedisService,
+    private _store: Store<any>,
     public util: UtilService) {
   }
 
@@ -120,6 +123,7 @@ export class ImportDataDialogComponent implements OnInit {
       this.util.showMessage(`${numberOfSucceed} of row import successful, ${totalRow
       - numberOfSucceed} of row import failed.`);
       this.dialogRef.close();
+      this._store.dispatch({type: REQ_FETCH_TREE, payload: {id: this.instanceId}});
     }, err => {
       this.util.showMessage('Import data failed, ' + this.util.getErrorMessage(err));
     });

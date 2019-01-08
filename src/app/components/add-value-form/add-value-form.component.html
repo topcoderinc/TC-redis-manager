@@ -45,7 +45,7 @@
   </div>
 
   <div class="line buttons">
-    <button mat-button (click)="onAddItem(getItemArray())" [disabled]="isEditMode">
+    <button mat-button (click)="onAddItem(getItemArray())" *ngIf="!isEditMode">
       <i class="material-icons">add</i>Add New Value
     </button>
   </div>

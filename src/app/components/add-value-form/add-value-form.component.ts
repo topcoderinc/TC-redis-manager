@@ -93,7 +93,9 @@ export class AddValueFormComponent implements OnInit {
   onValueChange() {
     this.onValueUpdate.emit({
       orderedValues: this.orderedValues,
-      hashMapValues: _.map(this.hashMapValues, (o) => { return _.omit(o, 'isNew'); }),
+      hashMapValues: _.map(this.hashMapValues, (o) => {
+        return _.omit(o, 'isNew');
+      }),
       values: this.values
     });
   }

@@ -23,13 +23,13 @@
           <i class="material-icons delete-btn">delete</i>
         </button>
         <button mat-icon-button
-                (click)="onInformationEvt()" onclick="this.blur()" 
+                (click)="onInformationEvt()" onclick="this.blur()"
                 matTooltip="Redis API Document"><i class="material-icons">info</i></button>
         <div class="flex1"></div>
         <mat-menu #sideMenu="matMenu">
           <button [disabled]="!currentInstance" mat-menu-item (click)="onRefresh(true)">Refresh + Expand All Nodes</button>
-          <button mat-menu-item>Import</button>
-          <button mat-menu-item>Export</button>
+          <button [disabled]="!currentInstance" mat-menu-item (click)="onImport(currentInstance)">Import</button>
+          <button [disabled]="!currentInstance" mat-menu-item (click)="onExport(currentInstance)">Export</button>
         </mat-menu>
         <button mat-icon-button matTooltip="Settings" (click)="onSettingsEvt()" onclick="this.blur()" ><i class="material-icons">settings</i></button>
         <button mat-icon-button matTooltip="More" [matMenuTriggerFor]="sideMenu">
@@ -58,12 +58,12 @@
         (onDisconnect)="onDisconnect($event)"
         (onNewValue)="onNewValue($event)"
         [instance]=""
-        *ngIf="(currentPage$| async)?.type === 'root-instance' && currentInstance.status === 'connected'"
+        *ngIf="currentInstance && (currentPage$| async)?.type === 'root-instance' && currentInstance.status === 'connected'"
       ></app-instance-root-panel>
 
       <app-data-viewer
         (onDeleteValue)="onDeleteValue()"
-        *ngIf="(currentPage$| async)?.type === 'data-viewer' && currentInstance.status === 'connected'"
+        *ngIf="currentInstance && (currentPage$| async)?.type === 'data-viewer' && currentInstance.status === 'connected'"
         [pageData]="(currentPage$| async)"
         (onNewValue)="onNewValue($event)">
       </app-data-viewer>
@@ -75,7 +75,7 @@
   <div class="{{'cli mat-elevation-z12 ' + ((cli$ | async)?.expanded ? 'cli-expanded':'') + ' cli-bg-color'}}">
     <div class="title">
       <span
-        class="current-instance">{{currentInstance ? getShortName(currentInstance) : 'No redis instance selected'}}</span>
+        class="current-instance current-instance-color">{{currentInstance ? getShortName(currentInstance) : 'No redis instance selected'}}</span>
       <span class="flex1"></span>
 
       <button mat-icon-button (click)="clearHistory()"
@@ -106,7 +106,10 @@
     <div class="input">
       <mat-form-field class="example-full-width">
         <input matInput
+               #cliInput
                class="common-font-color"
+               name="cli"
+               [autocomplete]="false"
                placeholder="{{!currentInstance ?'Please select a redis instance to enter redis command'
         : 'Enter Redis command'}}" value=""
                (keydown)="onCliInputKeyDown($event)"

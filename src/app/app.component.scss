@@ -62,7 +62,7 @@ $header-height: 60px;
       flex: 1;
       position: relative;
       &::after{
-        content: ""; 
+        content: "";
         background:url(../assets/watermark.png) no-repeat;
         opacity: 0.1;
         width: 350px;
@@ -95,7 +95,6 @@ $header-height: 60px;
         height: 22px;
         padding-left: 18px;
         padding-right: 18px;
-        background-color: #4054b2;
         font-size: 14px;
         color: white;
         display: flex;

@@ -20,6 +20,7 @@ export class ValueMode {
   };
   len = 0;
   rawLine = [];
+  onValueDelete: (element, cb) => {};
 }
 
 /**
@@ -150,19 +151,28 @@ export class AddValueDialogComponent implements OnInit {
    * Check for duplicates
    */
   hasDuplicates(values, field) {
-    console.log(values);
-    var result = _(values)
-      .groupBy(field)
+    const result = _(values).groupBy(field)
       .map((item, itemId) => {
-        var obj = {
+        const obj = {
           v: itemId,
           cnt: _.filter(values, (z) => z[field] === itemId).length
         };
-        console.log(obj);
-        return obj
+        return obj;
       })
       .filter((c) => c.cnt > 1)
       .value() || [];
     return result.length > 0;
+  }
+
+  /**
+   * on value delete
+   * @param evt
+   */
+  onValueDelete(evt) {
+    if (this.data.onValueDelete) {
+      this.data.onValueDelete(evt.element, () => {
+        evt.callback();
+      });
+    }
   }
 }

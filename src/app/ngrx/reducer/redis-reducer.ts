@@ -64,9 +64,11 @@ const getInstanceById = (id, state) => state.find(ins => ins.id === id) || {};
 export function reducer(state = initialState, action) {
   switch (action.type) {
     case actions.REQ_REDIS_CONNECT: {
-      const i = getInstanceById(action.payload.instance.id, state);
-      i.status = 'connecting';
-      i.working = true;
+      if (action.payload.instance) {
+        const i = getInstanceById(action.payload.instance.id, state);
+        i.status = 'connecting';
+        i.working = true;
+      }
       return state;
     }
     case actions.REDIS_CONNECT_FAILED: {

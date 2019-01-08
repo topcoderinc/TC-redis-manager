@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpHelperService} from './http-helper.service';
+import {API_BASE_URL, HttpHelperService} from './http-helper.service';
 
 /**
  * redis endpoint services
@@ -38,5 +38,14 @@ export class RedisService {
    */
   public call(id, lines) {
     return this.httpHelper.post(`/redis/call?id=${id}`, {lines});
+  }
+
+  /**
+   * export data
+   * @param id the redis id
+   * @param type the export type
+   */
+  public export(id, type) {
+    return this.httpHelper.get(`/redis/export?id=${id}&exportType=${type}`, {responseType: 'text'});
   }
 }

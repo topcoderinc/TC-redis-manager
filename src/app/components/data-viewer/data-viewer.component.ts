@@ -63,8 +63,8 @@ export class DataViewerComponent implements OnInit, OnChanges {
   /*
   * check if object has keys to use in view
   */
-  hasKeys(){
-    return Object.keys(this.selectedMap).length > 0 ? true : false;
+  hasKeys() {
+    return _.filter(this.selectedMap, (v) => v).length > 0;
   }
 
 
@@ -79,8 +79,9 @@ export class DataViewerComponent implements OnInit, OnChanges {
   /**
    * remove element
    * @param element the element
+   * @param cb delete callback
    */
-  removeElement(element) {
+  removeElement(element, cb = null) {
     const t = this.pageData.item.type;
     const pk = this.pageData.item.key;
     let values = [];
@@ -122,6 +123,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
           this.setCachedData = null;
           this.fetchData();
           this.util.showMessage('Delete successful');
+          if (cb) { cb(); }
         }, () => this.util.showMessage('Delete failed'));
       }
     });
@@ -250,6 +252,12 @@ export class DataViewerComponent implements OnInit, OnChanges {
     if (values) {
       viewMode.values = values;
       viewMode.isEditMode = true;
+    }
+    if (values && values.hashMapValues.length > 0) {
+      viewMode.onValueDelete = (element, cb) => {
+        this.removeElement(element, cb);
+        return 0;
+      };
     }
     this.dialogService.open(AddValueDialogComponent, {
       minWidth: Math.min(1000, Math.max(480, (viewMode.key.length / 50) * 480)) + 'px',
@@ -380,6 +388,25 @@ export class DataViewerComponent implements OnInit, OnChanges {
   onPageEvent(page) {
     this.page = page;
     this.fetchData();
+  }
+
+  /**
+   * master checkbox changed
+   * @param v the value
+   */
+  masterCheckboxToggle({checked}) {
+    if (!checked) {
+      this.selectedMap = {};
+    } else {
+      _.each(this.data, (v) => this.selectedMap[this.key(v)] = true);
+    }
+  }
+
+  /**
+   * check all item is selected or not
+   */
+  isAllSelected() {
+    return _.filter(this.selectedMap, (v) => v).length === this.data.length;
   }
 
   /**

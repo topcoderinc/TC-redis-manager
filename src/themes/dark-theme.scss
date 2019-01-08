@@ -50,16 +50,19 @@ $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
       color: #607eff;
     }
   }
+  .current-instance-color {
+    background-color: #4054b2;
+  }
 
   .error-font-color {
     color: lightsalmon;
   }
-  
-  .mat-form-field-appearance-legacy .mat-form-field-label 
+
+  .mat-form-field-appearance-legacy .mat-form-field-label
   , .mat-select-arrow {
     color: #607d8b;
   }
-  .mat-form-field-appearance-legacy .mat-form-field-underline, 
+  .mat-form-field-appearance-legacy .mat-form-field-underline,
   .mat-form-field-appearance-legacy .mat-form-field-ripple {
     background-color: #607d8b;
   }

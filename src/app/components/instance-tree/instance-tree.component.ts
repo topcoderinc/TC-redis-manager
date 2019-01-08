@@ -71,6 +71,9 @@ export class InstanceTreeComponent implements OnInit {
 
   ngOnInit() {
     this.expandDeep.subscribe(() => {
+      if (!this.instance.children) {
+        return;
+      }
       this.instance.children.forEach(item => {
         if (item.children) {
           this.deepExpandItem(item);

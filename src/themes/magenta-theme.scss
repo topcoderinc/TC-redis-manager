@@ -1,0 +1,81 @@
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+// magenta theme
+$magenta-primary: mat-palette($mat-red, 600);
+$magenta-accent: mat-palette($mat-red, 700);
+$magenta-warn: mat-palette($mat-red, A400);
+
+$magenta-theme: mat-light-theme($magenta-primary, $magenta-accent, $magenta-warn);
+
+$app-bg-color: white;
+
+@mixin magenta-app-colors {
+  .bg-color {
+    background-color: white;
+  }
+  .cli-bg-color {
+    background-color: white;
+  }
+  .material-icons {
+    color: black;
+  }
+  .common-font-color {
+    color: black;
+  }
+  input, textarea {
+    color: black;
+  }
+  .link-color {
+    color: #5c79ff;
+  }
+  .node-color {
+    background-color: white;
+    color: black;
+    &:hover {
+      background-color: #f6f6f6;
+    }
+    &.selected {
+      background-color: rgba(213, 17, 155, 0.2);
+    }
+  }
+  .tree-child-color {
+    color: black;
+    &:hover {
+      background-color: #f6f6f6;
+    }
+    &.selected {
+      background-color: rgba(213, 17, 155, 0.2);
+    }
+    .value-type {
+      color: #d51173;
+    }
+  }
+  .error-font-color {
+    color: red;
+  }
+
+  .current-instance-color {
+    background-color: #d51173;
+  }
+
+}
+
+.magenta-theme {
+  @include angular-material-theme($magenta-theme);
+  @include magenta-app-colors
+}
+
+.magenta-theme .mat-checkbox-checked.mat-primary .mat-checkbox-background,
+.magenta-theme .mat-checkbox-indeterminate.mat-primary .mat-checkbox-background {
+  background-color: #d51173;
+}
+
+.magenta-theme .mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+  color: rgba(213, 17, 155, .87);
+}
+
+.magenta-theme .mat-form-field.mat-focused .mat-form-field-label {
+  color: rgba(213, 17, 155, .54)
+}

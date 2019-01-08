@@ -24,6 +24,7 @@
                       [initHashMapValues]="data.values.hashMapValues"
                       [initOrderedValues]="data.values.orderedValues"
                       [isEditMode]="isEditMode()"
+                      (onValueDelete)="onValueDelete($event)"
                       (onValueUpdate)="data.values = $event">
 
   </app-add-value-form>

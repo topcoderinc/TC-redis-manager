@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 import {environment} from '../../environments/environment';
 import {catchError} from 'rxjs/operators';
 
-const API_BASE_URL = environment.URI;
+export const API_BASE_URL = environment.URI;
 
 @Injectable({
   providedIn: 'root'

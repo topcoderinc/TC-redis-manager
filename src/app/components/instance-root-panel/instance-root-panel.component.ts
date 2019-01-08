@@ -4,6 +4,10 @@ import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component
 import {AddValueDialogComponent, ValueMode} from '../add-value-dialog/add-value-dialog.component';
 import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs';
+import {RedisService} from '../../services/redis.service';
+import {UtilService} from '../../services/util.service';
+import {REMOVE_REDIS_SERVER} from '../../ngrx/actions/redis-actions';
+import {REQ_LOAD_PAGE} from '../../ngrx/actions/page-actions';
 
 
 /**
@@ -27,7 +31,9 @@ export class InstanceRootPanelComponent implements OnInit {
     pageSize: 20,
   };
 
-  constructor(public dialogService: MatDialog, private _store: Store<any>) {
+  constructor(public dialogService: MatDialog, private _store: Store<any>,
+              private util: UtilService,
+              private redisService: RedisService) {
     this.cli$ = this._store.select('cli');
   }
 
@@ -66,6 +72,25 @@ export class InstanceRootPanelComponent implements OnInit {
     });
   }
 
+  checkIsExist(ret) {
+    this.redisService.call(this.pageData.id, [['EXISTS', ret.key]]).subscribe((r) => {
+      if (r && r.length > 0 && r[0] > 0) { // exist
+        this.dialogService.open(ConfirmDialogComponent, {
+          width: '360px', data: {
+            title: `Key "${ret.key}" Exists`,
+            message: `Are you sure you want to to replace original value ?`
+          }
+        }).afterClosed().subscribe(cr => {
+          if (cr) {
+            this.onNewValue.emit(ret);
+          }
+        });
+      }
+    }, () => {
+      this.util.showMessage('network error');
+    });
+  }
+
   /**
    * on add new record event, show a dialog
    */
@@ -80,7 +105,7 @@ export class InstanceRootPanelComponent implements OnInit {
       if (ret) {
         ret.from = 'root';
         ret.item = {};
-        this.onNewValue.emit(ret);
+        this.checkIsExist(ret);
       }
     });
   }

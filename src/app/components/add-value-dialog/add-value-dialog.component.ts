@@ -92,7 +92,7 @@ export class AddValueDialogComponent implements OnInit {
       case 'Set': {
         const values = this.data.values.values;
         if (this.hasDuplicates(values, 'value') && this.data.type === 'Set') {
-          return this.showError('Duplicate values are found.');
+          return this.showError('Duplicated values are found.');
         }
         this.data.rawLine.push(this.data.type === 'List' ? 'RPUSH' : 'sadd');
         this.data.rawLine.push(this.data.key);
@@ -113,7 +113,7 @@ export class AddValueDialogComponent implements OnInit {
           return v;
         });
         if (this.hasDuplicates(values, 'value')) {
-          return this.showError('Duplicate values are found.');
+          return this.showError('Duplicated values are found.');
         }
         this.data.rawLine.push('zadd');
         this.data.rawLine.push(this.data.key);
@@ -136,7 +136,7 @@ export class AddValueDialogComponent implements OnInit {
       case 'Hash Map': {
         const values = this.data.values.hashMapValues;
         if (this.hasDuplicates(values, 'key')) {
-          return this.showError('Duplicate keys are found.');
+          return this.showError('Duplicated keys are found.');
         }
         for (let i = 0; i < values.length; i++) {
           if (i === 0) {

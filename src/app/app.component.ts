@@ -133,7 +133,7 @@ export class AppComponent implements OnInit {
         this._store.dispatch({type: REMOVE_REDIS_SERVER, payload: {instance: this.currentInstance}}); // remove
         this._store.dispatch({type: REQ_LOAD_PAGE, payload: getNewPage()});
         this.currentInstance = null;
-        this.util.showMessage('Delete server successfully.');
+        this.util.showMessage('The server is deleted successfully.');
       }
     });
   }
@@ -252,7 +252,7 @@ export class AppComponent implements OnInit {
       this._store.dispatch({type: SELECT_REDIS, payload: {id}});
       this.findInstance(id).then(instance => {
         if (!instance['id']) {
-          this.util.showMessage(`cannot found redis instance where id= ${id}`);
+          this.util.showMessage(`The Redis instance with id: ${id} cannot be found.`);
           return;
         }
         this.currentInstance = instance;

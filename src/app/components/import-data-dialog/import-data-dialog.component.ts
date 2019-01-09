@@ -80,9 +80,9 @@ export class ImportDataDialogComponent implements OnInit {
     this.redisService.export(this.instanceId, this.exportType).subscribe(rsp => {
       const data = new Blob([rsp], { type: 'text/plain;charset=utf-8' });
       saveAs(data, `db-${Date.now()}.${this.exportType}`);
-      this.util.showMessage('export successful');
+      this.util.showMessage('Exported successfully.');
     }, err => {
-      this.util.showMessage('export redis failed, ' + this.util.getErrorMessage(err));
+      this.util.showMessage('Fail to export redis commands: ' + this.util.getErrorMessage(err));
     });
 
     this.dialogRef.close();
@@ -93,7 +93,7 @@ export class ImportDataDialogComponent implements OnInit {
    */
   onImportClick() {
     if (this.rawContent.trim() === '') {
-      this.util.showMessage('data cannot empty');
+      this.util.showMessage('The commands to import cannot be empty.');
       return;
     }
     const commands = [];
@@ -120,12 +120,12 @@ export class ImportDataDialogComponent implements OnInit {
         numberOfSucceed += (!!v && v.toString().toLowerCase().indexOf('err') < 0) ? 1 : 0;
       });
       numberOfSucceed -= this.flushDB ? 1 : 0;
-      this.util.showMessage(`${numberOfSucceed} of row import successful, ${totalRow
-      - numberOfSucceed} of row import failed.`);
+      this.util.showMessage(`${numberOfSucceed} row(s) are imported successfully, ${totalRow
+      - numberOfSucceed} row(s) fail.`);
       this.dialogRef.close();
       this._store.dispatch({type: REQ_FETCH_TREE, payload: {id: this.instanceId}});
     }, err => {
-      this.util.showMessage('Import data failed, ' + this.util.getErrorMessage(err));
+      this.util.showMessage('Failed to import commands: ' + this.util.getErrorMessage(err));
     });
   }
 }

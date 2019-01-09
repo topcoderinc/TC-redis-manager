@@ -120,9 +120,9 @@ export class DataViewerComponent implements OnInit, OnChanges {
           this.setCachedData = null;
           this.pageData.item.len -= values.length;
           this.fetchData();
-          this.util.showMessage('Delete successful');
+          this.util.showMessage('Deleted successfully.');
           if (cb) { cb(); }
-        }, () => this.util.showMessage('Delete failed'));
+        }, () => this.util.showMessage('Delete is failed.'));
       }
     });
   }
@@ -288,12 +288,12 @@ export class DataViewerComponent implements OnInit, OnChanges {
    */
   onSaveString() {
     if (this.pageData.item.value.trim() === '') {
-      this.snackBar.open('Value cannot be empty', 'OK', {duration: 3000});
+      this.snackBar.open('The value cannot be empty', 'OK', {duration: 3000});
     } else {
       this.pageData.item.value = this.pageData.item.value.trim();
       this.redisService.call(this.pageData.id,
         [['set', this.pageData.item.key, this.pageData.item.value.trim()]]).subscribe(() => {
-        this.util.showMessage('save successful');
+        this.util.showMessage('Saved successfully');
       });
     }
   }
@@ -330,7 +330,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
     this.dialogService.open(ConfirmDialogComponent, {
       width: '320px', data: {
         title: 'Delete Confirmation',
-        message: `Are you sure you want to delete all values that belongs to "${this.pageData.item.key}" ?`,
+        message: `Are you sure you want to delete all values that belongs to "${this.pageData.item.key}"?`,
       }
     }).afterClosed().subscribe(ret => {
       if (ret) {
@@ -341,12 +341,12 @@ export class DataViewerComponent implements OnInit, OnChanges {
           keys = [this.pageData.item.key];
         }
         this.redisService.call(this.pageData.id, [['DEL'].concat(keys)]).subscribe(() => {
-          this.util.showMessage('deleted successfully');
+          this.util.showMessage('Deleted successfully.');
           this.pageData.item.deleted = true;
           this.onDeleteValue.emit();
           this._store.dispatch({type: REQ_FETCH_TREE, payload: {id: this.pageData.id}});
         }, e => {
-          this.util.showMessage('delete failed');
+          this.util.showMessage('Delete is failed.');
           console.error(e);
         });
       }

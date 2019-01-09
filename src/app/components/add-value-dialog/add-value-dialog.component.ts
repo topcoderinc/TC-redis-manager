@@ -36,6 +36,7 @@ export class ValueMode {
 })
 export class AddValueDialogComponent implements OnInit {
 
+  title = '';
   constructor(
     public dialogRef: MatDialogRef<AddValueDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ValueMode,
@@ -47,6 +48,12 @@ export class AddValueDialogComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log(this.data.from);
+    if (this.data.from === 'root') {
+      this.title = this.isEditMode() ? 'Edit Records' : 'Add new Records';
+    } else {
+      this.title = this.isEditMode() ? 'Edit Value' : 'Add New Value';
+    }
   }
 
   isEditMode() {

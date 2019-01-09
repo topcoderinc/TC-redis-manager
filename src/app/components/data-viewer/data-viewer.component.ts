@@ -52,7 +52,6 @@ export class DataViewerComponent implements OnInit, OnChanges {
     private util: UtilService,
     private _store: Store<any>,
   ) {
-
     this.cli$ = this._store.select('cli');
   }
 
@@ -96,10 +95,8 @@ export class DataViewerComponent implements OnInit, OnChanges {
     }
     this.dialogService.open(ConfirmDialogComponent, {
       width: '250px', data: {
-
         title: 'Delete Confirmation',
         message: `Are you sure you want to delete ${element ? 'this' : 'selected'} value${values.length > 1 ? 's' : ''} ?`
-
       }
     }).afterClosed().subscribe(ret => {
       if (ret) {
@@ -121,6 +118,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
           this._store.dispatch({type: REQ_FETCH_TREE, payload: {id: this.pageData.id}});
           this.hashCachedData = null;
           this.setCachedData = null;
+          this.pageData.item.len -= values.length;
           this.fetchData();
           this.util.showMessage('Delete successful');
           if (cb) { cb(); }
@@ -170,7 +168,6 @@ export class DataViewerComponent implements OnInit, OnChanges {
     const type = this.pageData.item.type;
     const key = this.pageData.item.key;
     const instanceId = this.pageData.id;
-
     const injectValuesToArray = (values) => (_.map(values, (v, index) => ({
       index: this.page.pageIndex * this.page.pageSize + index,
       value: v
@@ -211,6 +208,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
           this.showPagination = true;
         });
       } else {
+        this.showPagination = true;
         this.data = this.setCachedData.slice(start, end);
       }
     } else if (type === 'hash') {
@@ -231,6 +229,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
           }
         );
       } else {
+        this.showPagination = true;
         this.data = this.hashCachedData.slice(start, end);
       }
     }
@@ -274,6 +273,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
             this._store.dispatch({type: REQ_FETCH_TREE, payload: {id: this.pageData.id}});
             this.hashCachedData = null;
             this.setCachedData = null;
+            this.pageData.item.len += ret.len;
             this.fetchData();
           }
         };
@@ -417,7 +417,13 @@ export class DataViewerComponent implements OnInit, OnChanges {
    * when type changed from parent
    */
   ngOnChanges(changes: SimpleChanges): void {
-    this.page.pageIndex = 0;
+
+    if (changes.pageData.previousValue && changes.pageData.currentValue &&
+      changes.pageData.currentValue.item.key !== changes.pageData.previousValue.item.key
+    ) {
+      this.page.pageIndex = 0;
+    }
+
     this.data = [];
     this.selectedMap = {};
     this.setCachedData = null;

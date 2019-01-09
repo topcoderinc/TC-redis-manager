@@ -219,7 +219,9 @@ export class AppComponent implements OnInit {
    */
   onNewValue(newValue) {
     this.redisService.call(newValue.id, [newValue.rawLine]).subscribe(ret => {
-      this.onRefresh();
+      if (newValue.from === 'root') {
+        this.onRefresh();
+      }
       if (newValue.onSuccess) {
         newValue.onSuccess(newValue);
       }

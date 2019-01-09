@@ -34,7 +34,23 @@
     .example-table {
       position: relative;
       width: 100%;
+      table-layout: fixed;
+      .checkbox-col, .index-col, .small-col {
+        width: 40px;
+      }
+      .action-col{
+        width: 80px;
+      }
+      .text-td {
+        white-space: -o-pre-wrap;
+        word-wrap: break-word;
+        white-space: pre-wrap;
+        white-space: -moz-pre-wrap;
+        padding: 3px 10px;
+      }
     }
+
+
     .string-value{
       word-break: break-all;
     }

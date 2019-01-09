@@ -1,4 +1,4 @@
-import {Component, ElementRef, HostBinding, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {AddServerDialogComponent} from './components/add-server-dialog/add-server-dialog.component';
 import {RedisInstance} from './models/redis-instance';
@@ -6,6 +6,7 @@ import uuid from 'uuid';
 import {RedisService} from './services/redis.service';
 import {UtilService} from './services/util.service';
 import {Store} from '@ngrx/store';
+import { take } from 'rxjs/operators';
 import {
   ADD_REDIS_SERVER,
   DESELECT_ALL_REDIS,
@@ -16,12 +17,12 @@ import {
 import {Observable, Subject} from 'rxjs';
 import {REQ_LOAD_PAGE, REQ_LOAD_ROOT_PAGE} from './ngrx/actions/page-actions';
 import {PageModel} from './models/page-model';
-import {ADD_COMMAND, CLEAR_HISTORY, TOGGLE_CLI} from './ngrx/actions/cli-actions';
+import {ADD_COMMAND, CLEAR_HISTORY, PREVIEW_INDEX_UPDATE, TOGGLE_CLI} from './ngrx/actions/cli-actions';
 import {ConfirmDialogComponent} from './components/confirm-dialog/confirm-dialog.component';
 import {InformationDialogComponent} from './components/information-dialog/information-dialog.component';
 import {SettingsDialogComponent} from './components/settings-dialog/settings-dialog.component';
 import {ThemeConfig} from './theme-config';
-import _ from 'lodash';
+import {ImportDataDialogComponent} from './components/import-data-dialog/import-data-dialog.component';
 
 /**
  * return a new right page component
@@ -52,6 +53,7 @@ export class AppComponent implements OnInit {
   expandDeepCommand$: Subject<void> = new Subject();
 
   @ViewChild('cliScrollContent') private cliScrollContent: ElementRef;
+  @ViewChild('cliInput') private cliInput: ElementRef;
 
   public dragObject = {
     minWidth: 250,
@@ -109,7 +111,7 @@ export class AppComponent implements OnInit {
           } else {
             const newInstance = {id: uuid(), serverModel: result};
             this._store.dispatch({type: ADD_REDIS_SERVER, payload: newInstance});  // add new server
-            this._store.dispatch({type: REQ_REDIS_CONNECT, payload: {newInstance}}); // connect
+            this._store.dispatch({type: REQ_REDIS_CONNECT, payload: {instance: newInstance}}); // connect
           }
         });
       }
@@ -117,7 +119,6 @@ export class AppComponent implements OnInit {
   }
 
   onDeleteServer() {
-    console.log('here');
     if (!this.currentInstance) {
       this.util.showMessage('You need to select Redis instance first');
       return;
@@ -125,17 +126,15 @@ export class AppComponent implements OnInit {
     this.dialogService.open(ConfirmDialogComponent, {
       width: '250px', data: {
         title: 'Delete Confirm',
-        message: `Are you sure you want delete this server?`
+        message: `Are you sure you want to delete this server?`
       }
     }).afterClosed().subscribe(ret => {
       if (ret) {
         this._store.dispatch({type: REMOVE_REDIS_SERVER, payload: {instance: this.currentInstance}}); // remove
         this._store.dispatch({type: REQ_LOAD_PAGE, payload: getNewPage()});
         this.currentInstance = null;
-
         this.util.showMessage('Delete server successfully.');
       }
-      this.currentInstance = null;
     });
   }
 
@@ -205,11 +204,7 @@ export class AppComponent implements OnInit {
   onInformationEvt() {
     this.dialogService.open(InformationDialogComponent, {
       width: '80%',
-      height: '80%',
-      data: {
-        title: 'Delete Confirm',
-        message: `Are you sure you want delete this server?`
-      }
+      height: '80%'
     });
   }
 
@@ -225,14 +220,16 @@ export class AppComponent implements OnInit {
    */
   onNewValue(newValue) {
     this.redisService.call(newValue.id, [newValue.rawLine]).subscribe(ret => {
-      this.onRefresh();
+      if (newValue.from === 'root') {
+        this.onRefresh();
+      }
       if (newValue.onSuccess) {
         newValue.onSuccess(newValue);
       }
-      this.util.showMessage('new value added successfully');
+      this.util.showMessage(newValue.edit ? 'The value is updated successfully' : 'New value added successfully');
     }, e => {
-      console.error(e);
-      this.util.showMessage('new value add failed');
+      console.error(e.error.message);
+      this.util.showMessage('new value add failed, ' + this.util.getErrorMessage(e));
     });
   }
 
@@ -287,7 +284,7 @@ export class AppComponent implements OnInit {
    * @param instance the redis instance
    */
   getShortName(instance) {
-    return `${instance.serverModel.name}(${instance.serverModel.ip}:${instance.serverModel.port}:${instance.serverModel.db})`;
+    return this.util.getShortName(instance);
   }
 
   /**
@@ -352,6 +349,45 @@ export class AppComponent implements OnInit {
    * @param evt the event
    */
   onCliInputKeyDown(evt) {
+    if (evt.key === 'ArrowUp' || evt.key === 'ArrowDown') {
+      const step = evt.key === 'ArrowUp' ? 1 : -1;
+      this.cli$.subscribe(cliState => {
+        if (!cliState.items || cliState.items.length <= 0) { // no any commands
+          return;
+        }
+        const itemLength = cliState.items.length;
+
+        // ignore key event in below cases
+        if (cliState.previousIndex >= 0 &&
+          cliState.previousIndex < itemLength &&
+          this.cliInputValue.trim() !== '' &&
+          cliState.items[itemLength - cliState.previousIndex - 1] &&
+          cliState.items[itemLength - cliState.previousIndex - 1].rawCommand !== this.cliInputValue) {
+          return;
+        }
+
+        const startIndex = cliState.previousIndex;
+        let newIndex = startIndex + step;
+
+        if (newIndex >= cliState.items.length) {
+          newIndex = itemLength;
+        }
+        if (newIndex < 0) {
+          newIndex = -1;
+        }
+        const item = cliState.items[itemLength - newIndex - 1];
+        if (item && item.rawCommand) {
+          this.cliInputValue = item.rawCommand;
+          setTimeout(() => this.cliInput.nativeElement
+              .setSelectionRange(item.rawCommand.length, item.rawCommand.length),
+            20);
+        } else {
+          this.cliInputValue = '';
+        }
+        this._store.dispatch({type: PREVIEW_INDEX_UPDATE, payload: {index: newIndex}});
+      });
+      return;
+    }
     if (evt.key === 'Enter') {
       const v = this.cliInputValue.trim();
       this.cliInputValue = '';
@@ -379,5 +415,42 @@ export class AppComponent implements OnInit {
         }
       });
     }
+  }
+
+
+  /**
+   * on import button click
+   * @param instance the redis instance
+   */
+  onImport(instance) {
+    this.instances$.pipe(take(1)).subscribe((instances) => {
+      this.dialogService.open(ImportDataDialogComponent, {
+        width: '560px', data: {
+          title: 'Delete Confirm',
+          message: `Are you sure you want to delete this server?`,
+          opType: 'import',
+          currentInstance: instance,
+          instances,
+        }
+      });
+    });
+  }
+
+  /**
+   * on export button click
+   * @param instance the redis instance
+   */
+  onExport(instance) {
+    this.instances$.pipe(take(1)).subscribe((instances) => {
+      this.dialogService.open(ImportDataDialogComponent, {
+        width: '560px', data: {
+          title: 'Delete Confirm',
+          message: `Are you sure you want to delete this server?`,
+          opType: 'export',
+          currentInstance: instance,
+          instances,
+        }
+      });
+    });
   }
 }

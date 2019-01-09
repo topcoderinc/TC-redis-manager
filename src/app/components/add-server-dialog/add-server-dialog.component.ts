@@ -49,8 +49,7 @@ export class AddServerDialogComponent implements OnInit {
       this.data.port = parseInt(this.data.port + '', 10);
       if (isNaN(this.data.port) || this.data.port < 1 || this.data.port > 65535) {
         return this.util.showMessage('Port must be in 1 - 65535');
-      }
-      else {
+      } else {
         this.data.port = portNumber;
       }
 

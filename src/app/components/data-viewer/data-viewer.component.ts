@@ -52,7 +52,6 @@ export class DataViewerComponent implements OnInit, OnChanges {
     private util: UtilService,
     private _store: Store<any>,
   ) {
-
     this.cli$ = this._store.select('cli');
   }
 
@@ -63,8 +62,8 @@ export class DataViewerComponent implements OnInit, OnChanges {
   /*
   * check if object has keys to use in view
   */
-  hasKeys(){
-    return Object.keys(this.selectedMap).length > 0 ? true : false;
+  hasKeys() {
+    return _.filter(this.selectedMap, (v) => v).length > 0;
   }
 
 
@@ -79,8 +78,9 @@ export class DataViewerComponent implements OnInit, OnChanges {
   /**
    * remove element
    * @param element the element
+   * @param cb delete callback
    */
-  removeElement(element) {
+  removeElement(element, cb = null) {
     const t = this.pageData.item.type;
     const pk = this.pageData.item.key;
     let values = [];
@@ -95,10 +95,8 @@ export class DataViewerComponent implements OnInit, OnChanges {
     }
     this.dialogService.open(ConfirmDialogComponent, {
       width: '250px', data: {
-
         title: 'Delete Confirmation',
         message: `Are you sure you want to delete ${element ? 'this' : 'selected'} value${values.length > 1 ? 's' : ''} ?`
-
       }
     }).afterClosed().subscribe(ret => {
       if (ret) {
@@ -120,8 +118,10 @@ export class DataViewerComponent implements OnInit, OnChanges {
           this._store.dispatch({type: REQ_FETCH_TREE, payload: {id: this.pageData.id}});
           this.hashCachedData = null;
           this.setCachedData = null;
+          this.pageData.item.len -= values.length;
           this.fetchData();
           this.util.showMessage('Delete successful');
+          if (cb) { cb(); }
         }, () => this.util.showMessage('Delete failed'));
       }
     });
@@ -168,7 +168,6 @@ export class DataViewerComponent implements OnInit, OnChanges {
     const type = this.pageData.item.type;
     const key = this.pageData.item.key;
     const instanceId = this.pageData.id;
-
     const injectValuesToArray = (values) => (_.map(values, (v, index) => ({
       index: this.page.pageIndex * this.page.pageSize + index,
       value: v
@@ -179,6 +178,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
       this.loadingPageData = true;
       this.redisService.call(instanceId, [['LRANGE', key, start, end]]).subscribe(ret => {
           this.data = injectValuesToArray(ret[0]);
+          this.showPagination = true;
           this.loadingPageData = false;
         }
       );
@@ -208,6 +208,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
           this.showPagination = true;
         });
       } else {
+        this.showPagination = true;
         this.data = this.setCachedData.slice(start, end);
       }
     } else if (type === 'hash') {
@@ -228,6 +229,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
           }
         );
       } else {
+        this.showPagination = true;
         this.data = this.hashCachedData.slice(start, end);
       }
     }
@@ -235,8 +237,10 @@ export class DataViewerComponent implements OnInit, OnChanges {
 
   /**
    * on add new record
+   * @param values the record base values
+   * @param edit is edit mode
    */
-  onAddNewRecords(values) {
+  onAddNewRecords(values, edit = false) {
     const viewMode = new ValueMode();
     viewMode.type = TYPE_MAP[this.pageData.item.type];
     viewMode.hideType = true;
@@ -251,6 +255,12 @@ export class DataViewerComponent implements OnInit, OnChanges {
       viewMode.values = values;
       viewMode.isEditMode = true;
     }
+    if (values && values.hashMapValues.length > 0) {
+      viewMode.onValueDelete = (element, cb) => {
+        this.removeElement(element, cb);
+        return 0;
+      };
+    }
     this.dialogService.open(AddValueDialogComponent, {
       minWidth: Math.min(1000, Math.max(480, (viewMode.key.length / 50) * 480)) + 'px',
       minHeight: '400px',
@@ -263,9 +273,11 @@ export class DataViewerComponent implements OnInit, OnChanges {
             this._store.dispatch({type: REQ_FETCH_TREE, payload: {id: this.pageData.id}});
             this.hashCachedData = null;
             this.setCachedData = null;
+            this.pageData.item.len += ret.len;
             this.fetchData();
           }
         };
+        ret.edit = edit;
         this.onNewValue.emit(ret);
       }
     });
@@ -281,7 +293,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
       this.pageData.item.value = this.pageData.item.value.trim();
       this.redisService.call(this.pageData.id,
         [['set', this.pageData.item.key, this.pageData.item.value.trim()]]).subscribe(() => {
-        this.snackBar.open('save successful', 'OK', {duration: 3000});
+        this.util.showMessage('save successful');
       });
     }
   }
@@ -346,7 +358,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
    * @param elements the element arr
    */
   onEditMapElements(elements) {
-    this.onAddNewRecords({hashMapValues: JSON.parse(JSON.stringify(elements))});
+    this.onAddNewRecords({hashMapValues: JSON.parse(JSON.stringify(elements))}, true);
   }
 
   /**
@@ -383,10 +395,35 @@ export class DataViewerComponent implements OnInit, OnChanges {
   }
 
   /**
+   * master checkbox changed
+   * @param v the value
+   */
+  masterCheckboxToggle({checked}) {
+    if (!checked) {
+      this.selectedMap = {};
+    } else {
+      _.each(this.data, (v) => this.selectedMap[this.key(v)] = true);
+    }
+  }
+
+  /**
+   * check all item is selected or not
+   */
+  isAllSelected() {
+    return _.filter(this.selectedMap, (v) => v).length === this.data.length;
+  }
+
+  /**
    * when type changed from parent
    */
   ngOnChanges(changes: SimpleChanges): void {
-    this.page.pageIndex = 0;
+
+    if (changes.pageData.previousValue && changes.pageData.currentValue &&
+      changes.pageData.currentValue.item.key !== changes.pageData.previousValue.item.key
+    ) {
+      this.page.pageIndex = 0;
+    }
+
     this.data = [];
     this.selectedMap = {};
     this.setCachedData = null;

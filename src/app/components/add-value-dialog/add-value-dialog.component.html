@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>{{isEditMode()?'Edit Records':'Add new Records'}}</h1>
+<h1 mat-dialog-title>{{title}}</h1>
 <div mat-dialog-content>
   <mat-form-field [ngClass] = "[data.hideType ? 'readOnlyField' : '']">
     <textarea matInput placeholder="Key"
@@ -24,6 +24,7 @@
                       [initHashMapValues]="data.values.hashMapValues"
                       [initOrderedValues]="data.values.orderedValues"
                       [isEditMode]="isEditMode()"
+                      (onValueDelete)="onValueDelete($event)"
                       (onValueUpdate)="data.values = $event">
 
   </app-add-value-form>

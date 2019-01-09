@@ -16,6 +16,7 @@ export class AddValueFormComponent implements OnInit {
   @Input() initHashMapValues = null;
   @Input() isEditMode = false;
   @Output() onValueUpdate = new EventEmitter();
+  @Output() onValueDelete = new EventEmitter();
 
   values = [];
   orderedValues = [];
@@ -66,7 +67,16 @@ export class AddValueFormComponent implements OnInit {
    * @param index the index
    */
   onRemoveItem(arr, index) {
-    arr.splice(index, 1);
+    if (this.isEditMode) {
+      this.onValueDelete.emit({
+        element: arr[index],
+        callback: () => {
+          arr.splice(index, 1);
+        }
+      });
+    } else {
+      arr.splice(index, 1);
+    }
   }
 
   /**
@@ -83,7 +93,9 @@ export class AddValueFormComponent implements OnInit {
   onValueChange() {
     this.onValueUpdate.emit({
       orderedValues: this.orderedValues,
-      hashMapValues: _.map(this.hashMapValues, (o) => { return _.omit(o, 'isNew'); }),
+      hashMapValues: _.map(this.hashMapValues, (o) => {
+        return _.omit(o, 'isNew');
+      }),
       values: this.values
     });
   }

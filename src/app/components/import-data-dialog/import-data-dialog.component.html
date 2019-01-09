@@ -1,25 +1,67 @@
-<h1 mat-dialog-title>import Data</h1>
-<div mat-dialog-content>
-  <mat-form-field>
-    <mat-select placeholder="Redis Instance" [(ngModel)]="instanceId">
-      <mat-option *ngFor="let instance of data.instances" [value]="instance.id">
-        {{instance.name}}({{instance.ip}}:{{instance.port}}:{{instance.db}})
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+<h1 mat-dialog-title>{{opType === 'import' ? 'Import':'Export'}} Data</h1>
+<div mat-dialog-content class="import-dialog-root">
+
+  <div class="row">
+    <div class="left-part">Redis Server</div>
+    <mat-form-field>
+      <mat-select [(ngModel)]="instanceId">
+        <mat-option *ngFor="let instance of data.instances"
+                    [value]="instance.id">
+          {{util.getShortName(instance)}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
 
 
-  <mat-form-field [style.fontSize]="14">
-    <mat-label>Value</mat-label>
+  <div class="row" *ngIf="opType === 'import'">
+    <div class="left-part">
+      <div class="label">Value</div>
+      <div class="commands">
+        <div>set</div>
+        <div>hset</div>
+        <div>lpush</div>
+        <div>lpushx</div>
+        <div>rpush</div>
+        <div>rpushx</div>
+        <div>lset</div>
+        <div>sadd</div>
+        <div>zadd</div>
+        <div>ltrim</div>
+      </div>
+    </div>
+    <mat-form-field [style.fontSize]="14">
     <textarea matInput
               [(ngModel)]="rawContent"
               cdkTextareaAutosize
               #autosize="cdkTextareaAutosize"
-              cdkAutosizeMinRows="10"></textarea>
-  </mat-form-field>
+              cdkAutosizeMinRows="12"></textarea>
+    </mat-form-field>
+  </div>
+
+
+  <div class="row" *ngIf="opType === 'import'">
+    <div class="left-part"></div>
+    <mat-checkbox [(ngModel)]="flushDB">Flush DB</mat-checkbox>
+  </div>
+
+  <div class="row radio-group" *ngIf="opType === 'export'">
+    <div class="left-part">
+      Data type
+    </div>
+
+    <mat-radio-group [(ngModel)]="exportType">
+      <mat-radio-button value="redis">Redis</mat-radio-button>
+      <mat-radio-button value="json">JSON</mat-radio-button>
+    </mat-radio-group>
+
+  </div>
 
 </div>
-<div mat-dialog-actions>
+
+<div mat-dialog-actions class="buttons">
   <button mat-button [mat-dialog-close]="null">Cancel</button>
-  <button mat-raised-button color="primary">Add</button>
+  <button mat-raised-button color="primary" (click)="opType === 'import' ? onImportClick():onExportClick()">
+    {{opType === 'import'?'Import':'Export'}}
+  </button>
 </div>

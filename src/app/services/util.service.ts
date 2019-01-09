@@ -12,12 +12,23 @@ export class UtilService {
   }
 
   /**
+   * get error message from e
+   * @param e the error obj
+   */
+  getErrorMessage(e) {
+    if (e && e.error && e.error.message) {
+      return e.error.message;
+    }
+    return 'unknown error';
+  }
+
+  /**
    * show a message
    * @param msg the message text
    * @param {string} type
    */
   public showMessage(msg, type = 'normal') {
-    this.snackbar.open(msg, 'OK', {duration: 2000, verticalPosition: 'top'});
+    this.snackbar.open(msg, 'OK', {duration: 3000, verticalPosition: 'top'});
   }
 
   /**
@@ -74,6 +85,14 @@ export class UtilService {
       return results.slice(0, results.length - 1);
     }
     return results;
+  }
+
+  /**
+   * get short name of a redis instance
+   * @param instance the redis instance
+   */
+  getShortName(instance) {
+    return `${instance.serverModel.name}(${instance.serverModel.ip}:${instance.serverModel.port}:${instance.serverModel.db})`;
   }
 
 }

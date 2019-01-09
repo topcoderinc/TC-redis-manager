@@ -4,6 +4,10 @@ import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component
 import {AddValueDialogComponent, ValueMode} from '../add-value-dialog/add-value-dialog.component';
 import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs';
+import {RedisService} from '../../services/redis.service';
+import {UtilService} from '../../services/util.service';
+import {REMOVE_REDIS_SERVER} from '../../ngrx/actions/redis-actions';
+import {REQ_LOAD_PAGE} from '../../ngrx/actions/page-actions';
 
 
 /**
@@ -73,6 +77,7 @@ export class InstanceRootPanelComponent implements OnInit {
     const viewMode = new ValueMode();
     viewMode.type = 'String';
     viewMode.id = this.pageData.id;
+    viewMode.from = 'root';
     this.dialogService.open(AddValueDialogComponent, {
       width: '480px',
       data: viewMode,

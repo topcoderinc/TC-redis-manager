@@ -6,6 +6,7 @@ import uuid from 'uuid';
 import {RedisService} from './services/redis.service';
 import {UtilService} from './services/util.service';
 import {Store} from '@ngrx/store';
+import { take } from 'rxjs/operators';
 import {
   ADD_REDIS_SERVER,
   DESELECT_ALL_REDIS,
@@ -422,7 +423,7 @@ export class AppComponent implements OnInit {
    * @param instance the redis instance
    */
   onImport(instance) {
-    this.instances$.subscribe((instances) => {
+    this.instances$.pipe(take(1)).subscribe((instances) => {
       this.dialogService.open(ImportDataDialogComponent, {
         width: '560px', data: {
           title: 'Delete Confirm',
@@ -440,7 +441,7 @@ export class AppComponent implements OnInit {
    * @param instance the redis instance
    */
   onExport(instance) {
-    this.instances$.subscribe((instances) => {
+    this.instances$.pipe(take(1)).subscribe((instances) => {
       this.dialogService.open(ImportDataDialogComponent, {
         width: '560px', data: {
           title: 'Delete Confirm',

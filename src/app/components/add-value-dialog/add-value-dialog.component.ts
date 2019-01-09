@@ -48,7 +48,6 @@ export class AddValueDialogComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.data.from);
     if (this.data.from === 'root') {
       this.title = this.isEditMode() ? 'Edit Records' : 'Add new Records';
     } else {
@@ -92,7 +91,7 @@ export class AddValueDialogComponent implements OnInit {
       case 'List':
       case 'Set': {
         const values = this.data.values.values;
-        if (this.hasDuplicates(values, 'value')) {
+        if (this.hasDuplicates(values, 'value') && this.data.type === 'Set') {
           return this.showError('duplicate values found');
         }
         this.data.rawLine.push(this.data.type === 'List' ? 'RPUSH' : 'sadd');
@@ -108,12 +107,13 @@ export class AddValueDialogComponent implements OnInit {
         break;
       }
       case 'Ordered Set': {
-        const values = this.data.values.orderedValues;
+        let values = this.data.values.orderedValues;
+        values = _.map(values, v => {
+          v.score = _.isNull(v.score) || _.isUndefined(v.score) ? '' : v.score.toString();
+          return v;
+        });
         if (this.hasDuplicates(values, 'value')) {
           return this.showError('duplicate values found');
-        }
-        if (this.hasDuplicates(values, 'score')) {
-          return this.showError('duplicate scores found');
         }
         this.data.rawLine.push('zadd');
         this.data.rawLine.push(this.data.key);

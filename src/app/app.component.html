@@ -100,7 +100,7 @@
           <span class="time">[{{item.time | date:'medium'}}] ></span>
           <span class="common-font-color" (click)="onRawContentClick(item.rawCommand)">{{item.rawCommand}}</span>
         </div>
-        <div class="{{'result ' + (item.error ? 'error-font-color':'')}}" *ngIf="item.instanceId === currentInstance.id">{{item.result}}</div>
+        <div class="{{'result ' + (item.error ? 'error-font-color':'result-color')}}" *ngIf="item.instanceId === currentInstance.id">{{item.result}}</div>
       </div>
     </div>
     <div class="input">
@@ -108,8 +108,7 @@
         <input matInput
                #cliInput
                class="common-font-color"
-               name="cli"
-               [autocomplete]="false"
+               autocomplete="cli-new"
                placeholder="{{!currentInstance ?'Please select a redis instance to enter redis command'
         : 'Enter Redis command'}}" value=""
                (keydown)="onCliInputKeyDown($event)"

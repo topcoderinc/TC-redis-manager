@@ -117,7 +117,7 @@ export class ImportDataDialogComponent implements OnInit {
     this.redisService.call(this.instanceId, commands).subscribe((rsp) => {
       let numberOfSucceed = 0;
       _.each(rsp, v => {
-        numberOfSucceed += !!v ? 1 : 0;
+        numberOfSucceed += (!!v && v.toString().toLowerCase().indexOf('err') < 0) ? 1 : 0;
       });
       numberOfSucceed -= this.flushDB ? 1 : 0;
       this.util.showMessage(`${numberOfSucceed} of row import successful, ${totalRow

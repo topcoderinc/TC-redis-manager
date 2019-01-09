@@ -57,6 +57,9 @@ $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
   .error-font-color {
     color: lightsalmon;
   }
+  .result-color{
+    color: #c0c0c0;
+  }
 
   .mat-form-field-appearance-legacy .mat-form-field-label
   , .mat-select-arrow {

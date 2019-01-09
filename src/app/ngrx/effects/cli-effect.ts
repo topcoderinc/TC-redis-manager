@@ -40,7 +40,7 @@ export class CliEffect {
               payload: {
                 result: ret[0],
                 id: action['payload'].id,
-                error: false,
+                error: !(ret[0] && ret[0].toString() && ret[0].toString().toLowerCase().indexOf('err') < 0),
               }
             };
           }),

@@ -2,54 +2,141 @@
 
 @include mat-core();
 
-// magenta theme
-$magenta-primary: mat-palette($mat-red, 600);
-$magenta-accent: mat-palette($mat-red, 700);
-$magenta-warn: mat-palette($mat-red, A400);
+$tmo-brand: (
+  100: #f6b3d5,
+  200: #f66db3,
+  500: #e20074,
+  700: #ba0060,
+  900: #a10053,
+  contrast: (
+    100: #ffffff,
+    200: #ffffff,
+    500: #ffffff,
+    700: #ffffff,
+    900: #ffffff
+  )
+);
+$tmo-warn: (
+  100: #e3b721,
+  200: #51d85e,
+  300: #078a14,
+  500: #e8200d,
+  contrast: (
+    100: #000000,
+    200: #000000,
+    300: #ffffff,
+    500: #ffffff
+  )
+);
+$tmo-gray: (
+  50: #f8f8f8,
+  100: #f2f2f2,
+  200: #e8e8e8,
+  300: #cccccc,
+  400: #9b9b9b,
+  500: #6a6a6a,
+  600: #4c4c4c,
+  700: #333333,
+  800: #262626,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff
+  )
+);
 
-$magenta-theme: mat-light-theme($magenta-primary, $magenta-accent, $magenta-warn);
+// Palette refs - do not use directly
+$primary: mat-palette($tmo-brand, 500, 100, 700);
+$warn: mat-palette($tmo-warn);
+$gray: mat-palette($tmo-gray);
+
+// Primary Colors
+$tmo-magenta: mat-color($primary, 500);
+$tmo-magenta-light: mat-color($primary, 100);
+$tmo-magenta-dark: mat-color($primary, 700);
+$tmo-magenta-darkest: mat-color($primary, 900);
+$tmo-white: #ffffff;
+$tmo-black: #000000;
+
+// Warn Colors
+$tmo-red: mat-color($warn, 500);
+$tmo-green: mat-color($warn, 300);
+$tmo-green-light: mat-color($warn, 200);
+$tmo-yellow: mat-color($warn, 100);
+
+// Grays
+$tmo-gray5: mat-color($gray, 50);
+$tmo-gray10: mat-color($gray, 100);
+$tmo-gray20: mat-color($gray, 200);
+$tmo-gray30: mat-color($gray, 300);
+$tmo-gray40: mat-color($gray, 400);
+$tmo-gray60: mat-color($gray, 500);
+$tmo-gray70: mat-color($gray, 600);
+$tmo-gray80: mat-color($gray, 700);
+$tmo-gray85: mat-color($gray, 800);
+
+// some aliases
+$disabled: $tmo-gray60;
+$disabled-dark: $tmo-gray40;
+
+@include mat-core();
+
+$tmo-theme: mat-light-theme($primary, $gray, $warn);
+@include angular-material-theme($tmo-theme);
+
+$tmo-dark-theme: mat-dark-theme($primary, $gray, $warn);
 
 $app-bg-color: white;
 
 @mixin magenta-app-colors {
   .bg-color {
-    background-color: white;
+    background-color: #424242;
   }
   .cli-bg-color {
-    background-color: white;
+    background-color: #424242;
   }
   .material-icons {
-    color: black;
+    color: #ffffff;
   }
   .common-font-color {
-    color: black;
+    color: #ffffff;
   }
   input, textarea {
-    color: black;
+    color: #ffffff;
   }
   .link-color {
     color: #5c79ff;
   }
+
   .node-color {
-    background-color: white;
-    color: black;
+    background-color: #323232;
+    color: white;
     &:hover {
-      background-color: #f6f6f6;
+      background-color: #747474;
     }
     &.selected {
-      background-color: rgba(213, 17, 155, 0.2);
+      background-color: mat-color($tmo-brand, 500)
     }
   }
   .tree-child-color {
-    color: black;
+    color: white;
     &:hover {
-      background-color: #f6f6f6;
+      background-color: #747474;
     }
     &.selected {
-      background-color: rgba(213, 17, 155, 0.2);
+      background-color: mat-color($tmo-brand, 500);
+      .value-type {
+        color: white;
+      }
     }
     .value-type {
-      color: #d51173;
+      color: mat-color($tmo-brand, 500);
     }
   }
   .error-font-color {
@@ -57,25 +144,27 @@ $app-bg-color: white;
   }
 
   .current-instance-color {
-    background-color: #d51173;
+    background-color: mat-color($tmo-brand, 500);
   }
 
 }
 
-.magenta-theme {
-  @include angular-material-theme($magenta-theme);
-  @include magenta-app-colors
-}
-
 .magenta-theme .mat-checkbox-checked.mat-primary .mat-checkbox-background,
 .magenta-theme .mat-checkbox-indeterminate.mat-primary .mat-checkbox-background {
-  background-color: #d51173;
+  background-color: mat-color($tmo-brand, 500);
 }
 
 .magenta-theme .mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
-  color: rgba(213, 17, 155, .87);
+  color: mat-color($tmo-brand, 500);
 }
 
 .magenta-theme .mat-form-field.mat-focused .mat-form-field-label {
-  color: rgba(213, 17, 155, .54)
+  color: mat-color($tmo-brand, 500);
+}
+
+.magenta-theme {
+  @include angular-material-theme($tmo-dark-theme);
+  background-color: $tmo-black;
+  color: $tmo-white;
+  @include magenta-app-colors
 }

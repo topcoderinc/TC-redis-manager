@@ -133,7 +133,7 @@ export class AppComponent implements OnInit {
         this._store.dispatch({type: REMOVE_REDIS_SERVER, payload: {instance: this.currentInstance}}); // remove
         this._store.dispatch({type: REQ_LOAD_PAGE, payload: getNewPage()});
         this.currentInstance = null;
-        this.util.showMessage('The server is deleted successfully.');
+        this.util.showMessage('Deleted successfully.');
       }
     });
   }

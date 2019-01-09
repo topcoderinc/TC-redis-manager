@@ -288,12 +288,12 @@ export class DataViewerComponent implements OnInit, OnChanges {
    */
   onSaveString() {
     if (this.pageData.item.value.trim() === '') {
-      this.snackBar.open('The value cannot be empty', 'OK', {duration: 3000});
+      this.snackBar.open('The value cannot be empty.', 'OK', {duration: 3000});
     } else {
       this.pageData.item.value = this.pageData.item.value.trim();
       this.redisService.call(this.pageData.id,
         [['set', this.pageData.item.key, this.pageData.item.value.trim()]]).subscribe(() => {
-        this.util.showMessage('Saved successfully');
+        this.util.showMessage('Updated successfully');
       });
     }
   }
@@ -330,7 +330,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
     this.dialogService.open(ConfirmDialogComponent, {
       width: '320px', data: {
         title: 'Delete Confirmation',
-        message: `Are you sure you want to delete the key "${this.pageData.item.key}" and its value(s)?`,
+        message: `Are you sure you want to delete the key "${this.pageData.item.key}"?`,
       }
     }).afterClosed().subscribe(ret => {
       if (ret) {

@@ -73,7 +73,7 @@ export class AddValueDialogComponent implements OnInit {
     const getValue = this.util.getValue;
     this.data.key = getValue(this.data.key);
     if (!this.data.key) {
-      return this.showError('The key cannot be empty');
+      return this.showError('The key cannot be empty.');
     }
     this.data.rawLine = [];
     switch (this.data.type) {
@@ -81,7 +81,7 @@ export class AddValueDialogComponent implements OnInit {
         const values = this.data.values.values;
         values[0].value = getValue(values[0].value);
         if (!values[0].value) {
-          return this.showError(`${this.data.type} value cannot be empty`);
+          return this.showError(`The value cannot be empty.`);
         }
         this.data.rawLine.push('set');
         this.data.rawLine.push(this.data.key);
@@ -99,7 +99,7 @@ export class AddValueDialogComponent implements OnInit {
         for (let i = 0; i < values.length; i++) {
           values[i].value = getValue(values[i].value);
           if (!values[i].value) {
-            return this.showError(`${this.data.type} value of row ${i + 1} cannot be empty`);
+            return this.showError(`The value in row ${i + 1} cannot be empty.`);
           }
           this.data.rawLine.push(values[i].value);
         }
@@ -120,12 +120,12 @@ export class AddValueDialogComponent implements OnInit {
         for (let i = 0; i < values.length; i++) {
           values[i].value = getValue(values[i].value);
           if (!values[i].value) {
-            return this.showError(`${this.data.type} value of row ${i + 1} cannot be empty`);
+            return this.showError(`The value in row ${i + 1} cannot be empty.`);
           }
 
           values[i].score = getValue(values[i].score);
           if (!values[i].score) {
-            return this.showError(`${this.data.type} Score of row ${i + 1} cannot be empty`);
+            return this.showError(`The score in row ${i + 1} cannot be empty.`);
           }
           this.data.rawLine.push(parseFloat(values[i].score));
           this.data.rawLine.push(values[i].value);
@@ -146,10 +146,10 @@ export class AddValueDialogComponent implements OnInit {
           values[i].value = getValue(values[i].value);
           values[i].key = getValue(values[i].key);
           if (!values[i].key) {
-            return this.showError(`${this.data.type} key of row ${i + 1} cannot be empty`);
+            return this.showError(`The key in row ${i + 1} cannot be empty.`);
           }
           if (!values[i].value) {
-            return this.showError(`${this.data.type} value of row ${i + 1} cannot be empty`);
+            return this.showError(`The value in row ${i + 1} cannot be empty.`);
           }
           this.data.rawLine.push(values[i].key);
           this.data.rawLine.push(values[i].value);
@@ -191,7 +191,7 @@ export class AddValueDialogComponent implements OnInit {
         this.dialogService.open(ConfirmDialogComponent, {
           width: '360px', data: {
             title: `Key "${ret.key}" Already Exists`,
-            message: `Are you sure you want to to replace original value?`
+            message: `Are you sure you want to replace the original key?`
           }
         }).afterClosed().subscribe(cr => {
           if (cr) {

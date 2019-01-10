@@ -1,29 +1,85 @@
 /**
  * the redis instance actions
  */
-export const REQ_REDIS_CONNECT = 'REQ_REDIS_CONNECT'; // request to connect a redis
-export const REDIS_CONNECT = 'REDIS_CONNECT'; // when a redis instance connected
-export const REDIS_CONNECT_FAILED = 'REDIS_CONNECT_FAILED'; // when a redis instance connect failed
-export const REDIS_DISCONNECT = 'REDIS_DISCONNECT'; // disconnect a redis
-export const DESELECT_ALL_REDIS = 'DESELECT_ALL_REDIS'; // de selected all redis instance
-export const SELECT_REDIS = 'SELECT_REDIS'; // select a redis instance
-export const REQ_FETCH_TREE = 'REQ_FETCH_TREE'; // request to fetch a redis instance tree node
-export const FETCHED_TREE = 'FETCHED_TREE'; // when fetch tree finished
-export const TOGGLE_REDIS = 'TOGGLE_REDIS'; // toggle redis instance
-export const ADD_REDIS_SERVER = 'ADD_REDIS_SERVER'; // add redis server
-export const REMOVE_REDIS_SERVER = 'REMOVE_REDIS_SERVER'; // delete redis server
+import {Action} from '@ngrx/store';
 
-export default {
-  REQ_REDIS_CONNECT,
-  REDIS_CONNECT,
-  REDIS_CONNECT_FAILED,
+import {RedisInstance} from '../../models/redis-instance';
 
-  REDIS_DISCONNECT,
-  SELECT_REDIS,
-  DESELECT_ALL_REDIS,
-  REQ_FETCH_TREE,
-  FETCHED_TREE,
-  TOGGLE_REDIS,
-  ADD_REDIS_SERVER,
-  REMOVE_REDIS_SERVER,
-};
+
+export enum RedisActions {
+  ReqRedisConnect = 'Req Redis Connect', // request to connect a redis
+  RedisConnect = 'Redis Connect', // when a redis instance connected
+  RedisConnectFailed = 'Redis Connect Failed', // when a redis instance connect failed
+  RedisDisconnect = 'Redis Disconnect', // disconnect a redis
+  DisconnectAllRedis = 'Disconnect All Redis', // de selected all redis instance
+  SelectRedis = 'Select Redis', // select a redis instance
+  ReqFetchTree = 'Req Fetch Tree', // request to fetch a redis instance tree node
+  FetchedTree = 'Fetched Tree', // when fetch tree finished
+  ToggleRedis = 'Toggle Redis', // toggle redis instance
+  AddRedisServer = 'Add Redis Server', // add redis server
+  RemoveRedisServer = 'Remove Redis Server' // delete redis server
+}
+
+export class ReqRedisConnect implements Action {
+  readonly type = RedisActions.ReqRedisConnect;
+
+  constructor(public payload: any) { }
+}
+
+export class RedisConnect implements Action {
+  readonly type = RedisActions.RedisConnect;
+
+  constructor(public payload: RedisInstance) { }
+}
+
+export class RedisConnectFailed implements Action {
+  readonly type = RedisActions.RedisConnectFailed;
+
+  constructor(public payload: {id: string}) { }
+}
+
+export class RedisDisconnect implements Action {
+  readonly type = RedisActions.RedisDisconnect;
+
+  constructor(public payload: {id: string}) { }
+}
+
+export class DisconnectAllRedis implements Action {
+  readonly type = RedisActions.DisconnectAllRedis;
+}
+
+export class SelectRedis implements Action {
+  readonly type = RedisActions.SelectRedis;
+
+  constructor(public payload: {id: string}) { }
+}
+
+export class ReqFetchTree implements Action {
+  readonly type = RedisActions.ReqFetchTree;
+
+  constructor(public payload: {id: string, scb?: any}) { }
+}
+
+export class FetchedTree implements Action {
+  readonly type = RedisActions.FetchedTree;
+
+  constructor(public payload: any) { }
+}
+
+export class ToggleRedis implements Action {
+  readonly type = RedisActions.ToggleRedis;
+
+  constructor(public payload: {id: string}) { }
+}
+
+export class AddRedisServer implements Action {
+  readonly type = RedisActions.AddRedisServer;
+
+  constructor(public payload: any) { }
+}
+
+export class RemoveRedisServer implements Action {
+  readonly type = RedisActions.RemoveRedisServer;
+
+  constructor(public payload: any) { }
+}

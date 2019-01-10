@@ -1,7 +1,7 @@
 /**
  * the page reducer
  */
-import actions from '../actions/page-actions';
+import {PageActions} from '../actions/page-actions';
 import {PageModel} from '../../models/page-model';
 
 
@@ -11,13 +11,13 @@ export const initialState: PageModel = {};
 
 export function reducer(state = initialState, action) {
   switch (action.type) {
-    case actions.REQ_LOAD_ROOT_PAGE: {
+    case PageActions.ReqLoadRootPage: {
       return action.payload;
     }
-    case actions.REQ_LOAD_PAGE: {
+    case PageActions.ReqLoadPage: {
       return action.payload;
     }
-    case actions.LOADED_PAGE: {
+    case PageActions.LoadedPage: {
       if (state.id === action.payload.id && state.requestId === action.payload.requestId) { // same page
         state.item = action.payload.item;
         state.loading = false;

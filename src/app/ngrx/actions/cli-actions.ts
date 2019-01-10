@@ -1,18 +1,43 @@
 /**
  * the cli actions
  */
-export const ADD_COMMAND = 'ADD_COMMAND'; // when user enter command and press enter key
-export const COMMAND_RUN_FINISHED = 'COMMAND_RUN_FINISHED'; // when command send to server and returned result
-export const CLEAR_HISTORY = 'CLEAR_HISTORY'; // clear all cli history
-export const TOGGLE_CLI = 'TOGGLE_CLI'; // toggle cli panel
-export const CLEAR_PREVIEW_INDEX = 'CLEAR_PREVIEW_INDEX'; // clear preview index
-export const PREVIEW_INDEX_UPDATE = 'PREVIEW_INDEX_UPDATE'; // update preview index
+import {Action} from '@ngrx/store';
 
-export default {
-  ADD_COMMAND,
-  COMMAND_RUN_FINISHED,
-  CLEAR_HISTORY,
-  TOGGLE_CLI,
-  PREVIEW_INDEX_UPDATE,
-  CLEAR_PREVIEW_INDEX,
-};
+export enum CliActions {
+  AddCommand = 'Add Command', // when user enter command and press enter key
+  CommandRunFinished = 'Command Run Finished', // when command send to server and returned result
+  ClearHistory = 'Clear History', // clear all cli history
+  ToggleCli = 'Toggle Cli', // toggle cli panel
+  ClearPreviewIndex = 'Clear Preview Index', // clear preview index
+  PreviewIndexUpdate = 'Preview Index Update' // update preview index
+}
+
+export class AddCommand implements Action {
+  readonly type = CliActions.AddCommand;
+
+  constructor(public payload: any) { }
+}
+
+export class CommandRunFinished implements Action {
+  readonly type = CliActions.CommandRunFinished;
+
+  constructor(public payload: any) { }
+}
+
+export class ClearHistory implements Action {
+  readonly type = CliActions.ClearHistory;
+}
+
+export class ToggleCli implements Action {
+  readonly type = CliActions.ToggleCli;
+}
+
+export class PreviewIndexUpdate implements Action {
+  readonly type = CliActions.PreviewIndexUpdate;
+
+  constructor(public payload: {index: number}) { }
+}
+
+export class ClearPreviewIndex implements Action {
+  readonly type = CliActions.ClearPreviewIndex;
+}

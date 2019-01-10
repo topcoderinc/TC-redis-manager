@@ -4,7 +4,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ### Dependencies
 
-- Node 8.11.x , npm 5.6.x
+- Node 10.x.x , npm 6.x.x
 - redis 4.x
 - docker
 
@@ -51,7 +51,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 - Frontend 
 
-  - Angular 6
+  - Angular 7
   - Angular Material https://material.angular.io/
   - Ngrx
   - Material Icons https://material.io/tools/icons/?style=baseline

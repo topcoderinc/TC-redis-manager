@@ -8,16 +8,16 @@ import {UtilService} from './services/util.service';
 import {Store} from '@ngrx/store';
 import { take } from 'rxjs/operators';
 import {
-  ADD_REDIS_SERVER,
-  DESELECT_ALL_REDIS,
-  REDIS_DISCONNECT, REMOVE_REDIS_SERVER, REQ_FETCH_TREE,
-  REQ_REDIS_CONNECT,
-  SELECT_REDIS
+  AddRedisServer,
+  DisconnectAllRedis,
+  RedisDisconnect, RemoveRedisServer, ReqFetchTree,
+  ReqRedisConnect,
+  SelectRedis
 } from './ngrx/actions/redis-actions';
 import {Observable, Subject} from 'rxjs';
-import {REQ_LOAD_PAGE, REQ_LOAD_ROOT_PAGE} from './ngrx/actions/page-actions';
+import {ReqLoadPage, ReqLoadRootPage} from './ngrx/actions/page-actions';
 import {PageModel} from './models/page-model';
-import {ADD_COMMAND, CLEAR_HISTORY, PREVIEW_INDEX_UPDATE, TOGGLE_CLI} from './ngrx/actions/cli-actions';
+import {AddCommand, ClearHistory, PreviewIndexUpdate, ToggleCli} from './ngrx/actions/cli-actions';
 import {ConfirmDialogComponent} from './components/confirm-dialog/confirm-dialog.component';
 import {InformationDialogComponent} from './components/information-dialog/information-dialog.component';
 import {SettingsDialogComponent} from './components/settings-dialog/settings-dialog.component';
@@ -74,7 +74,7 @@ export class AppComponent implements OnInit {
     this.currentPage$ = this._store.select('page');
     this.cli$ = this._store.select('cli');
     this.instances$.subscribe((instances) => {
-      this._store.dispatch({type: REQ_REDIS_CONNECT, payload: {instance: instances[0]}});
+      this._store.dispatch(new ReqRedisConnect({instance: instances[0]}));
     });
   }
 
@@ -110,8 +110,8 @@ export class AppComponent implements OnInit {
             return;
           } else {
             const newInstance = {id: uuid(), serverModel: result};
-            this._store.dispatch({type: ADD_REDIS_SERVER, payload: newInstance});  // add new server
-            this._store.dispatch({type: REQ_REDIS_CONNECT, payload: {instance: newInstance}}); // connect
+            this._store.dispatch(new AddRedisServer(newInstance));  // add new server
+            this._store.dispatch(new ReqRedisConnect({instance: newInstance})); // connect
           }
         });
       }
@@ -130,8 +130,8 @@ export class AppComponent implements OnInit {
       }
     }).afterClosed().subscribe(ret => {
       if (ret) {
-        this._store.dispatch({type: REMOVE_REDIS_SERVER, payload: {instance: this.currentInstance}}); // remove
-        this._store.dispatch({type: REQ_LOAD_PAGE, payload: getNewPage()});
+        this._store.dispatch(new RemoveRedisServer({instance: this.currentInstance})); // remove
+        this._store.dispatch(new ReqLoadPage(getNewPage()));
         this.currentInstance = null;
         this.util.showMessage('Deleted successfully.');
       }
@@ -148,26 +148,22 @@ export class AppComponent implements OnInit {
         this.util.showMessage('You need to select a Redis instance first.');
         return;
       }
-      this._store.dispatch({
-        type: REQ_REDIS_CONNECT, payload: {
-          instance: ins, scb: () => {
-            if (expandNodes) {
-              ins.expanded = true;
-            }
-            if (ins.expanded) {
-              this._store.dispatch({
-                type: REQ_FETCH_TREE, payload: {
-                  id: ins.id, scb: () => {
-                    if (expandNodes) {
-                      setTimeout(() => this.expandDeepCommand$.next(), 0);
-                    }
-                  }
+      this._store.dispatch( new ReqRedisConnect({
+        instance: ins, scb: () => {
+          if (expandNodes) {
+            ins.expanded = true;
+          }
+          if (ins.expanded) {
+            this._store.dispatch(new ReqFetchTree({
+              id: ins.id, scb: () => {
+                if (expandNodes) {
+                  setTimeout(() => this.expandDeepCommand$.next(), 0);
                 }
-              });
-            }
+              }
+            }));
           }
         }
-      });
+      }));
     });
   }
 
@@ -197,8 +193,8 @@ export class AppComponent implements OnInit {
    */
   onDisconnect(id) {
     this.currentInstance = null;
-    this._store.dispatch({type: REDIS_DISCONNECT, payload: {id}});
-    this._store.dispatch({type: REQ_LOAD_PAGE, payload: getNewPage()});
+    this._store.dispatch(new RedisDisconnect({id}));
+    this._store.dispatch(new ReqLoadPage(getNewPage()));
   }
 
   onInformationEvt() {
@@ -237,7 +233,7 @@ export class AppComponent implements OnInit {
    * on delete value (succeed)
    */
   onDeleteValue() {
-    this._store.dispatch({type: REQ_LOAD_PAGE, payload: getNewPage()});
+    this._store.dispatch(new ReqLoadPage(getNewPage()));
   }
 
   /**
@@ -248,33 +244,29 @@ export class AppComponent implements OnInit {
     const {id, type} = page;
     if (page.type === 'root-instance') { // show server information
       this.requireId = uuid();
-      this._store.dispatch({type: DESELECT_ALL_REDIS});
-      this._store.dispatch({type: SELECT_REDIS, payload: {id}});
+      this._store.dispatch(new DisconnectAllRedis());
+      this._store.dispatch(new SelectRedis({id}));
       this.findInstance(id).then(instance => {
         if (!instance['id']) {
           this.util.showMessage(`The Redis instance with id: ${id} cannot be found.`);
           return;
         }
         this.currentInstance = instance;
-        this._store.dispatch({
-          type: REQ_REDIS_CONNECT, payload: {
-            instance: instance, scb: () => {
-              this._store.dispatch({
-                type: REQ_LOAD_ROOT_PAGE, payload: {
-                  id, type, loading: true, item: [],
-                  requestId: uuid(),
-                }
-              });
-            }
+        this._store.dispatch(new ReqRedisConnect({
+          instance: instance, scb: () => {
+            this._store.dispatch(new ReqLoadRootPage({
+              id, type, loading: true, item: [],
+              requestId: uuid(),
+            }));
           }
-        });
+        }));
       });
     } else if (page.type === 'data-viewer') {
-      this._store.dispatch({type: DESELECT_ALL_REDIS});
-      this._store.dispatch({type: SELECT_REDIS, payload: {id}});
+      this._store.dispatch(new DisconnectAllRedis());
+      this._store.dispatch(new SelectRedis({id}));
       this.findInstance(id).then(instance => {
         this.currentInstance = instance;
-        this._store.dispatch({type: REQ_LOAD_PAGE, payload: {id, type, loading: true, item: page.item}});
+        this._store.dispatch(new ReqLoadPage({id, type, loading: true, item: page.item}));
       });
     }
   }
@@ -291,7 +283,7 @@ export class AppComponent implements OnInit {
    * toggle cli panel
    */
   toggleCli() {
-    this._store.dispatch({type: TOGGLE_CLI});
+    this._store.dispatch(new ToggleCli());
     setTimeout(() => {
       try {
         this.cliScrollContent.nativeElement.scrollTop = this.cliScrollContent.nativeElement.scrollHeight;
@@ -306,7 +298,7 @@ export class AppComponent implements OnInit {
    * clear cli history
    */
   clearHistory() {
-    this._store.dispatch({type: CLEAR_HISTORY});
+    this._store.dispatch(new ClearHistory());
   }
 
 
@@ -384,7 +376,7 @@ export class AppComponent implements OnInit {
         } else {
           this.cliInputValue = '';
         }
-        this._store.dispatch({type: PREVIEW_INDEX_UPDATE, payload: {index: newIndex}});
+        this._store.dispatch(new PreviewIndexUpdate({index: newIndex}));
       });
       return;
     }
@@ -397,23 +389,21 @@ export class AppComponent implements OnInit {
 
       const command = v.split(' ').filter(c => c.trim() !== ''); // combine into a command
       const id = uuid();
-      this._store.dispatch({  // dispatch
-        type: ADD_COMMAND, payload: {
-          redisId: this.currentInstance.id,
+      this._store.dispatch(new AddCommand({
+        redisId: this.currentInstance.id,
+        id,
+        command,
+        cb: (err) => this.onCommandAdded(err),
+        item: {
+          status: 'new',
           id,
+          time: new Date(),
+          rawCommand: v,
           command,
-          cb: (err) => this.onCommandAdded(err),
-          item: {
-            status: 'new',
-            id,
-            time: new Date(),
-            rawCommand: v,
-            command,
-            result: ['running, please wait ...'],
-            instanceId: this.currentInstance.id,
-          },
-        }
-      });
+          result: ['running, please wait ...'],
+          instanceId: this.currentInstance.id,
+        },
+      }));
     }
   }
 

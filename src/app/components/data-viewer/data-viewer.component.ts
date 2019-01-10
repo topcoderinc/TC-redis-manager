@@ -7,7 +7,7 @@ import _ from 'lodash';
 import {UtilService} from '../../services/util.service';
 import {Observable} from 'rxjs';
 import {Store} from '@ngrx/store';
-import {REQ_FETCH_TREE} from '../../ngrx/actions/redis-actions';
+import {ReqFetchTree} from '../../ngrx/actions/redis-actions';
 
 /**
  * the backend type to frontend type map
@@ -115,7 +115,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
             delete this.selectedMap[v];
           });
 
-          this._store.dispatch({type: REQ_FETCH_TREE, payload: {id: this.pageData.id}});
+          this._store.dispatch(new ReqFetchTree({id: this.pageData.id}));
           this.hashCachedData = null;
           this.setCachedData = null;
           this.pageData.item.len -= values.length;
@@ -270,7 +270,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
         ret.onSuccess = () => {
           if (this.pageData.item.type === 'folder') {
           } else {
-            this._store.dispatch({type: REQ_FETCH_TREE, payload: {id: this.pageData.id}});
+            this._store.dispatch(new ReqFetchTree({id: this.pageData.id}));
             this.hashCachedData = null;
             this.setCachedData = null;
             this.pageData.item.len += ret.len;
@@ -344,7 +344,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
           this.util.showMessage('Deleted successfully.');
           this.pageData.item.deleted = true;
           this.onDeleteValue.emit();
-          this._store.dispatch({type: REQ_FETCH_TREE, payload: {id: this.pageData.id}});
+          this._store.dispatch(new ReqFetchTree({id: this.pageData.id}));
         }, e => {
           this.util.showMessage('Delete is failed.');
           console.error(e);

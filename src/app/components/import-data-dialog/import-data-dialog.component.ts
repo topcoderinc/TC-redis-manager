@@ -5,7 +5,7 @@ import {RedisService} from '../../services/redis.service';
 import { saveAs } from 'file-saver';
 import _ from 'lodash';
 import {Store} from '@ngrx/store';
-import {REQ_FETCH_TREE} from '../../ngrx/actions/redis-actions';
+import {ReqFetchTree} from '../../ngrx/actions/redis-actions';
 
 @Component({
   selector: 'app-import-data-dialog',
@@ -123,7 +123,7 @@ export class ImportDataDialogComponent implements OnInit {
       this.util.showMessage(`${numberOfSucceed} row(s) are imported successfully, ${totalRow
       - numberOfSucceed} row(s) fail.`);
       this.dialogRef.close();
-      this._store.dispatch({type: REQ_FETCH_TREE, payload: {id: this.instanceId}});
+      this._store.dispatch(new ReqFetchTree({id: this.instanceId}));
     }, err => {
       this.util.showMessage('Failed to import commands: ' + this.util.getErrorMessage(err));
     });

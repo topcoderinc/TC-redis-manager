@@ -2,7 +2,7 @@
  * the redis reducer
  */
 import uuid from 'uuid';
-import actions from '../actions/redis-actions';
+import {RedisActions} from '../actions/redis-actions';
 import {RedisInstance} from '../../models/redis-instance';
 import _ from 'lodash';
 
@@ -63,7 +63,7 @@ const getInstanceById = (id, state) => state.find(ins => ins.id === id) || {};
 
 export function reducer(state = initialState, action) {
   switch (action.type) {
-    case actions.REQ_REDIS_CONNECT: {
+    case RedisActions.ReqRedisConnect: {
       if (action.payload.instance) {
         const i = getInstanceById(action.payload.instance.id, state);
         i.status = 'connecting';
@@ -71,28 +71,28 @@ export function reducer(state = initialState, action) {
       }
       return state;
     }
-    case actions.REDIS_CONNECT_FAILED: {
+    case RedisActions.RedisConnectFailed: {
       const i = getInstanceById(action.payload.id, state);
       i.status = 'failed';
       i.working = false;
       return state;
     }
-    case actions.REDIS_CONNECT: {
+    case RedisActions.RedisConnect: {
       const i = getInstanceById(action.payload.id, state);
       i.status = 'connected';
       i.working = false;
       return state;
     }
-    case actions.DESELECT_ALL_REDIS: {
+    case RedisActions.DisconnectAllRedis: {
       state.forEach(r => r.selected = false);
       return state;
     }
-    case actions.SELECT_REDIS: {
+    case RedisActions.SelectRedis: {
       const i = getInstanceById(action.payload.id, state);
       i.selected = true;
       return state;
     }
-    case actions.REDIS_DISCONNECT: {
+    case RedisActions.RedisDisconnect: {
       const i = getInstanceById(action.payload.id, state);
       i.expanded = false;
       i.status = null;
@@ -100,29 +100,29 @@ export function reducer(state = initialState, action) {
       return state;
     }
 
-    case actions.REQ_FETCH_TREE: {
+    case RedisActions.ReqFetchTree: {
       const i = getInstanceById(action.payload.id, state);
       i.working = true;
       return state;
     }
-    case actions.FETCHED_TREE: {
+    case RedisActions.FetchedTree: {
       const i = getInstanceById(action.payload.id, state);
       i.children = action.payload.data;
       i.working = false;
       return state;
     }
-    case actions.TOGGLE_REDIS: {
+    case RedisActions.ToggleRedis: {
       const i = getInstanceById(action.payload.id, state);
       i.expanded = !i.expanded;
       return state;
     }
-    case actions.REMOVE_REDIS_SERVER: {
+    case RedisActions.RemoveRedisServer: {
       const newState = state.filter(i => i.id !== action.payload.instance.id);
       saveInstanceToLocalStorage(newState);
       return newState;
     }
 
-    case actions.ADD_REDIS_SERVER: {
+    case RedisActions.AddRedisServer: {
       state.push(action.payload);
       saveInstanceToLocalStorage(state);
       return state;

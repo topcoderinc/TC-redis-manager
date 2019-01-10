@@ -1,7 +1,7 @@
 /**
  * the cli reducer
  */
-import actions from '../actions/cli-actions';
+import {CliActions} from '../actions/cli-actions';
 
 const DEFAULT_PREVIEW_INDEX = -1;
 
@@ -17,12 +17,12 @@ const errorSuffixString = ', with args beginning with: ';
 
 export function reducer(state = initialState, action) {
   switch (action.type) {
-    case actions.ADD_COMMAND: {
+    case CliActions.AddCommand: {
       state.items.push(action.payload.item);
       state.previousIndex = DEFAULT_PREVIEW_INDEX;
       return state;
     }
-    case actions.COMMAND_RUN_FINISHED: {
+    case CliActions.CommandRunFinished: {
       const id = action.payload.id;
       const i = getItemById(id, state);
       if (action.payload.result instanceof Array) {
@@ -36,20 +36,20 @@ export function reducer(state = initialState, action) {
       i.error = action.payload.error;
       return state;
     }
-    case actions.CLEAR_HISTORY: {
+    case CliActions.ClearHistory: {
       // clear all, and only keep un completed command
       state.items = state.items.filter(i => i.status === 'new');
       return state;
     }
-    case actions.CLEAR_PREVIEW_INDEX: {
+    case CliActions.ClearPreviewIndex: {
       state.previousIndex = DEFAULT_PREVIEW_INDEX;
       return state;
     }
-    case actions.PREVIEW_INDEX_UPDATE: {
+    case CliActions.PreviewIndexUpdate: {
       state.previousIndex = action.payload.index;
       return state;
     }
-    case actions.TOGGLE_CLI: {
+    case CliActions.ToggleCli: {
       state.expanded = !state.expanded;
       return state;
     }

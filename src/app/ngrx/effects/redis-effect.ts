@@ -7,7 +7,7 @@ import {of, Observable} from 'rxjs';
 import {RedisService} from '../../services/redis.service';
 
 
-import {FETCHED_TREE, REDIS_CONNECT, REDIS_CONNECT_FAILED, REQ_FETCH_TREE, REQ_REDIS_CONNECT} from '../actions/redis-actions';
+import {RedisActions, FetchedTree, RedisConnect, RedisConnectFailed, ReqFetchTree, ReqRedisConnect} from '../actions/redis-actions';
 import {catchError, map, mergeMap} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {Action} from '@ngrx/store';
@@ -22,20 +22,20 @@ export class RedisEffect {
   }
 
   /**
-   * send connect request to backend when dispatch "REQ_REDIS_CONNECT"
-   * and when backend returned, dispatch data to "REDIS_CONNECT"
-   * when backend return error, dispatch to "REDIS_CONNECT_FAILED"
+   * send connect request to backend when dispatch "ReqRedisConnect"
+   * and when backend returned, dispatch data to "RedisConnect"
+   * when backend return error, dispatch to "RedisConnectFailed"
    */
   @Effect()
   connectRedis: Observable<Action> = this.actions$.pipe(
-    ofType(REQ_REDIS_CONNECT),
+    ofType<ReqRedisConnect>(RedisActions.ReqRedisConnect),
     mergeMap(action => {
         return this.redisService.connect(action['payload'].instance).pipe(
           map(data => {
             if (action['payload'].scb) {
               action['payload'].scb(data);
             }
-            return {type: REDIS_CONNECT, payload: data};
+            return new RedisConnect(data);
           }),
           catchError(() => {
             if (action['payload'].fcb) {
@@ -46,7 +46,7 @@ export class RedisEffect {
               const host = action['payload'].instance.serverModel.name;
               const port = action['payload'].instance.serverModel.port;
               this.util.showMessage(`Fail to connect Redis server at ${host}:${port}.`);
-              return of({type: REDIS_CONNECT_FAILED, payload: {id}});
+              return of(new RedisConnectFailed({id}));
             }
           })
         );
@@ -55,13 +55,13 @@ export class RedisEffect {
   );
 
   /**
-   * send fetch tree request to backend when dispatch "REQ_FETCH_TREE"
-   * and when backend returned, dispatch data to "FETCHED_TREE"
-   * when backend return error, dispatch to "REDIS_CONNECT_FAILED"
+   * send fetch tree request to backend when dispatch "ReqFetchTree"
+   * and when backend returned, dispatch data to "FetchedTree"
+   * when backend return error, dispatch to "RedisConnectFailed"
    */
   @Effect()
   fetchTree: Observable<Action> = this.actions$.pipe(
-    ofType(REQ_FETCH_TREE),
+    ofType<ReqFetchTree>(RedisActions.ReqFetchTree),
     mergeMap(action => {
         const id = action['payload'].id;
         return this.redisService.fetchTree({id}).pipe(
@@ -69,10 +69,10 @@ export class RedisEffect {
             if (action['payload'].scb) {
               action['payload'].scb(data);
             }
-            return {type: FETCHED_TREE, payload: {id, data}};
+            return new FetchedTree({id, data});
           }),
           catchError(() => {
-            return of({type: REDIS_CONNECT_FAILED, payload: {id}});
+            return of( new RedisConnectFailed({id}));
           })
         );
       }

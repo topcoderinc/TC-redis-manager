@@ -6,8 +6,8 @@ import {of, Observable} from 'rxjs';
 import {RedisService} from '../../services/redis.service';
 
 
-import {LOADED_PAGE, REQ_LOAD_ROOT_PAGE} from '../actions/page-actions';
-import {REDIS_CONNECT_FAILED} from '../actions/redis-actions';
+import {PageActions, LoadedPage, ReqLoadRootPage} from '../actions/page-actions';
+import {RedisConnectFailed} from '../actions/redis-actions';
 
 import {catchError, map, mergeMap} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
@@ -23,12 +23,12 @@ export class PageEffect {
   }
 
   /**
-   * send command to backend when dispatch "REQ_LOAD_ROOT_PAGE"
-   * and when backend returned, dispatch data to "LOADED_PAGE"
+   * send command to backend when dispatch "ReqLoadRootPage"
+   * and when backend returned, dispatch data to "LoadedPage"
    */
   @Effect()
   pageLoad: Observable<Action> = this.actions$.pipe(
-    ofType(REQ_LOAD_ROOT_PAGE),
+    ofType<ReqLoadRootPage>(PageActions.ReqLoadRootPage),
     mergeMap(action => {
         return this.redisService.call(
           action['payload'].id,
@@ -49,11 +49,15 @@ export class PageEffect {
                 value: parts[1],
               });
             });
-            return {type: LOADED_PAGE, payload: {item: result, requestId: action['payload'].requestId, id: action['payload'].id}};
+            return new LoadedPage({
+              item: result,
+              requestId: action['payload'].requestId,
+              id: action['payload'].id
+            });
           }),
           catchError(() => {
             const id = action['payload'].id;
-            return of({type: REDIS_CONNECT_FAILED, payload: {id}});
+            return of( new RedisConnectFailed({id}));
           })
         );
       }

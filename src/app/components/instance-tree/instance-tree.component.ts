@@ -3,7 +3,7 @@ import {Subject} from 'rxjs';
 import {RedisInstance} from '../../models/redis-instance';
 import {RedisService} from '../../services/redis.service';
 import {Store} from '@ngrx/store';
-import {REQ_FETCH_TREE, TOGGLE_REDIS} from '../../ngrx/actions/redis-actions';
+import {ReqFetchTree, ToggleRedis} from '../../ngrx/actions/redis-actions';
 
 /**
  * a redis instance tree component
@@ -30,11 +30,11 @@ export class InstanceTreeComponent implements OnInit {
   onExpand() {
     const id = this.instance.id;
     if (this.instance.expanded) {
-      this._store.dispatch({type: TOGGLE_REDIS, payload: {id}});
+      this._store.dispatch(new ToggleRedis({id}));
       return;
     }
-    this._store.dispatch({type: REQ_FETCH_TREE, payload: {id}});
-    this._store.dispatch({type: TOGGLE_REDIS, payload: {id}});
+    this._store.dispatch(new ReqFetchTree({id}));
+    this._store.dispatch(new ToggleRedis({id}));
   }
 
   /**

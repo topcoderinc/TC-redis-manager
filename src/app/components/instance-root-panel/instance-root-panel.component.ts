@@ -6,8 +6,8 @@ import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs';
 import {RedisService} from '../../services/redis.service';
 import {UtilService} from '../../services/util.service';
-import {REMOVE_REDIS_SERVER} from '../../ngrx/actions/redis-actions';
-import {REQ_LOAD_PAGE} from '../../ngrx/actions/page-actions';
+import {RemoveRedisServer} from '../../ngrx/actions/redis-actions';
+import {ReqLoadPage} from '../../ngrx/actions/page-actions';
 
 
 /**

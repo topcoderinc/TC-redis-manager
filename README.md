@@ -1,7 +1,5 @@
 # Redis manager
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.1.4.
-
 ### Dependencies
 
 - Node 10.x.x , npm 6.x.x

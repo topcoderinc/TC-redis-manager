@@ -3,6 +3,9 @@
  */
 import {Action} from '@ngrx/store';
 
+import {PageModel} from '../../models/page-model';
+
+
 export enum PageActions {
   ReqLoadPage = 'Req Load Page', // request to load new date viewer page
   LoadedPage = 'Loaded Page', // page loaded
@@ -24,5 +27,5 @@ export class LoadedPage implements Action {
 export class ReqLoadRootPage implements Action {
   readonly type = PageActions.ReqLoadRootPage;
 
-  constructor(public payload: any) { }
+  constructor(public payload: PageModel) { }
 }

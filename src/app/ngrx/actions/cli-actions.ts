@@ -35,11 +35,9 @@ export class ToggleCli implements Action {
 export class PreviewIndexUpdate implements Action {
   readonly type = CliActions.PreviewIndexUpdate;
 
-  constructor(public payload: any) { }
+  constructor(public payload: {index: number}) { }
 }
 
 export class ClearPreviewIndex implements Action {
   readonly type = CliActions.ClearPreviewIndex;
-
-  constructor(public payload: any) { }
 }

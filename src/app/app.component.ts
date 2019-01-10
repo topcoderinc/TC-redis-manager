@@ -110,7 +110,7 @@ export class AppComponent implements OnInit {
             return;
           } else {
             const newInstance = {id: uuid(), serverModel: result};
-            this._store.dispatch(new AddRedisServer({newInstance}));  // add new server
+            this._store.dispatch(new AddRedisServer(newInstance));  // add new server
             this._store.dispatch(new ReqRedisConnect({instance: newInstance})); // connect
           }
         });

@@ -3,6 +3,9 @@
  */
 import {Action} from '@ngrx/store';
 
+import {RedisInstance} from '../../models/redis-instance';
+
+
 export enum RedisActions {
   ReqRedisConnect = 'Req Redis Connect', // request to connect a redis
   RedisConnect = 'Redis Connect', // when a redis instance connected
@@ -26,19 +29,19 @@ export class ReqRedisConnect implements Action {
 export class RedisConnect implements Action {
   readonly type = RedisActions.RedisConnect;
 
-  constructor(public payload: any) { }
+  constructor(public payload: RedisInstance) { }
 }
 
 export class RedisConnectFailed implements Action {
   readonly type = RedisActions.RedisConnectFailed;
 
-  constructor(public payload: any) { }
+  constructor(public payload: {id: string}) { }
 }
 
 export class RedisDisconnect implements Action {
   readonly type = RedisActions.RedisDisconnect;
 
-  constructor(public payload: any) { }
+  constructor(public payload: {id: string}) { }
 }
 
 export class DisconnectAllRedis implements Action {
@@ -48,13 +51,13 @@ export class DisconnectAllRedis implements Action {
 export class SelectRedis implements Action {
   readonly type = RedisActions.SelectRedis;
 
-  constructor(public payload: any) { }
+  constructor(public payload: {id: string}) { }
 }
 
 export class ReqFetchTree implements Action {
   readonly type = RedisActions.ReqFetchTree;
 
-  constructor(public payload: any) { }
+  constructor(public payload: {id: string, scb?: any}) { }
 }
 
 export class FetchedTree implements Action {
@@ -66,7 +69,7 @@ export class FetchedTree implements Action {
 export class ToggleRedis implements Action {
   readonly type = RedisActions.ToggleRedis;
 
-  constructor(public payload: any) { }
+  constructor(public payload: {id: string}) { }
 }
 
 export class AddRedisServer implements Action {

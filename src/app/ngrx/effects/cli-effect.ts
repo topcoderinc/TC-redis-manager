@@ -2,12 +2,11 @@
  * the cli async effect function
  */
 import {Effect, Actions, ofType} from '@ngrx/effects';
-import {of} from 'rxjs';
+import {of, Observable} from 'rxjs';
 import {RedisService} from '../../services/redis.service';
 
 import {catchError, map, mergeMap} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
 import {Action} from '@ngrx/store';
 import {UtilService} from '../../services/util.service';
 import {ADD_COMMAND, COMMAND_RUN_FINISHED} from '../actions/cli-actions';

@@ -2,7 +2,7 @@
  * the page async effect functions
  */
 import {Effect, Actions, ofType} from '@ngrx/effects';
-import {of} from 'rxjs';
+import {of, Observable} from 'rxjs';
 import {RedisService} from '../../services/redis.service';
 
 
@@ -11,7 +11,6 @@ import {REDIS_CONNECT_FAILED} from '../actions/redis-actions';
 
 import {catchError, map, mergeMap} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
 import {Action} from '@ngrx/store';
 import {UtilService} from '../../services/util.service';
 

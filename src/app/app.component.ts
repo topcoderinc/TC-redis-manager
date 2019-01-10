@@ -106,7 +106,7 @@ export class AppComponent implements OnInit {
       if (result) {
         this.findInstanceByName(result.name).then(instance => {
           if (instance) {
-            this.util.showMessage('Instance Name Already Exists');
+            this.util.showMessage('The instance name already exists.');
             return;
           } else {
             const newInstance = {id: uuid(), serverModel: result};
@@ -133,7 +133,7 @@ export class AppComponent implements OnInit {
         this._store.dispatch({type: REMOVE_REDIS_SERVER, payload: {instance: this.currentInstance}}); // remove
         this._store.dispatch({type: REQ_LOAD_PAGE, payload: getNewPage()});
         this.currentInstance = null;
-        this.util.showMessage('Delete server successfully.');
+        this.util.showMessage('Deleted successfully.');
       }
     });
   }
@@ -145,7 +145,7 @@ export class AppComponent implements OnInit {
     this.instances$.subscribe(instances => {
       const ins = instances.find(i => i.selected === true);
       if (!ins) {
-        this.util.showMessage('you need select Redis instance first');
+        this.util.showMessage('You need to select a Redis instance first.');
         return;
       }
       this._store.dispatch({
@@ -226,10 +226,10 @@ export class AppComponent implements OnInit {
       if (newValue.onSuccess) {
         newValue.onSuccess(newValue);
       }
-      this.util.showMessage(newValue.edit ? 'The value is updated successfully' : 'New value added successfully');
+      this.util.showMessage(newValue.edit ? 'Updated successfully.' : 'Added successfully.');
     }, e => {
       console.error(e.error.message);
-      this.util.showMessage('new value add failed, ' + this.util.getErrorMessage(e));
+      this.util.showMessage('Fail to add the value: ' + this.util.getErrorMessage(e));
     });
   }
 
@@ -252,7 +252,7 @@ export class AppComponent implements OnInit {
       this._store.dispatch({type: SELECT_REDIS, payload: {id}});
       this.findInstance(id).then(instance => {
         if (!instance['id']) {
-          this.util.showMessage(`cannot found redis instance where id= ${id}`);
+          this.util.showMessage(`The Redis instance with id: ${id} cannot be found.`);
           return;
         }
         this.currentInstance = instance;

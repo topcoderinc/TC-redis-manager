@@ -80,3 +80,7 @@ $app-bg-color: white;
 .light-theme .mat-form-field.mat-focused .mat-form-field-label {
   color: rgba(0,0,0,.54)
 }
+
+.light-theme .mat-form-field.mat-focused.mat-primary .mat-select-arrow {
+  color: rgba(0, 0, 0, .54);
+}

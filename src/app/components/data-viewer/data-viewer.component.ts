@@ -288,7 +288,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
    */
   onSaveString() {
     if (this.pageData.item.value.trim() === '') {
-      this.snackBar.open('The value cannot be empty.', 'OK', {duration: 3000});
+      this.util.showMessage('The value cannot be empty.');
     } else {
       this.pageData.item.value = this.pageData.item.value.trim();
       this.redisService.call(this.pageData.id,

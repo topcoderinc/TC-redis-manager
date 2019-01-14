@@ -8,6 +8,7 @@ import {UtilService} from '../../services/util.service';
 import {Observable} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {ReqFetchTree} from '../../ngrx/actions/redis-actions';
+import {ReqLoadPage} from '../../ngrx/actions/page-actions';
 
 /**
  * the backend type to frontend type map
@@ -271,10 +272,12 @@ export class DataViewerComponent implements OnInit, OnChanges {
           if (this.pageData.item.type === 'folder') {
           } else {
             this._store.dispatch(new ReqFetchTree({id: this.pageData.id}));
-            this.hashCachedData = null;
-            this.setCachedData = null;
-            this.pageData.item.len += ret.len;
-            this.fetchData();
+            this._store.dispatch(new ReqLoadPage({
+              id: this.pageData.id,
+              type: 'data-viewer',
+              loading: true,
+              item: this.pageData.item
+            }));
           }
         };
         ret.edit = edit;

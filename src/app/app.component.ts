@@ -307,7 +307,6 @@ export class AppComponent implements OnInit {
    * @param err is command added failed
    */
   onCommandAdded(err) {
-    this.onRefresh();
     setTimeout(() => {
       try {
         this.cliScrollContent.nativeElement.scrollTop = this.cliScrollContent.nativeElement.scrollHeight;

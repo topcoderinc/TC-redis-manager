@@ -7,12 +7,16 @@ import {MAT_DIALOG_DATA} from '@angular/material';
   styleUrls: ['./information-dialog.component.scss']
 })
 export class InformationDialogComponent implements OnInit {
+  isLoading = true;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data) {
   }
 
 
   ngOnInit() {
+    setTimeout(() => {
+      this.isLoading = false;
+    }, 300);
   }
 
 }

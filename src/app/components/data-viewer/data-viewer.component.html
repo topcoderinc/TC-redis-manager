@@ -104,6 +104,9 @@
       <tr mat-header-row *matHeaderRowDef="getColumns()"></tr>
       <tr mat-row *matRowDef="let row; columns: getColumns();"></tr>
     </table>
+
+    <!-- when table is empty -->
+    <div *ngIf="data.length === 0" class="empty-table-message mat-cell">No Values</div>
   </div>
   <mat-paginator
     *ngIf="showPagination"

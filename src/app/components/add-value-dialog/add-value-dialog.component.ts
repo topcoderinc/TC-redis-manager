@@ -51,7 +51,7 @@ export class AddValueDialogComponent implements OnInit {
 
   ngOnInit() {
     if (this.data.from === 'root') {
-      this.title = this.isEditMode() ? 'Edit Records' : 'Add new Records';
+      this.title = this.isEditMode() ? 'Edit Records' : 'Add New Record';
     } else {
       this.title = this.isEditMode() ? 'Edit Value' : 'Add New Value';
     }

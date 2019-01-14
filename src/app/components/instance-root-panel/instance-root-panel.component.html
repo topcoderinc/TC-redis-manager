@@ -1,6 +1,6 @@
 <div class="redis-panel-root">
   <div class="header">
-    <button mat-raised-button (click)="onAddNewRecords()" onclick="this.blur()">Add new Records</button>
+    <button mat-raised-button (click)="onAddNewRecords()" onclick="this.blur()">Add New Record</button>
     <button mat-raised-button color="warn" (click)="disconnect()">Disconnect</button>
   </div>
   <div class="{{'table-content mat-elevation-z8 ' + ((cli$ | async)?.expanded ? 'cli-expanded':'')}}"

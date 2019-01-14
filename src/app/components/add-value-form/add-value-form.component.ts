@@ -67,14 +67,7 @@ export class AddValueFormComponent implements OnInit {
    * @param index the index
    */
   onRemoveItem(arr, index) {
-    if (this.isEditMode) {
-      this.onValueDelete.emit({
-        element: arr[index],
-        callback: () => {
-          arr.splice(index, 1);
-        }
-      });
-    } else {
+    if (!this.isEditMode) {
       arr.splice(index, 1);
     }
   }

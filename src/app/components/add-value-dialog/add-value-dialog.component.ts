@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatSnackBar} from '@angular/material';
 import {UtilService} from '../../services/util.service';
 import _ from 'lodash';
@@ -35,6 +35,8 @@ export class ValueMode {
   styleUrls: ['./add-value-dialog.component.scss']
 })
 export class AddValueDialogComponent implements OnInit {
+
+  @ViewChild('valueContainer') private valueContainer: ElementRef;
 
   title = '';
   constructor(
@@ -233,5 +235,19 @@ export class AddValueDialogComponent implements OnInit {
         evt.callback();
       });
     }
+  }
+
+  onValueAdded() {
+    this.scrollToBottom();
+  }
+
+  /**
+   * Scrolls the element to bottom.
+   */
+  scrollToBottom(): void {
+    setTimeout(() => {
+      this.valueContainer.nativeElement.scrollTop = this.valueContainer.nativeElement.scrollHeight;
+    }, 10);
+
   }
 }

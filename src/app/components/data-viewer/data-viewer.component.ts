@@ -293,7 +293,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
       this.pageData.item.value = this.pageData.item.value.trim();
       this.redisService.call(this.pageData.id,
         [['set', this.pageData.item.key, this.pageData.item.value.trim()]]).subscribe(() => {
-        this.util.showMessage('Updated successfully');
+        this.util.showMessage('Updated successfully.');
       });
     }
   }
@@ -373,7 +373,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
     });
 
     if (keys.length <= 0) {
-      return this.util.showMessage('You need to select a row first');
+      return this.util.showMessage('You need to select a row first.');
     }
 
     if (this.pageData.item.type === 'hash') {

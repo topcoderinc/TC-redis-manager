@@ -120,7 +120,7 @@ export class AppComponent implements OnInit {
 
   onDeleteServer() {
     if (!this.currentInstance) {
-      this.util.showMessage('You need to select Redis instance first');
+      this.util.showMessage('You need to select Redis instance first.');
       return;
     }
     this.dialogService.open(ConfirmDialogComponent, {

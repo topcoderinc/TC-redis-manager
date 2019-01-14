@@ -3,7 +3,7 @@
 @include mat-core();
 
 // Light theme
-$light-primary: mat-palette($mat-grey, 200, 500, 300);
+$light-primary: mat-palette($mat-grey, 700, 500, 300);
 $light-accent: mat-palette($mat-brown, 300);
 $light-warn: mat-palette($mat-deep-orange, 200);
 

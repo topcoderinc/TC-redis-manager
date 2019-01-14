@@ -1,5 +1,5 @@
 <h1 mat-dialog-title>{{title}}</h1>
-<div mat-dialog-content>
+<div mat-dialog-content #valueContainer>
   <mat-form-field [ngClass] = "[data.hideType ? 'readOnlyField' : '']">
     <textarea matInput placeholder="Key"
             [readonly]="data.hideType"
@@ -25,7 +25,9 @@
                       [initOrderedValues]="data.values.orderedValues"
                       [isEditMode]="isEditMode()"
                       (onValueDelete)="onValueDelete($event)"
-                      (onValueUpdate)="data.values = $event">
+                      (onValueUpdate)="data.values = $event"
+                      (onValueAdded)="onValueAdded()"
+  >
 
   </app-add-value-form>
 </div>

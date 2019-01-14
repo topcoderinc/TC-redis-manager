@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import _ from 'lodash';
 
 /**
@@ -17,6 +17,8 @@ export class AddValueFormComponent implements OnInit {
   @Input() isEditMode = false;
   @Output() onValueUpdate = new EventEmitter();
   @Output() onValueDelete = new EventEmitter();
+  @Output() onValueAdded = new EventEmitter();
+
 
   values = [];
   orderedValues = [];
@@ -85,6 +87,7 @@ export class AddValueFormComponent implements OnInit {
    */
   onAddItem(arr) {
     arr.push(this.getEmptyItem());
+    this.onValueAdded.emit();
   }
 
   /**
@@ -99,5 +102,6 @@ export class AddValueFormComponent implements OnInit {
       values: this.values
     });
   }
+
 
 }

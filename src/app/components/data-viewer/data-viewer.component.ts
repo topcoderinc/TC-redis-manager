@@ -296,7 +296,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
     } else {
       this.redisService.call(this.pageData.id,
         [['set', this.pageData.item.key, this.stringValue.trim()]]).subscribe(() => {
-        this.util.showMessage('Updated successfully');
+        this.util.showMessage('Updated successfully.');
       });
     }
   }

@@ -1,7 +1,6 @@
 .instance-root {
   margin-top: 16px;
   .item-line {
-    cursor: pointer;
     display: flex;
     flex-direction: row;
     padding: 2px;
@@ -18,6 +17,9 @@
         color: red !important;
       }
     }
+  }
+  >.item-line {
+    cursor: pointer;
   }
   .sub-items {
     margin-top: 8px;

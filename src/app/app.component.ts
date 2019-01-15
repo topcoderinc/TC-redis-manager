@@ -17,7 +17,7 @@ import {
 import {Observable, Subject} from 'rxjs';
 import {ReqLoadPage, ReqLoadRootPage} from './ngrx/actions/page-actions';
 import {PageModel} from './models/page-model';
-import {AddCommand, ClearHistory, PreviewIndexUpdate, ToggleCli} from './ngrx/actions/cli-actions';
+import {AddCommand, ClearHistory, PreviewIndexUpdate, ToggleCli, CollapseCli} from './ngrx/actions/cli-actions';
 import {ConfirmDialogComponent} from './components/confirm-dialog/confirm-dialog.component';
 import {InformationDialogComponent} from './components/information-dialog/information-dialog.component';
 import {SettingsDialogComponent} from './components/settings-dialog/settings-dialog.component';
@@ -195,6 +195,7 @@ export class AppComponent implements OnInit {
     this.currentInstance = null;
     this._store.dispatch(new RedisDisconnect({id}));
     this._store.dispatch(new ReqLoadPage(getNewPage()));
+    this._store.dispatch(new CollapseCli());
   }
 
   onInformationEvt() {

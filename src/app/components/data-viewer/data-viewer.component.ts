@@ -37,6 +37,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
   public page = {
     pageIndex: 0,
     pageSize: 20,
+    totalSize: 0
   };
   cli$: Observable<any> = null;
   public data = [];
@@ -120,7 +121,6 @@ export class DataViewerComponent implements OnInit, OnChanges {
           this._store.dispatch(new ReqFetchTree({id: this.pageData.id}));
           this.hashCachedData = null;
           this.setCachedData = null;
-          this.pageData.item.len -= values.length;
           this.fetchData();
           this.util.showMessage('Deleted successfully.');
           if (cb) { cb(); }
@@ -178,7 +178,8 @@ export class DataViewerComponent implements OnInit, OnChanges {
     this.showPagination = false;
     if (type === 'list') {
       this.loadingPageData = true;
-      this.redisService.call(instanceId, [['LRANGE', key, start, end]]).subscribe(ret => {
+      this.redisService.call(instanceId, [['LRANGE', key, start, end], ['LLEN', key]]).subscribe(ret => {
+          this.page.totalSize = ret[1];
           this.data = injectValuesToArray(ret[0]);
           this.showPagination = true;
           this.loadingPageData = false;
@@ -186,7 +187,8 @@ export class DataViewerComponent implements OnInit, OnChanges {
       );
     } else if (type === 'zset') {
       this.loadingPageData = true;
-      this.redisService.call(instanceId, [['ZRANGE', key, start, end, 'withscores']]).subscribe(ret => {
+      this.redisService.call(instanceId, [['ZRANGE', key, start, end, 'withscores'], ['ZCARD', key]]).subscribe(ret => {
+          this.page.totalSize = ret[1];
           this.data = [];
           for (let i = 0; i < ret[0].length;) {
             this.data.push({
@@ -205,6 +207,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
         this.loadingPageData = true;
         this.redisService.call(instanceId, [['SMEMBERS', key]]).subscribe(ret => {
           this.setCachedData = injectValuesToArray(ret[0]);
+          this.page.totalSize = this.setCachedData.length;
           this.data = this.setCachedData.slice(start, end);
           this.loadingPageData = false;
           this.showPagination = true;
@@ -225,6 +228,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
               });
               i += 2;
             }
+            this.page.totalSize = this.hashCachedData.length;
             this.data = this.hashCachedData.slice(start, end);
             this.loadingPageData = false;
             this.showPagination = true;
@@ -277,7 +281,6 @@ export class DataViewerComponent implements OnInit, OnChanges {
             this._store.dispatch(new ReqFetchTree({id: this.pageData.id}));
             this.hashCachedData = null;
             this.setCachedData = null;
-            this.pageData.item.len += ret.len;
             this.fetchData();
           }
         };

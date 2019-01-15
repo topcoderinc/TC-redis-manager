@@ -110,7 +110,7 @@
   </div>
   <mat-paginator
     *ngIf="showPagination"
-    [length]="pageData.item.len"
+    [length]="page.totalSize"
     [pageSizeOptions]="[10,20,50,100]"
     [pageIndex]="page.pageIndex"
     (page)="onPageEvent($event)"

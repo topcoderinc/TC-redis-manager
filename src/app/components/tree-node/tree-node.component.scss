@@ -1,5 +1,5 @@
 .item-line {
-  cursor: pointer;
+
   display: flex;
   flex-direction: row;
   padding: 2px;
@@ -28,11 +28,12 @@
       display: none;
     }
     .single-line {
+      cursor: pointer;
       height: 20px;
       display: flex;
       flex-direction: row;
       align-items: center;
-      padding-right: 24px;
+      padding-right: 12px;
 
       .value-type {
         font-size: 8px;

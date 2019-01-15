@@ -44,6 +44,8 @@ export class DataViewerComponent implements OnInit, OnChanges {
   public hashCachedData = null;
   public selectedMap = {};
   public showPagination = false;
+  // when item type is string
+  public stringValue: string;
 
   constructor(
     public dialogService: MatDialog,
@@ -232,6 +234,8 @@ export class DataViewerComponent implements OnInit, OnChanges {
         this.showPagination = true;
         this.data = this.hashCachedData.slice(start, end);
       }
+    } else if (type === 'string') {
+      this.stringValue = this.pageData.item.value;
     }
   }
 
@@ -287,12 +291,11 @@ export class DataViewerComponent implements OnInit, OnChanges {
    * on save string event
    */
   onSaveString() {
-    if (this.pageData.item.value.trim() === '') {
+    if (this.stringValue.trim() === '') {
       this.util.showMessage('The value cannot be empty.');
     } else {
-      this.pageData.item.value = this.pageData.item.value.trim();
       this.redisService.call(this.pageData.id,
-        [['set', this.pageData.item.key, this.pageData.item.value.trim()]]).subscribe(() => {
+        [['set', this.pageData.item.key, this.stringValue.trim()]]).subscribe(() => {
         this.util.showMessage('Updated successfully.');
       });
     }

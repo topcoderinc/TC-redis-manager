@@ -109,7 +109,7 @@
                #cliInput
                class="common-font-color"
                autocomplete="off"
-               placeholder="{{!currentInstance ?'Please select a redis instance to enter redis command'
+               placeholder="{{!currentInstance ?'Please select a redis connection to enter command.'
         : 'Enter Redis Command Here'}}" value=""
                (keydown)="onCliInputKeyDown($event)"
                [(ngModel)]="cliInputValue"

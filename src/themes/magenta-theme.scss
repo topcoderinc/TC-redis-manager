@@ -140,7 +140,7 @@ $app-bg-color: white;
     }
   }
   .error-font-color {
-    color: red;
+    color: #ffc4c4;
   }
 
   .current-instance-color {
@@ -170,4 +170,9 @@ $app-bg-color: white;
   background-color: $tmo-black;
   color: $tmo-white;
   @include magenta-app-colors
+}
+
+
+.magenta-theme .cli.mat-elevation-z12 {
+  box-shadow: 0px 7px 8px -4px rgba(0, 0, 0, 0.2), 0px 12px 17px 2px rgba(0, 0, 0, 0.14), 0px 5px 22px 4px rgba(0, 0, 0, 0.8);
 }

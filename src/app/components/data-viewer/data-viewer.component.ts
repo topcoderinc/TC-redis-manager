@@ -37,6 +37,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
   public page = {
     pageIndex: 0,
     pageSize: 20,
+    totalSize: 0
   };
   cli$: Observable<any> = null;
   public data = [];
@@ -44,6 +45,8 @@ export class DataViewerComponent implements OnInit, OnChanges {
   public hashCachedData = null;
   public selectedMap = {};
   public showPagination = false;
+  // when item type is string
+  public stringValue: string;
 
   constructor(
     public dialogService: MatDialog,
@@ -118,7 +121,6 @@ export class DataViewerComponent implements OnInit, OnChanges {
           this._store.dispatch(new ReqFetchTree({id: this.pageData.id}));
           this.hashCachedData = null;
           this.setCachedData = null;
-          this.pageData.item.len -= values.length;
           this.fetchData();
           this.util.showMessage('Deleted successfully.');
           if (cb) { cb(); }
@@ -176,7 +178,8 @@ export class DataViewerComponent implements OnInit, OnChanges {
     this.showPagination = false;
     if (type === 'list') {
       this.loadingPageData = true;
-      this.redisService.call(instanceId, [['LRANGE', key, start, end]]).subscribe(ret => {
+      this.redisService.call(instanceId, [['LRANGE', key, start, end], ['LLEN', key]]).subscribe(ret => {
+          this.page.totalSize = ret[1];
           this.data = injectValuesToArray(ret[0]);
           this.showPagination = true;
           this.loadingPageData = false;
@@ -184,7 +187,8 @@ export class DataViewerComponent implements OnInit, OnChanges {
       );
     } else if (type === 'zset') {
       this.loadingPageData = true;
-      this.redisService.call(instanceId, [['ZRANGE', key, start, end, 'withscores']]).subscribe(ret => {
+      this.redisService.call(instanceId, [['ZRANGE', key, start, end, 'withscores'], ['ZCARD', key]]).subscribe(ret => {
+          this.page.totalSize = ret[1];
           this.data = [];
           for (let i = 0; i < ret[0].length;) {
             this.data.push({
@@ -203,6 +207,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
         this.loadingPageData = true;
         this.redisService.call(instanceId, [['SMEMBERS', key]]).subscribe(ret => {
           this.setCachedData = injectValuesToArray(ret[0]);
+          this.page.totalSize = this.setCachedData.length;
           this.data = this.setCachedData.slice(start, end);
           this.loadingPageData = false;
           this.showPagination = true;
@@ -223,6 +228,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
               });
               i += 2;
             }
+            this.page.totalSize = this.hashCachedData.length;
             this.data = this.hashCachedData.slice(start, end);
             this.loadingPageData = false;
             this.showPagination = true;
@@ -232,6 +238,8 @@ export class DataViewerComponent implements OnInit, OnChanges {
         this.showPagination = true;
         this.data = this.hashCachedData.slice(start, end);
       }
+    } else if (type === 'string') {
+      this.stringValue = this.pageData.item.value;
     }
   }
 
@@ -273,7 +281,6 @@ export class DataViewerComponent implements OnInit, OnChanges {
             this._store.dispatch(new ReqFetchTree({id: this.pageData.id}));
             this.hashCachedData = null;
             this.setCachedData = null;
-            this.pageData.item.len += ret.len;
             this.fetchData();
           }
         };
@@ -287,13 +294,12 @@ export class DataViewerComponent implements OnInit, OnChanges {
    * on save string event
    */
   onSaveString() {
-    if (this.pageData.item.value.trim() === '') {
-      this.snackBar.open('The value cannot be empty.', 'OK', {duration: 3000});
+    if (this.stringValue.trim() === '') {
+      this.util.showMessage('The value cannot be empty.');
     } else {
-      this.pageData.item.value = this.pageData.item.value.trim();
       this.redisService.call(this.pageData.id,
-        [['set', this.pageData.item.key, this.pageData.item.value.trim()]]).subscribe(() => {
-        this.util.showMessage('Updated successfully');
+        [['set', this.pageData.item.key, this.stringValue.trim()]]).subscribe(() => {
+        this.util.showMessage('Updated successfully.');
       });
     }
   }
@@ -330,7 +336,8 @@ export class DataViewerComponent implements OnInit, OnChanges {
     this.dialogService.open(ConfirmDialogComponent, {
       width: '320px', data: {
         title: 'Delete Confirmation',
-        message: `Are you sure you want to delete the key "${this.pageData.item.key}"?`,
+        message: `Are you sure you want to delete
+        ${this.pageData.item.type === 'folder' ?  'all the keys inside this branch' : 'the key'}: "${this.pageData.item.key}"?`,
       }
     }).afterClosed().subscribe(ret => {
       if (ret) {
@@ -373,7 +380,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
     });
 
     if (keys.length <= 0) {
-      return this.util.showMessage('You need to select a row first');
+      return this.util.showMessage('You need to select a row first.');
     }
 
     if (this.pageData.item.type === 'hash') {

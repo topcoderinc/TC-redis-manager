@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>Add Redis Server</h1>
+<h1 mat-dialog-title>Add Redis Connection</h1>
 <div mat-dialog-content>
   <mat-form-field>
     <input matInput placeholder="Name" [(ngModel)]="data.name">
@@ -9,7 +9,7 @@
   </mat-form-field>
 
   <mat-form-field>
-    <input matInput [min]="1" type="number" placeholder="Port" [(ngModel)]="data.port">
+    <input matInput [min]="1" [max]="65535" type="number" placeholder="Port" [(ngModel)]="data.port">
   </mat-form-field>
 
   <mat-form-field>

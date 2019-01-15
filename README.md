@@ -8,7 +8,7 @@
 
 ### Redis
 
-- follow here https://redis.io/download download and compile redis server  or follow this commands
+- follow here https://redis.io/download download and compile redis server  or follow these commands
 
   ```
   $ wget http://download.redis.io/releases/redis-4.0.11.tar.gz
@@ -22,13 +22,13 @@
 
 ### Local run
 
-- goto submission folder, run `npm i` first
+- go to submission folder, run `npm i` first
 - for a local build, run `npm run local`, and use browsers open http://127.0.0.1:3003
 - for a production build, run `npm run start`, and use browsers open http://127.0.0.1:3003
 
 ### Docker build and run
 
-- build image, make sure your dokcer already startup
+- build image, make sure your docker already startup
   - run `./build-docker-image.sh` to build docker image, the image named **tc/redis-manager**
   - after build succeed, run `docker run -p 3003:3003 -it tc/redis-manager` to run image
   - then use browsers open http://127.0.0.1:3003
@@ -69,8 +69,8 @@
   
     - Other commands may need according to functions.
 
-  - which commands are dependent on one another?
+  - what commands are dependent on one another?
 
-    a web app function  dependent a lot of command, so, in fact, there is no command dependent on one another command.
+    a web app function dependent on a lot of command, so, in fact, there is no command dependent on one another command.
 
 Please note this app does not function in IE11+

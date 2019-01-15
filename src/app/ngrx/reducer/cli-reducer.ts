@@ -53,6 +53,10 @@ export function reducer(state = initialState, action) {
       state.expanded = !state.expanded;
       return state;
     }
+    case CliActions.CollapseCli: {
+      state.expanded = false;
+      return state;
+    }
     default: {
       return state;
     }

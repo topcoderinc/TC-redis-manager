@@ -6,6 +6,9 @@
     mat-form-field {
       flex: 1;
     }
+    &.import-value {
+      margin-top: -13px;
+    }
     .left-part {
       font-size: 14px;
       width: 100px;
@@ -16,7 +19,7 @@
       display: flex;
 
       .label {
-        margin-top: 16px;
+        margin-top: 22px;
         margin-bottom: 16px;
       }
       .commands {

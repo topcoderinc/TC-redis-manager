@@ -88,7 +88,7 @@
       <button mat-icon-button (click)="toggleCli()"
               *ngIf="currentInstance"
               [disabled]="!currentInstance"
-              matTooltip="{{currentInstance?'Toggle':''}}">
+              matTooltip="{{currentInstance?'Toggle Panel':''}}">
         <i class="material-icons">{{(cli$ | async)?.expanded ? 'keyboard_arrow_down':'keyboard_arrow_up'}}</i>
       </button>
 

@@ -99,7 +99,7 @@ export class AppComponent implements OnInit {
    */
   onAddServer() {
     const ref = this.dialogService.open(AddServerDialogComponent, {
-      width: '250px',
+      width: '280px',
       data: {name: 'localhost', password: '', ip: 'localhost', port: 6379, db: 0},
     });
     ref.afterClosed().subscribe(result => {
@@ -120,12 +120,12 @@ export class AppComponent implements OnInit {
 
   onDeleteServer() {
     if (!this.currentInstance) {
-      this.util.showMessage('You need to select Redis instance first');
+      this.util.showMessage('You need to select Redis instance first.');
       return;
     }
     this.dialogService.open(ConfirmDialogComponent, {
       width: '250px', data: {
-        title: 'Delete Confirm',
+        title: 'Delete Confirmation',
         message: `Are you sure you want to delete this server?`
       }
     }).afterClosed().subscribe(ret => {
@@ -416,7 +416,7 @@ export class AppComponent implements OnInit {
     this.instances$.pipe(take(1)).subscribe((instances) => {
       this.dialogService.open(ImportDataDialogComponent, {
         width: '560px', data: {
-          title: 'Delete Confirm',
+          title: 'Delete Confirmation',
           message: `Are you sure you want to delete this server?`,
           opType: 'import',
           currentInstance: instance,
@@ -434,7 +434,7 @@ export class AppComponent implements OnInit {
     this.instances$.pipe(take(1)).subscribe((instances) => {
       this.dialogService.open(ImportDataDialogComponent, {
         width: '560px', data: {
-          title: 'Delete Confirm',
+          title: 'Delete Confirmation',
           message: `Are you sure you want to delete this server?`,
           opType: 'export',
           currentInstance: instance,

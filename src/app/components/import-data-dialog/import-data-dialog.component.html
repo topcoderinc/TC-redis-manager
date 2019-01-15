@@ -14,7 +14,7 @@
   </div>
 
 
-  <div class="row" *ngIf="opType === 'import'">
+  <div class="row import-value" *ngIf="opType === 'import'">
     <div class="left-part">
       <div class="label">Value</div>
       <div class="commands">
@@ -47,7 +47,7 @@
 
   <div class="row radio-group" *ngIf="opType === 'export'">
     <div class="left-part">
-      Data type
+      Data Type
     </div>
 
     <mat-radio-group [(ngModel)]="exportType">

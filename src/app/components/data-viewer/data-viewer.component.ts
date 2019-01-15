@@ -292,7 +292,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
    */
   onSaveString() {
     if (this.stringValue.trim() === '') {
-      this.snackBar.open('The value cannot be empty.', 'OK', {duration: 3000});
+      this.util.showMessage('The value cannot be empty.');
     } else {
       this.redisService.call(this.pageData.id,
         [['set', this.pageData.item.key, this.stringValue.trim()]]).subscribe(() => {
@@ -376,7 +376,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
     });
 
     if (keys.length <= 0) {
-      return this.util.showMessage('You need to select a row first');
+      return this.util.showMessage('You need to select a row first.');
     }
 
     if (this.pageData.item.type === 'hash') {

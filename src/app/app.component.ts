@@ -106,7 +106,7 @@ export class AppComponent implements OnInit {
       if (result) {
         this.findInstanceByName(result.name).then(instance => {
           if (instance) {
-            this.util.showMessage('The instance name already exists.');
+            this.util.showMessage('The connection name already exists.');
             return;
           } else {
             const newInstance = {id: uuid(), serverModel: result};
@@ -120,13 +120,13 @@ export class AppComponent implements OnInit {
 
   onDeleteServer() {
     if (!this.currentInstance) {
-      this.util.showMessage('You need to select Redis instance first.');
+      this.util.showMessage('You need to select a Redis connection first.');
       return;
     }
     this.dialogService.open(ConfirmDialogComponent, {
       width: '250px', data: {
         title: 'Delete Confirmation',
-        message: `Are you sure you want to delete this server?`
+        message: `Are you sure you want to delete this Redis connection?`
       }
     }).afterClosed().subscribe(ret => {
       if (ret) {
@@ -145,7 +145,7 @@ export class AppComponent implements OnInit {
     this.instances$.subscribe(instances => {
       const ins = instances.find(i => i.selected === true);
       if (!ins) {
-        this.util.showMessage('You need to select a Redis instance first.');
+        this.util.showMessage('You need to select a Redis connection first.');
         return;
       }
       this._store.dispatch( new ReqRedisConnect({
@@ -248,7 +248,7 @@ export class AppComponent implements OnInit {
       this._store.dispatch(new SelectRedis({id}));
       this.findInstance(id).then(instance => {
         if (!instance['id']) {
-          this.util.showMessage(`The Redis instance with id: ${id} cannot be found.`);
+          this.util.showMessage(`The Redis connection with id: ${id} cannot be found.`);
           return;
         }
         this.currentInstance = instance;
@@ -417,7 +417,7 @@ export class AppComponent implements OnInit {
       this.dialogService.open(ImportDataDialogComponent, {
         width: '560px', data: {
           title: 'Delete Confirmation',
-          message: `Are you sure you want to delete this server?`,
+          message: `Are you sure you want to delete this Redis connection?`,
           opType: 'import',
           currentInstance: instance,
           instances,
@@ -435,7 +435,7 @@ export class AppComponent implements OnInit {
       this.dialogService.open(ImportDataDialogComponent, {
         width: '560px', data: {
           title: 'Delete Confirmation',
-          message: `Are you sure you want to delete this server?`,
+          message: `Are you sure you want to delete this Redis connection?`,
           opType: 'export',
           currentInstance: instance,
           instances,

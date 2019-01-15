@@ -9,7 +9,7 @@
   <div class="body bg-color">
     <div class="left-part" [style.width.px]="dragObject.currentWidth">
       <div class="side-header mat-elevation-z1">
-        <button mat-icon-button matTooltip="Refresh Redis Instance" (click)="onRefresh()">
+        <button mat-icon-button matTooltip="Refresh" (click)="onRefresh()">
           <i class="material-icons">refresh</i>
         </button>
 
@@ -17,7 +17,7 @@
           <i class="material-icons">add_circle</i>
         </button>
         <button mat-icon-button
-                matTooltip="Remove This Redis Server"
+                matTooltip="Remove Redis Connection"
                 (click)="onDeleteServer()"onclick="this.blur()" >
 
           <i class="material-icons delete-btn">delete</i>

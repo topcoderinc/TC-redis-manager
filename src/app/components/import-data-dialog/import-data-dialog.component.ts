@@ -119,8 +119,9 @@ export class ImportDataDialogComponent implements OnInit {
         numberOfSucceed += (!!v && v.toString().toLowerCase().indexOf('err') < 0) ? 1 : 0;
       });
       numberOfSucceed -= this.flushDB ? 1 : 0;
-      this.util.showMessage(`${numberOfSucceed} row(s) are imported successfully, ${totalRow
-      - numberOfSucceed} row(s) fail.`);
+      const numberOfFailed = totalRow - numberOfSucceed;
+      this.util.showMessage(`${numberOfSucceed} row${numberOfSucceed !== 1 ? 's were' : ' was'} imported
+                            successfully, ${numberOfFailed} row${numberOfFailed !== 1 ? 's have' : ' has'} failed.`);
       this.dialogRef.close();
       this._store.dispatch(new ReqFetchTree({id: this.instanceId}));
     }, err => {

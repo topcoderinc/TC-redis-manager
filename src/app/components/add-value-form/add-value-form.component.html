@@ -38,7 +38,8 @@
              cdkAutosizeMaxRows="7"></textarea>
     </mat-form-field>
 
-    <button mat-icon-button (click)="onRemoveItem(getItemArray(),i)" *ngIf="!isEditMode && getItemArray().length > 1">
+    <button mat-icon-button (click)="onRemoveItem(getItemArray(),i)" *ngIf="!isEditMode && getItemArray().length > 1"
+            matTooltip="Delete Value">
       <i class="material-icons delete-icon">delete</i>
     </button>
   </div>

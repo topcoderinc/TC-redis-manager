@@ -276,9 +276,8 @@ export class DataViewerComponent implements OnInit, OnChanges {
     }).afterClosed().subscribe(ret => {
       if (ret) {
         ret.onSuccess = () => {
-          if (this.pageData.item.type === 'folder') {
-          } else {
-            this._store.dispatch(new ReqFetchTree({id: this.pageData.id}));
+          this._store.dispatch(new ReqFetchTree({id: this.pageData.id}));
+          if (this.pageData.item.type !== 'folder') {
             this.hashCachedData = null;
             this.setCachedData = null;
             this.fetchData();

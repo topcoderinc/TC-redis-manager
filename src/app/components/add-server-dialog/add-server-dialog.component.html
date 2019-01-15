@@ -9,7 +9,7 @@
   </mat-form-field>
 
   <mat-form-field>
-    <input matInput [min]="1" type="number" placeholder="Port" [(ngModel)]="data.port">
+    <input matInput [min]="1" [max]="65535" type="number" placeholder="Port" [(ngModel)]="data.port">
   </mat-form-field>
 
   <mat-form-field>

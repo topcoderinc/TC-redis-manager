@@ -35,7 +35,7 @@
                 [(ngModel)]="stringValue"
                 #autosize="cdkTextareaAutosize"
                 cdkAutosizeMinRows="2"
-                [maxLength]="2000"></textarea>
+                cdkAutosizeMaxRows="{{(cli$ | async)?.expanded ? 8 : 15}}"></textarea>
     </mat-form-field>
 
     <button mat-raised-button

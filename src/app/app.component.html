@@ -81,14 +81,14 @@
       <button mat-icon-button (click)="clearHistory()"
               *ngIf="currentInstance"
               [disabled]="!currentInstance"
-              matTooltip="{{currentInstance?'Clear All History':''}}">
+              matTooltip="{{currentInstance?'Clear History':''}}">
         <i class="material-icons">clear_all</i>
       </button>
 
       <button mat-icon-button (click)="toggleCli()"
               *ngIf="currentInstance"
               [disabled]="!currentInstance"
-              matTooltip="{{currentInstance?'Toggle Cli panel':''}}">
+              matTooltip="{{currentInstance?'Toggle':''}}">
         <i class="material-icons">{{(cli$ | async)?.expanded ? 'keyboard_arrow_down':'keyboard_arrow_up'}}</i>
       </button>
 

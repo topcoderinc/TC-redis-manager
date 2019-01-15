@@ -9,7 +9,8 @@ export enum CliActions {
   ClearHistory = 'Clear History', // clear all cli history
   ToggleCli = 'Toggle Cli', // toggle cli panel
   ClearPreviewIndex = 'Clear Preview Index', // clear preview index
-  PreviewIndexUpdate = 'Preview Index Update' // update preview index
+  PreviewIndexUpdate = 'Preview Index Update', // update preview index
+  CollapseCli = 'Collapse Cli' // collpase cli panel
 }
 
 export class AddCommand implements Action {
@@ -40,4 +41,8 @@ export class PreviewIndexUpdate implements Action {
 
 export class ClearPreviewIndex implements Action {
   readonly type = CliActions.ClearPreviewIndex;
+}
+
+export class CollapseCli implements Action {
+  readonly type = CliActions.CollapseCli;
 }

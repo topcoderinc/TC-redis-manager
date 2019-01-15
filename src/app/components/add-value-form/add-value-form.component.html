@@ -9,19 +9,6 @@
 
 <div *ngIf="type !== 'String'" class="add-form-list">
   <div class="line" *ngFor="let v of getItemArray(); let i = index">
-    <mat-form-field *ngIf="type === 'List' || type === 'Set' || type === 'Ordered Set'">
-      <input matInput placeholder="Value"
-             (change)="onValueChange()"
-             [(ngModel)]="getItemArray()[i].value">
-    </mat-form-field>
-
-    <mat-form-field *ngIf="type === 'Ordered Set'">
-      <input matInput type="number" placeholder="Score"
-             (change)="onValueChange()"
-             [(ngModel)]="getItemArray()[i].score"
-             type="number">
-    </mat-form-field>
-
     <mat-form-field *ngIf="type === 'Hash Map'" style="flex-grow:0">
       <input matInput placeholder="Key"
              [readonly]="isEditMode && !v.isNew"
@@ -29,13 +16,20 @@
              [(ngModel)]="getItemArray()[i].key">
     </mat-form-field>
 
-    <mat-form-field *ngIf="type === 'Hash Map'">
+    <mat-form-field *ngIf="type === 'List' || type === 'Set' || type === 'Ordered Set' || type === 'Hash Map'">
       <textarea matInput placeholder="Value"
              (change)="onValueChange()"
              [(ngModel)]="getItemArray()[i].value"
              cdkTextareaAutosize
              cdkAutosizeMinRows="1"
              cdkAutosizeMaxRows="7"></textarea>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="type === 'Ordered Set'">
+      <input matInput type="number" placeholder="Score"
+             (change)="onValueChange()"
+             [(ngModel)]="getItemArray()[i].score"
+             type="number">
     </mat-form-field>
 
     <button mat-icon-button (click)="onRemoveItem(getItemArray(),i)" *ngIf="!isEditMode && getItemArray().length > 1">

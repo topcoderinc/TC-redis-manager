@@ -125,7 +125,7 @@ export class AppComponent implements OnInit {
     }
     this.dialogService.open(ConfirmDialogComponent, {
       width: '250px', data: {
-        title: 'Delete Confirm',
+        title: 'Delete Confirmation',
         message: `Are you sure you want to delete this server?`
       }
     }).afterClosed().subscribe(ret => {
@@ -416,7 +416,7 @@ export class AppComponent implements OnInit {
     this.instances$.pipe(take(1)).subscribe((instances) => {
       this.dialogService.open(ImportDataDialogComponent, {
         width: '560px', data: {
-          title: 'Delete Confirm',
+          title: 'Delete Confirmation',
           message: `Are you sure you want to delete this server?`,
           opType: 'import',
           currentInstance: instance,
@@ -434,7 +434,7 @@ export class AppComponent implements OnInit {
     this.instances$.pipe(take(1)).subscribe((instances) => {
       this.dialogService.open(ImportDataDialogComponent, {
         width: '560px', data: {
-          title: 'Delete Confirm',
+          title: 'Delete Confirmation',
           message: `Are you sure you want to delete this server?`,
           opType: 'export',
           currentInstance: instance,

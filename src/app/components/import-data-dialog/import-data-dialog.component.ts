@@ -80,7 +80,6 @@ export class ImportDataDialogComponent implements OnInit {
     this.redisService.export(this.instanceId, this.exportType).subscribe(rsp => {
       const data = new Blob([rsp], { type: 'text/plain;charset=utf-8' });
       saveAs(data, `db-${Date.now()}.${this.exportType}`);
-      this.util.showMessage('Exported successfully.');
     }, err => {
       this.util.showMessage('Fail to export redis commands: ' + this.util.getErrorMessage(err));
     });

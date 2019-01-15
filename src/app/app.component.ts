@@ -99,7 +99,7 @@ export class AppComponent implements OnInit {
    */
   onAddServer() {
     const ref = this.dialogService.open(AddServerDialogComponent, {
-      width: '250px',
+      width: '280px',
       data: {name: 'localhost', password: '', ip: 'localhost', port: 6379, db: 0},
     });
     ref.afterClosed().subscribe(result => {

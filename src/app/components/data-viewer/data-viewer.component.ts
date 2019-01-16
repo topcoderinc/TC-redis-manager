@@ -7,7 +7,7 @@ import _ from 'lodash';
 import {UtilService} from '../../services/util.service';
 import {Observable} from 'rxjs';
 import {Store} from '@ngrx/store';
-import {ReqFetchTree} from '../../ngrx/actions/redis-actions';
+import {ReqFetchTree, RedisConnectFailed} from '../../ngrx/actions/redis-actions';
 
 /**
  * the backend type to frontend type map
@@ -124,7 +124,10 @@ export class DataViewerComponent implements OnInit, OnChanges {
           this.fetchData();
           this.util.showMessage('Deleted successfully.');
           if (cb) { cb(); }
-        }, () => this.util.showMessage('Delete is failed.'));
+        }, () => {
+          this.util.showMessage('Deleted Failed.');
+          this._store.dispatch(new RedisConnectFailed({id: this.pageData.id}))
+        }
       }
     });
   }
@@ -180,7 +183,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
       this.loadingPageData = true;
       this.redisService.call(instanceId, [['LRANGE', key, start, end], ['LLEN', key]]).subscribe(ret => {
           this.page.totalSize = ret[1];
-          this.data = injectValuesToArray(ret[0]);
+          this.data = injectValuesToArray(ret[0].result);
           this.showPagination = true;
           this.loadingPageData = false;
         }
@@ -189,12 +192,13 @@ export class DataViewerComponent implements OnInit, OnChanges {
       this.loadingPageData = true;
       this.redisService.call(instanceId, [['ZRANGE', key, start, end, 'withscores'], ['ZCARD', key]]).subscribe(ret => {
           this.page.totalSize = ret[1];
+          const { result } = ret[0];
           this.data = [];
-          for (let i = 0; i < ret[0].length;) {
+          for (let i = 0; i < result.length;) {
             this.data.push({
               index: this.page.pageIndex * this.page.pageSize + (i / 2),
-              score: parseFloat(ret[0][i + 1]),
-              value: ret[0][i],
+              score: parseFloat(result[i + 1]),
+              value: result[i],
             });
             i += 2;
           }
@@ -206,7 +210,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
       if (!this.setCachedData) {
         this.loadingPageData = true;
         this.redisService.call(instanceId, [['SMEMBERS', key]]).subscribe(ret => {
-          this.setCachedData = injectValuesToArray(ret[0]);
+          this.setCachedData = injectValuesToArray(ret[0].result);
           this.page.totalSize = this.setCachedData.length;
           this.data = this.setCachedData.slice(start, end + 1);
           this.loadingPageData = false;
@@ -222,10 +226,11 @@ export class DataViewerComponent implements OnInit, OnChanges {
         this.loadingPageData = true;
         this.redisService.call(instanceId, [['HGETALL', key]]).subscribe(ret => {
             this.hashCachedData = [];
-            for (let i = 0; i < ret[0].length;) {
+            const { result } = ret[0];
+            for (let i = 0; i < result.length;) {
               this.hashCachedData.push({
-                key: ret[0][i],
-                value: ret[0][i + 1],
+                key: result[i],
+                value: result[i + 1],
               });
               i += 2;
             }
@@ -244,7 +249,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
       this.loadingPageData = true;
       this.redisService.call(instanceId, [['GET', key]]).subscribe(ret => {
         this.loadingPageData = false;
-        this.stringValue = ret[0];
+        this.stringValue = ret[0].result;
       });
     }
   }
@@ -358,8 +363,8 @@ export class DataViewerComponent implements OnInit, OnChanges {
           this.onDeleteValue.emit();
           this._store.dispatch(new ReqFetchTree({id: this.pageData.id}));
         }, e => {
-          this.util.showMessage('Delete is failed.');
-          console.error(e);
+          this.util.showMessage('Delete Failed.');
+          this._store.dispatch(new RedisConnectFailed({id: this.pageData.id}))
         });
       }
     });

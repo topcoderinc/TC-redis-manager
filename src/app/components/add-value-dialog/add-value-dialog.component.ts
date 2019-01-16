@@ -173,18 +173,6 @@ export class AddValueDialogComponent implements OnInit {
     }
   }
 
-  /**
-   * remove exist key
-   * @param ret the ret include id and key
-   * @param cb the callback
-   */
-  removeExistKey(ret, cb) {
-    this.redisService.call(ret.id, [['DEL', ret.key]]).subscribe(() => {
-      cb();
-    }, err => {
-      this.util.showMessage('Delete is failed: ' + this.util.getErrorMessage(err));
-    });
-  }
 
   /**
    * check is exist
@@ -193,7 +181,7 @@ export class AddValueDialogComponent implements OnInit {
    */
   checkIsExist(ret, cb) {
     this.redisService.call(ret.id, [['EXISTS', ret.key]]).subscribe((r) => {
-      if (r && r.length > 0 && r[0] > 0) { // exist
+      if (!r[0].error && r[0].result > 0) { // exist
         this.dialogService.open(ConfirmDialogComponent, {
           width: '360px', data: {
             title: `Key "${ret.key}" Already Exists`,
@@ -201,7 +189,7 @@ export class AddValueDialogComponent implements OnInit {
           }
         }).afterClosed().subscribe(cr => {
           if (cr) {
-            this.removeExistKey(ret, cb);
+            cb();
           }
         });
       } else {

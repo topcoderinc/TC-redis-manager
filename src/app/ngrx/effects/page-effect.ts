@@ -34,26 +34,30 @@ export class PageEffect {
           action['payload'].id,
           [['info']]).pipe(
           map(ret => {
-            const rawInfo = ret[0];
-            const result = [];
-            rawInfo.split('\n').forEach(line => {
-              if (line.indexOf('#') === 0) {
-                return;
-              }
-              if (line.trim() === '') {
-                return;
-              }
-              const parts = line.split(':');
-              result.push({
-                key: parts[0].split('_').join(' '),
-                value: parts[1],
+            if (!ret[0].error) {
+              const rawInfo = ret[0].result;
+              const result = [];
+              rawInfo.split('\n').forEach(line => {
+                if (line.indexOf('#') === 0) {
+                  return;
+                }
+                if (line.trim() === '') {
+                  return;
+                }
+                const parts = line.split(':');
+                result.push({
+                  key: parts[0].split('_').join(' '),
+                  value: parts[1],
+                });
               });
-            });
-            return new LoadedPage({
-              item: result,
-              requestId: action['payload'].requestId,
-              id: action['payload'].id
-            });
+              return new LoadedPage({
+                item: result,
+                requestId: action['payload'].requestId,
+                id: action['payload'].id
+              });
+            } else {
+              this.util.showMessage('Failed to load instance.');
+            }
           }),
           catchError(() => {
             const id = action['payload'].id;

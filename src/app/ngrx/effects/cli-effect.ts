@@ -31,13 +31,17 @@ export class CliEffect {
           action['payload'].redisId,
           [action['payload'].command]).pipe(
           map(ret => {
+            const { error } = ret[0];
+            const result = error ? ret[0].message : ret[0].result;
+
             if (action['payload'].cb) {
-              action['payload'].cb(false);
+              action['payload'].cb(error);
             }
+            
             return new CommandRunFinished({
-              result: ret[0],
+              result,
               id: action['payload'].id,
-              error: !(ret[0] && ret[0].toString() && ret[0].toString().toLowerCase().indexOf('err') < 0),
+              error,
             });
           }),
           catchError((e) => {

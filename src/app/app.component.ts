@@ -219,16 +219,20 @@ export class AppComponent implements OnInit {
    */
   onNewValue(newValue) {
     this.redisService.call(newValue.id, [newValue.rawLine]).subscribe(ret => {
-      if (newValue.from === 'root') {
-        this.onRefresh();
+      if (!ret[0].error) {
+        if (newValue.from === 'root') {
+          this.onRefresh();
+        }
+        if (newValue.onSuccess) {
+          newValue.onSuccess(newValue);
+        }
+        this.util.showMessage(newValue.edit ? 'Updated successfully.' : 'Added successfully.');
+      } else {
+        this.util.showMessage('Failed to add the value: ' + ret[0].message);
       }
-      if (newValue.onSuccess) {
-        newValue.onSuccess(newValue);
-      }
-      this.util.showMessage(newValue.edit ? 'Updated successfully.' : 'Added successfully.');
     }, e => {
-      console.error(e.error.message);
-      this.util.showMessage('Fail to add the value: ' + this.util.getErrorMessage(e));
+      this.util.showMessage('Failed to add the value: ' + this.util.getErrorMessage(e));
+      this._store.dispatch(new RedisConnectFailed({id: this.pageData.id}))
     });
   }
 

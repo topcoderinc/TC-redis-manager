@@ -113,10 +113,10 @@ export class ImportDataDialogComponent implements OnInit {
     });
 
     const totalRow = this.flushDB ? commands.length - 1 : commands.length;
-    this.redisService.call(this.instanceId, commands).subscribe((rsp) => {
+    this.redisService.call(this.instanceId, commands).subscribe((results) => {
       let numberOfSucceed = 0;
-      _.each(rsp, v => {
-        numberOfSucceed += (!!v && v.toString().toLowerCase().indexOf('err') < 0) ? 1 : 0;
+      _.each(results, v => {
+        numberOfSucceed += v.error ? 0 : 1;
       });
       numberOfSucceed -= this.flushDB ? 1 : 0;
       const numberOfFailed = totalRow - numberOfSucceed;

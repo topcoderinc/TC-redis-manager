@@ -208,14 +208,14 @@ export class DataViewerComponent implements OnInit, OnChanges {
         this.redisService.call(instanceId, [['SMEMBERS', key]]).subscribe(ret => {
           this.setCachedData = injectValuesToArray(ret[0]);
           this.page.totalSize = this.setCachedData.length;
-          this.data = this.setCachedData.slice(start, end);
+          this.data = this.setCachedData.slice(start, end + 1);
           this.loadingPageData = false;
           this.showPagination = true;
         });
       } else {
         this.showPagination = true;
         this.page.totalSize = this.setCachedData.length;
-        this.data = this.setCachedData.slice(start, end);
+        this.data = this.setCachedData.slice(start, end + 1);
       }
     } else if (type === 'hash') {
       if (!this.hashCachedData) {
@@ -230,7 +230,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
               i += 2;
             }
             this.page.totalSize = this.hashCachedData.length;
-            this.data = this.hashCachedData.slice(start, end);
+            this.data = this.hashCachedData.slice(start, end + 1);
             this.loadingPageData = false;
             this.showPagination = true;
           }
@@ -238,7 +238,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
       } else {
         this.showPagination = true;
         this.page.totalSize = this.hashCachedData.length;
-        this.data = this.hashCachedData.slice(start, end);
+        this.data = this.hashCachedData.slice(start, end + 1);
       }
     } else if (type === 'string') {
       this.stringValue = this.pageData.item.value;

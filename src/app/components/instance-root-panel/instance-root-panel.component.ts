@@ -44,7 +44,7 @@ export class InstanceRootPanelComponent implements OnInit {
    */
   getData() {
     const start = this.page.pageIndex * this.page.pageSize;
-    return this.pageData.item.slice(start, start + this.page.pageSize - 1);
+    return this.pageData.item.slice(start, start + this.page.pageSize);
   }
 
   /**

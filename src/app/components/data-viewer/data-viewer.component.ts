@@ -214,6 +214,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
         });
       } else {
         this.showPagination = true;
+        this.page.totalSize = this.setCachedData.length;
         this.data = this.setCachedData.slice(start, end);
       }
     } else if (type === 'hash') {
@@ -236,6 +237,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
         );
       } else {
         this.showPagination = true;
+        this.page.totalSize = this.hashCachedData.length;
         this.data = this.hashCachedData.slice(start, end);
       }
     } else if (type === 'string') {

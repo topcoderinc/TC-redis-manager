@@ -239,7 +239,11 @@ export class DataViewerComponent implements OnInit, OnChanges {
         this.data = this.hashCachedData.slice(start, end);
       }
     } else if (type === 'string') {
-      this.stringValue = this.pageData.item.value;
+      this.loadingPageData = true;
+      this.redisService.call(instanceId, [['GET', key]]).subscribe(ret => {
+        this.loadingPageData = false;
+        this.stringValue = ret[0];
+      });
     }
   }
 

@@ -399,6 +399,7 @@ export class DataViewerComponent implements OnInit, OnChanges {
    */
   onPageEvent(page) {
     this.page = page;
+    this.selectedMap = {};
     this.fetchData();
   }
 

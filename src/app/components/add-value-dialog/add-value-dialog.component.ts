@@ -54,6 +54,10 @@ export class AddValueDialogComponent implements OnInit {
       this.title = this.isEditMode() ? 'Edit Records' : 'Add New Record';
     } else {
       this.title = this.isEditMode() ? 'Edit Value' : 'Add New Value';
+      if (this.isEditMode()
+        && this.data.values && this.data.values.hashMapValues && this.data.values.hashMapValues.length > 1) {
+        this.title = 'Edit Values';
+      }
     }
   }
 

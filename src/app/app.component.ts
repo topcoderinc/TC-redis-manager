@@ -175,6 +175,7 @@ export class AppComponent implements OnInit {
     if (!this.dragObject.pressed) {
       return;
     }
+    evt.preventDefault();
     if (evt.clientX + 10 <= this.dragObject.minWidth) {
       return;
     }

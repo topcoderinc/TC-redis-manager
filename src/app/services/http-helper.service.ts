@@ -3,7 +3,7 @@ import {Observable, throwError, of} from 'rxjs';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import * as _ from 'lodash';
 import {environment} from '../../environments/environment';
-import {catchError} from 'rxjs/operators';
+import {catchError, delay} from 'rxjs/operators';
 
 export const API_BASE_URL = environment.URI;
 
@@ -24,7 +24,7 @@ export class HttpHelperService {
   get(url: string, options?: any): Observable<any> {
     return this.http
       .get(API_BASE_URL + url, this.requestOptions(options))
-      .pipe(catchError(err => this.catchError(err)));
+      .pipe(delay(1000), catchError(err => this.catchError(err)));
   }
 
   /**
@@ -38,7 +38,7 @@ export class HttpHelperService {
   post(url: string, body: any, options?: any, isUpload?: boolean): Observable<any> {
     return this.http
       .post(API_BASE_URL + url, body, this.requestOptions(options, isUpload))
-      .pipe(catchError(err => this.catchError(err)));
+      .pipe(delay(1000), catchError(err => this.catchError(err)));
   }
 
   /**

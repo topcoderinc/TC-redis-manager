@@ -57,6 +57,7 @@ export class AppComponent implements OnInit {
 
   public dragObject = {
     minWidth: 250,
+    maxWidth: 600,
     currentWidth: 300,
     startClientX: 0,
     pressed: false,
@@ -176,7 +177,7 @@ export class AppComponent implements OnInit {
       return;
     }
     evt.preventDefault();
-    if (evt.clientX + 10 <= this.dragObject.minWidth) {
+    if ((evt.clientX + 10 <= this.dragObject.minWidth) || (evt.clientX >= this.dragObject.maxWidth)) {
       return;
     }
     this.dragObject.currentWidth = evt.clientX + 10;

@@ -4,6 +4,11 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import * as _ from 'lodash';
 import {environment} from '../../environments/environment';
 import {catchError, delay} from 'rxjs/operators';
+import {Store} from '@ngrx/store';
+
+import {RedisConnectFailed} from '../ngrx/actions/redis-actions';
+import {REDIS_INSTANCES_KEY} from '../ngrx/reducer/redis-reducer';
+import {UtilService} from './util.service';
 
 export const API_BASE_URL = environment.URI;
 
@@ -12,8 +17,11 @@ export const API_BASE_URL = environment.URI;
 })
 
 export class HttpHelperService {
-  constructor(private http: HttpClient) {
-  }
+  constructor(
+    private http: HttpClient,
+    private util: UtilService,
+    private _store: Store<any>
+  ) { }
 
   /**
    * Performs a request with `get` http method.
@@ -45,7 +53,20 @@ export class HttpHelperService {
    * catches the auth error
    * @param error the error response
    */
-  catchError(error: Response): Observable<Response> {
+  catchError(error: any): Observable<any> {
+    const err = error.error;
+    if (err.code === 500) {
+      const instancesString = localStorage.getItem(REDIS_INSTANCES_KEY);
+      const instances = instancesString ? JSON.parse(instancesString) : [];
+      const instance = _.find(instances, {'id': err.instanceId});console.log('dsadas');console.log(instance);
+      if (instance) {
+        const id = instance.id;
+        const host = instance.serverModel.name;
+        const port = instance.serverModel.port;
+        this.util.showMessage(`Fail to connect Redis server at ${host}:${port}.`);
+        this._store.dispatch(new RedisConnectFailed({id}));
+      }
+    }
     return throwError(error);
   }
 

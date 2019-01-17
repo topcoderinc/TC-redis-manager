@@ -6,7 +6,7 @@ import {RedisActions} from '../actions/redis-actions';
 import {RedisInstance} from '../../models/redis-instance';
 import _ from 'lodash';
 
-const REDIS_INSTANCES_KEY = 'REDIS_INSTANCES_KEY';
+export const REDIS_INSTANCES_KEY = 'REDIS_INSTANCES_KEY';
 const defaultState = [{serverModel: {name: 'default-local', ip: 'localhost', port: 6379, db: 0, password: ''}, id: uuid()}];
 let initState = defaultState;
 

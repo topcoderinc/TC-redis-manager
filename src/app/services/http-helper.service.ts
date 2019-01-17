@@ -5,8 +5,10 @@ import * as _ from 'lodash';
 import {environment} from '../../environments/environment';
 import {catchError, delay} from 'rxjs/operators';
 import {Store} from '@ngrx/store';
+import {MatDialog} from '@angular/material';
 
 import {RedisConnectFailed} from '../ngrx/actions/redis-actions';
+import {CollapseCli} from '../ngrx/actions/cli-actions';
 import {REDIS_INSTANCES_KEY} from '../ngrx/reducer/redis-reducer';
 import {UtilService} from './util.service';
 
@@ -20,7 +22,8 @@ export class HttpHelperService {
   constructor(
     private http: HttpClient,
     private util: UtilService,
-    private _store: Store<any>
+    private _store: Store<any>,
+    private dialogService: MatDialog
   ) { }
 
   /**
@@ -63,11 +66,16 @@ export class HttpHelperService {
         const id = instance.id;
         const host = instance.serverModel.name;
         const port = instance.serverModel.port;
-        this.util.showMessage(`Fail to connect Redis server at ${host}:${port}.`);
+        // reset UI if redis connection fails
+        this.dialogService.closeAll();
+        this.util.showMessage(`Failed to connect Redis server at ${host}:${port}.`);
         this._store.dispatch(new RedisConnectFailed({id}));
+        this._store.dispatch(new CollapseCli());
       }
+      return of();
+    } else {
+      return throwError(error);
     }
-    return throwError(error);
   }
 
   /**

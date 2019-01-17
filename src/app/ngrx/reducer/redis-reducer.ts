@@ -75,6 +75,8 @@ export function reducer(state = initialState, action) {
       const i = getInstanceById(action.payload.id, state);
       i.status = 'failed';
       i.working = false;
+      i.selected = false;
+      i.expanded = false;
       return state;
     }
     case RedisActions.RedisConnect: {

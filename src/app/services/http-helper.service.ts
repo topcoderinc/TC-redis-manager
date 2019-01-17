@@ -58,7 +58,7 @@ export class HttpHelperService {
     if (err.code === 500) {
       const instancesString = localStorage.getItem(REDIS_INSTANCES_KEY);
       const instances = instancesString ? JSON.parse(instancesString) : [];
-      const instance = _.find(instances, {'id': err.instanceId});console.log('dsadas');console.log(instance);
+      const instance = _.find(instances, {'id': err.instanceId});
       if (instance) {
         const id = instance.id;
         const host = instance.serverModel.name;

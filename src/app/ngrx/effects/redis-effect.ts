@@ -7,7 +7,7 @@ import {of, Observable} from 'rxjs';
 import {RedisService} from '../../services/redis.service';
 
 
-import {RedisActions, FetchedTree, RedisConnect, RedisConnectFailed, ReqFetchTree, ReqRedisConnect} from '../actions/redis-actions';
+import {RedisActions, FetchedTree, RedisConnect, ReqFetchTree, ReqRedisConnect} from '../actions/redis-actions';
 import {catchError, map, mergeMap} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {Action} from '@ngrx/store';
@@ -24,7 +24,6 @@ export class RedisEffect {
   /**
    * send connect request to backend when dispatch "ReqRedisConnect"
    * and when backend returned, dispatch data to "RedisConnect"
-   * when backend return error, dispatch to "RedisConnectFailed"
    */
   @Effect()
   connectRedis: Observable<Action> = this.actions$.pipe(
@@ -36,18 +35,6 @@ export class RedisEffect {
               action['payload'].scb(data);
             }
             return new RedisConnect(data);
-          }),
-          catchError(() => {
-            if (action['payload'].fcb) {
-              action['payload'].fcb(action['payload'].instance);
-            }
-            if (action['payload'].instance) {
-              const id = action['payload'].instance.id;
-              const host = action['payload'].instance.serverModel.name;
-              const port = action['payload'].instance.serverModel.port;
-              this.util.showMessage(`Fail to connect Redis server at ${host}:${port}.`);
-              return of(new RedisConnectFailed({id}));
-            }
           })
         );
       }
@@ -57,7 +44,6 @@ export class RedisEffect {
   /**
    * send fetch tree request to backend when dispatch "ReqFetchTree"
    * and when backend returned, dispatch data to "FetchedTree"
-   * when backend return error, dispatch to "RedisConnectFailed"
    */
   @Effect()
   fetchTree: Observable<Action> = this.actions$.pipe(
@@ -70,9 +56,6 @@ export class RedisEffect {
               action['payload'].scb(data);
             }
             return new FetchedTree({id, data});
-          }),
-          catchError(() => {
-            return of( new RedisConnectFailed({id}));
           })
         );
       }

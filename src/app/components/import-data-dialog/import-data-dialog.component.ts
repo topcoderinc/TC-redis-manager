@@ -17,7 +17,7 @@ export class ImportDataDialogComponent implements OnInit {
   public instanceId = '';
 
   public rawContent = '';
-  public flushDB = true;
+  public flushDB = false;
   public opType = '';
   public exportType = 'redis';
 
@@ -114,18 +114,12 @@ export class ImportDataDialogComponent implements OnInit {
 
     const totalRow = this.flushDB ? commands.length - 1 : commands.length;
     this.redisService.call(this.instanceId, commands).subscribe((rsp) => {
-      let numberOfSucceed = 0;
-      _.each(rsp, v => {
-        numberOfSucceed += (!!v && v.toString().toLowerCase().indexOf('err') < 0) ? 1 : 0;
-      });
-      numberOfSucceed -= this.flushDB ? 1 : 0;
-      const numberOfFailed = totalRow - numberOfSucceed;
-      this.util.showMessage(`${numberOfSucceed} row${numberOfSucceed !== 1 ? 's were' : ' was'} imported
-                            successfully, ${numberOfFailed} row${numberOfFailed !== 1 ? 's have' : ' has'} failed.`);
+      this.util.showMessage(`All rows were imported successfully.`);
       this.dialogRef.close();
       this._store.dispatch(new ReqFetchTree({id: this.instanceId}));
     }, err => {
-      this.util.showMessage('Failed to import commands: ' + this.util.getErrorMessage(err));
+      const errorLineNo = err.error.line - (this.flushDB ? 1 : 0);
+      this.util.showMessage(`The command on row ${errorLineNo} failed with error: ${this.util.getErrorMessage(err)}`);
     });
   }
 }

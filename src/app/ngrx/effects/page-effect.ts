@@ -7,7 +7,6 @@ import {RedisService} from '../../services/redis.service';
 
 
 import {PageActions, LoadedPage, ReqLoadRootPage} from '../actions/page-actions';
-import {RedisConnectFailed} from '../actions/redis-actions';
 
 import {catchError, map, mergeMap} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
@@ -54,10 +53,6 @@ export class PageEffect {
               requestId: action['payload'].requestId,
               id: action['payload'].id
             });
-          }),
-          catchError(() => {
-            const id = action['payload'].id;
-            return of( new RedisConnectFailed({id}));
           })
         );
       }

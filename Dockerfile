@@ -1,4 +1,4 @@
-FROM node:8.11.2
+FROM node:8.13
 
 LABEL app="redis-manager" version="1.0"
 
